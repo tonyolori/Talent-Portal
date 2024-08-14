@@ -320,6 +320,9 @@
       "Domain/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "8.0.8"
+        },
         "compile": {
           "bin/placeholder/Domain.dll": {}
         },
@@ -832,32 +835,35 @@
     ]
   },
   "packageFolders": {
-    "/Users/apple/.nuget/packages/": {}
+    "C:\\Users\\Tony\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/apple/Documents/Programming Coding/Talent-Portal/Src/Infrastructure/Infrastructure.csproj",
+      "projectUniqueName": "C:\\Users\\Tony\\source\\repos\\Talent-Portal\\Src\\Infrastructure\\Infrastructure.csproj",
       "projectName": "Infrastructure",
-      "projectPath": "/Users/apple/Documents/Programming Coding/Talent-Portal/Src/Infrastructure/Infrastructure.csproj",
-      "packagesPath": "/Users/apple/.nuget/packages/",
-      "outputPath": "/Users/apple/Documents/Programming Coding/Talent-Portal/Src/Infrastructure/obj/",
+      "projectPath": "C:\\Users\\Tony\\source\\repos\\Talent-Portal\\Src\\Infrastructure\\Infrastructure.csproj",
+      "packagesPath": "C:\\Users\\Tony\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Tony\\source\\repos\\Talent-Portal\\Src\\Infrastructure\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/apple/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\Tony\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "/Users/apple/Documents/Programming Coding/Talent-Portal/Src/Domain/Domain.csproj": {
-              "projectPath": "/Users/apple/Documents/Programming Coding/Talent-Portal/Src/Domain/Domain.csproj"
+            "C:\\Users\\Tony\\source\\repos\\Talent-Portal\\Src\\Domain\\Domain.csproj": {
+              "projectPath": "C:\\Users\\Tony\\source\\repos\\Talent-Portal\\Src\\Domain\\Domain.csproj"
             }
           }
         }
@@ -866,6 +872,11 @@
         "warnAsError": [
           "NU1605"
         ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -897,8 +908,16 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.303/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303/PortableRuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Problem reading the cache file C:\\Users\\Tony\\source\\repos\\Talent-Portal\\Src\\Infrastructure\\obj\\project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
+    }
+  ]
 }
