@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNet.Identity.EntityFramework;
-
+﻿using Microsoft.AspNetCore.Identity;
 namespace Domain.Common.Entities;
 public abstract class BaseUser : IdentityUser
 {
