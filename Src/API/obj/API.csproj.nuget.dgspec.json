@@ -1,33 +1,36 @@
 {
   "format": 1,
   "restore": {
-    "/Users/apple/Documents/Programming Coding/Talent-Portal/Src/API/API.csproj": {}
+    "C:\\Users\\Tony\\source\\repos\\Talent-Portal\\Src\\API\\API.csproj": {}
   },
   "projects": {
-    "/Users/apple/Documents/Programming Coding/Talent-Portal/Src/API/API.csproj": {
+    "C:\\Users\\Tony\\source\\repos\\Talent-Portal\\Src\\API\\API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/apple/Documents/Programming Coding/Talent-Portal/Src/API/API.csproj",
+        "projectUniqueName": "C:\\Users\\Tony\\source\\repos\\Talent-Portal\\Src\\API\\API.csproj",
         "projectName": "API",
-        "projectPath": "/Users/apple/Documents/Programming Coding/Talent-Portal/Src/API/API.csproj",
-        "packagesPath": "/Users/apple/.nuget/packages/",
-        "outputPath": "/Users/apple/Documents/Programming Coding/Talent-Portal/Src/API/obj/",
+        "projectPath": "C:\\Users\\Tony\\source\\repos\\Talent-Portal\\Src\\API\\API.csproj",
+        "packagesPath": "C:\\Users\\Tony\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Tony\\source\\repos\\Talent-Portal\\Src\\API\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/apple/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\Tony\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "/Users/apple/Documents/Programming Coding/Talent-Portal/Src/Application/Application.csproj": {
-                "projectPath": "/Users/apple/Documents/Programming Coding/Talent-Portal/Src/Application/Application.csproj"
+              "C:\\Users\\Tony\\source\\repos\\Talent-Portal\\Src\\Application\\Application.csproj": {
+                "projectPath": "C:\\Users\\Tony\\source\\repos\\Talent-Portal\\Src\\Application\\Application.csproj"
               }
             }
           }
@@ -36,6 +39,11 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -66,34 +74,37 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.303/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "/Users/apple/Documents/Programming Coding/Talent-Portal/Src/Application/Application.csproj": {
+    "C:\\Users\\Tony\\source\\repos\\Talent-Portal\\Src\\Application\\Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/apple/Documents/Programming Coding/Talent-Portal/Src/Application/Application.csproj",
+        "projectUniqueName": "C:\\Users\\Tony\\source\\repos\\Talent-Portal\\Src\\Application\\Application.csproj",
         "projectName": "Application",
-        "projectPath": "/Users/apple/Documents/Programming Coding/Talent-Portal/Src/Application/Application.csproj",
-        "packagesPath": "/Users/apple/.nuget/packages/",
-        "outputPath": "/Users/apple/Documents/Programming Coding/Talent-Portal/Src/Application/obj/",
+        "projectPath": "C:\\Users\\Tony\\source\\repos\\Talent-Portal\\Src\\Application\\Application.csproj",
+        "packagesPath": "C:\\Users\\Tony\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Tony\\source\\repos\\Talent-Portal\\Src\\Application\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/apple/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\Tony\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "/Users/apple/Documents/Programming Coding/Talent-Portal/Src/Infrastructure/Infrastructure.csproj": {
-                "projectPath": "/Users/apple/Documents/Programming Coding/Talent-Portal/Src/Infrastructure/Infrastructure.csproj"
+              "C:\\Users\\Tony\\source\\repos\\Talent-Portal\\Src\\Infrastructure\\Infrastructure.csproj": {
+                "projectPath": "C:\\Users\\Tony\\source\\repos\\Talent-Portal\\Src\\Infrastructure\\Infrastructure.csproj"
               }
             }
           }
@@ -102,6 +113,11 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -123,26 +139,29 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.303/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "/Users/apple/Documents/Programming Coding/Talent-Portal/Src/Domain/Domain.csproj": {
+    "C:\\Users\\Tony\\source\\repos\\Talent-Portal\\Src\\Domain\\Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/apple/Documents/Programming Coding/Talent-Portal/Src/Domain/Domain.csproj",
+        "projectUniqueName": "C:\\Users\\Tony\\source\\repos\\Talent-Portal\\Src\\Domain\\Domain.csproj",
         "projectName": "Domain",
-        "projectPath": "/Users/apple/Documents/Programming Coding/Talent-Portal/Src/Domain/Domain.csproj",
-        "packagesPath": "/Users/apple/.nuget/packages/",
-        "outputPath": "/Users/apple/Documents/Programming Coding/Talent-Portal/Src/Domain/obj/",
+        "projectPath": "C:\\Users\\Tony\\source\\repos\\Talent-Portal\\Src\\Domain\\Domain.csproj",
+        "packagesPath": "C:\\Users\\Tony\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Tony\\source\\repos\\Talent-Portal\\Src\\Domain\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/apple/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\Tony\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -155,6 +174,11 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -182,34 +206,37 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.303/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "/Users/apple/Documents/Programming Coding/Talent-Portal/Src/Infrastructure/Infrastructure.csproj": {
+    "C:\\Users\\Tony\\source\\repos\\Talent-Portal\\Src\\Infrastructure\\Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/apple/Documents/Programming Coding/Talent-Portal/Src/Infrastructure/Infrastructure.csproj",
+        "projectUniqueName": "C:\\Users\\Tony\\source\\repos\\Talent-Portal\\Src\\Infrastructure\\Infrastructure.csproj",
         "projectName": "Infrastructure",
-        "projectPath": "/Users/apple/Documents/Programming Coding/Talent-Portal/Src/Infrastructure/Infrastructure.csproj",
-        "packagesPath": "/Users/apple/.nuget/packages/",
-        "outputPath": "/Users/apple/Documents/Programming Coding/Talent-Portal/Src/Infrastructure/obj/",
+        "projectPath": "C:\\Users\\Tony\\source\\repos\\Talent-Portal\\Src\\Infrastructure\\Infrastructure.csproj",
+        "packagesPath": "C:\\Users\\Tony\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Tony\\source\\repos\\Talent-Portal\\Src\\Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/apple/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\Tony\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "/Users/apple/Documents/Programming Coding/Talent-Portal/Src/Domain/Domain.csproj": {
-                "projectPath": "/Users/apple/Documents/Programming Coding/Talent-Portal/Src/Domain/Domain.csproj"
+              "C:\\Users\\Tony\\source\\repos\\Talent-Portal\\Src\\Domain\\Domain.csproj": {
+                "projectPath": "C:\\Users\\Tony\\source\\repos\\Talent-Portal\\Src\\Domain\\Domain.csproj"
               }
             }
           }
@@ -218,6 +245,11 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -249,7 +281,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.303/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

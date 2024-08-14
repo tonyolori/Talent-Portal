@@ -69,3 +69,10 @@ Desktop.ini
 
 # Ignore global gitignore
 .gitignore_global
+
+
+#
+*.user
+
+# each user sets up their appSettings
+**/appsettings.json
