@@ -3,7 +3,6 @@ namespace Domain.Common.Entities;
 public abstract class BaseUser : IdentityUser
 {
 
-    public string PhoneNumber;
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
     public DateTime DateOfBirth;
