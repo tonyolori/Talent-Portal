@@ -78,9 +78,10 @@ public class Result
         return new Result(true, entity);
     }
 
-    public static Result Success<T>(object entity, T request, string message)
+ 
+    public static Result Success<T>( string message, object entity)
     {
-        Log.Information("Request executed successfully!.", entity, request, message);
+        Log.Information("Request executed successfully!.", entity, message);
         return new Result(true, message, entity);
     }
 

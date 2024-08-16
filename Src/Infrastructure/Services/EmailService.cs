@@ -1,57 +1,45 @@
-﻿using Application.Common.Models;
-using Application.Interfaces;
-using Microsoft.Extensions.Configuration;
-using System.Net;
+﻿using System.Net;
 using System.Net.Mail;
+using Microsoft.Extensions.Configuration;
+using Application.Common.Models;
+using Application.Interfaces;
 
-namespace Infrastructure.Services;
-public class EmailService : IEmailService
+namespace Infrastructure.Services
 {
-    private readonly SmtpClient _smtpClient;
-    private readonly string _fromEmail;
-    private readonly string _password;
-    private readonly string smtpServer;
-    private readonly int port;
-
-    public EmailService(IConfiguration configuration)
+    public class EmailService : IEmailService
     {
-        IConfigurationSection emailConfig = configuration.GetSection("EmailSender");
-        _fromEmail = emailConfig["Email"];
-        _password = emailConfig["Password"];
-        smtpServer = emailConfig["smtpServer"];
+        private readonly SmtpClient _smtpClient;
+        private readonly string _fromEmail;
+        private readonly IConfiguration _configuration;
 
-
-        if (!int.TryParse(emailConfig["port"], out port))
+        public EmailService(IConfiguration configuration, SmtpClient smtpClient)
         {
-            throw new InvalidOperationException("Invalid port value in configuration");
+            _configuration = configuration;
+            _smtpClient = smtpClient;
+            _fromEmail = _configuration.GetConnectionString("Email");
         }
 
-        _smtpClient = new SmtpClient(smtpServer, port)
+        public async Task<Result> SendEmailAsync(string toEmail, string subject, string body)
         {
-            Credentials = new NetworkCredential(_fromEmail, _password),
-            EnableSsl = true,
-            UseDefaultCredentials = false
-        };
-    }
+            var smtpServer = _configuration.GetConnectionString("SmtpServer");
+            var port = int.Parse(_configuration.GetConnectionString("Port"));
+            var password = _configuration.GetConnectionString("Password");
 
-    public async Task<Result> SendEmailAsync(string toEmail, string FistName)
-    {
-        string subject = EmailTemplate.GetSubject(FistName, "Atm Application");
-        string body = EmailTemplate.GetBody(FistName, "Atm Application");
-        try
-        {
-            MailMessage mailMessage = new MailMessage(_fromEmail, toEmail, subject, body);
-            using (SmtpClient smtpClient = new SmtpClient(_smtpClient.Host, _smtpClient.Port))
+            _smtpClient.Host = smtpServer;
+            _smtpClient.Port = port;
+            _smtpClient.Credentials = new NetworkCredential(_fromEmail, password);
+            _smtpClient.EnableSsl = true;
+
+            try
             {
-                smtpClient.Credentials = _smtpClient.Credentials;
-                smtpClient.EnableSsl = _smtpClient.EnableSsl;
-                await smtpClient.SendMailAsync(mailMessage);
+                var mailMessage = new MailMessage(_fromEmail, toEmail, subject, body);
+                await _smtpClient.SendMailAsync(mailMessage);
+                return Result.Success($"Registration Email successfully sent to {toEmail}");
             }
-            return Result.Success($"Registration Email successfully sent to {toEmail}");
-        }
-        catch (Exception ex)
-        {
-            return Result.Failure($"Failed to send email to {toEmail}", ex);
+            catch (Exception ex)
+            {
+                return Result.Failure($"Failed to send email to {toEmail}", ex);
+            }
         }
     }
 }
