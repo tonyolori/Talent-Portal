@@ -7,11 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Domain\Domain.csproj" />
+    <Compile Remove="Students\Queries\**" />
+    <EmbeddedResource Remove="Students\Queries\**" />
+    <None Remove="Students\Queries\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Students\Queries\" />
+    <ProjectReference Include="..\Domain\Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
