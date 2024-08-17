@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data
 {
-    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<BaseUser>(options), IDataContext
+    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<BaseUser>(options)
     {
         public DbSet<Student> Students { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
-        public DbSet<LearningAdmin> LearningAdmins { get; set; }
+        //public DbSet<LearningAdmin> LearningAdmins { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken)
         {

@@ -19,12 +19,12 @@ namespace API.Controllers
         {
             return Ok(await _mediator.Send(command));
         }
-       
+
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginUserCommand command)
         {
             return Ok(await _mediator.Send(command));
         }
-        
+
     }
 }
