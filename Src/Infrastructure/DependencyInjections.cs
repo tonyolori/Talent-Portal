@@ -35,12 +35,15 @@ namespace Infrastructure
             //Identity
             services.AddIdentityCore<Teacher>()
                     .AddRoles<IdentityRole>()
-                    .AddEntityFrameworkStores<ApplicationDbContext>();
+                    .AddEntityFrameworkStores<ApplicationDbContext>()
+                    .AddApiEndpoints();
+
             //Identity
-            services.AddIdentityCore<BaseUser>()
+            services.AddIdentityCore<LearningAdmin>()
                     .AddRoles<IdentityRole>()
                     .AddEntityFrameworkStores<ApplicationDbContext>()
                     .AddApiEndpoints();
+
 
 
             var key = configuration["Jwt:Key"];

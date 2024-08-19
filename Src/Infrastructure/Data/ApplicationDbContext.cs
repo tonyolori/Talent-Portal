@@ -10,7 +10,7 @@ namespace Infrastructure.Data
     {
         public DbSet<Student> Students { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
-        //public DbSet<LearningAdmin> LearningAdmins { get; set; }
+        public DbSet<LearningAdmin> LearningAdmins { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken)
         {

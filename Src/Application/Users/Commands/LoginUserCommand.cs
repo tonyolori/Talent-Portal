@@ -14,63 +14,48 @@ namespace Application.Users.Commands
         public string Password { get; set; }
     }
 
-    public class LoginUserCommandHandler(SignInManager<BaseUser> signInManager, UserManager<BaseUser> userManager,
+    public class LoginUserCommandHandler(SignInManager<Student> signInManager, UserManager<Student> userManager,
         IGenerateToken generateToken) : IRequestHandler<LoginUserCommand, Result>
     {
-        private readonly UserManager<BaseUser> _userManager = userManager;
-        private readonly SignInManager<BaseUser> _signInManager = signInManager;
+        private readonly UserManager<Student> _userManager = userManager;
+        private readonly SignInManager<Student> _signInManager = signInManager;
         private readonly IGenerateToken _generateToken = generateToken;
 
         public async Task<Result> Handle(LoginUserCommand request, CancellationToken cancellationToken)
         {
 
-            //var user = await _userManager.FindByEmailAsync(request.Email);
+            Student? user = await _userManager.FindByEmailAsync(request.Email);
 
-            //if (user == null)
-            //{
-            //    // ...
-            //}
+            if (user == null)
+            {
+                return Result.Failure<LoginUserCommand>("User Not Found.");
+            }
 
-            //Student? user = await _userManager.FindByEmailAsync(request.Email);
-            //if (user == null)
-            //{
-            //    return Result.Failure<LoginUserCommand>("Invalid login attempt.");
-            //}
-            //// Cast to specific user type if needed
-            //var studentUser = user as Student;
-            //var teacherUser = user as Teacher;
+            SignInResult signInResult = await _signInManager.PasswordSignInAsync(user, request.Password, isPersistent: false, lockoutOnFailure: true);
 
-            //// Use the correct SignInManager based on user type
-            //var signInResult = await _signInManager.PasswordSignInAsync(
-            //    studentUser ?? teacherUser, // Use the correct user type
-            //    request.Password,
-            //    isPersistent: false,
-            //    lockoutOnFailure: true);
+            // Cast to specific user type if needed
+
+            if (user.UserStatus != Status.Active)
+            {
+                return Result.Failure<LoginUserCommand>($"User {request.Email} account is not active.");
+            }
 
 
-            //if (user.UserStatus != Status.Active)
-            //{
-            //    return Result.Failure<LoginUserCommand>($"User {request.Email} account is not active.");
-            //}
+            if (!signInResult.Succeeded)
+            {
+                if (signInResult.IsLockedOut)
+                {
+                    user.UserStatus = Status.Suspended;
+                    user.UserStatusDes = Status.Suspended.ToString();
+                    await _userManager.UpdateAsync(user);
 
-            //SignInResult result = await _signInManager.PasswordSignInAsync(user, request.Password, isPersistent: false, lockoutOnFailure: true);
+                    return Result.Failure<LoginUserCommand>($"User {request.Email} account locked: Unsuccessful 3 login attempts.");
+                }
+                return Result.Failure<LoginUserCommand>("Invalid login attempt.");
+            }
 
-            //if (!result.Succeeded)
-            //{
-            //    if (result.IsLockedOut)
-            //    {
-            //        user.UserStatus = Status.Suspended;
-            //        user.UserStatusDes = Status.Suspended.ToString();
-            //        await _userManager.UpdateAsync(user);
-
-            //        return Result.Failure<LoginUserCommand>($"User {request.Email} account locked: Unsuccessful 3 login attempts.");
-            //    }
-            //    return Result.Failure<LoginUserCommand>("Invalid login attempt.");
-            //}
-
-            //string token = _generateToken.GenerateToken(user.Email, user.RoleDesc);
-            //return Result.Success(token);
-            return Result.Success(":asdfga");
+            string token = _generateToken.GenerateToken(user.Email, user.RoleDesc);
+            return Result.Success(token);
         }
     }
 }

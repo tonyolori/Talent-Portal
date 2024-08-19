@@ -51,6 +51,7 @@ public class RegisterStudentCommandHandler(
             Role = Enum.Parse<UserRoles>(request.Role, true), 
             RoleDesc = request.Role,  
             UserStatus = Status.Active,
+            UserStatusDes = Status.Active.ToString(),
             Programme = request.Programme,
             SecurityStamp = Guid.NewGuid().ToString(),
             CreatedDate = DateTime.UtcNow,
@@ -73,7 +74,7 @@ public class RegisterStudentCommandHandler(
             await _userManager.AddToRoleAsync(student, roleName);
         }
 
-        await _emailSender.SendEmailAsync(request.Email, "Welcome", $"Welcome {request.FirstName}!");
+        //await _emailSender.SendEmailAsync(request.Email, "Welcome", $"Welcome {request.FirstName}!");
         return Result.Success<RegisterStudentCommand>( "Student registered successfully!", result );
     }
 }
