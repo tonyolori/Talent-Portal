@@ -1,10 +1,10 @@
 using Application.Common.Models;
 using Application.Interfaces;
-using Domain.Common.Entities;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
 using Domain.Entities;
 using Domain.Enum;
+using Domain.Common.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace Application.Users.Commands
 {
@@ -14,38 +14,36 @@ namespace Application.Users.Commands
         public string Password { get; set; }
     }
 
-    public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, Result>
+    public class LoginUserCommandHandler(SignInManager<Student> signInManager, UserManager<Student> userManager,
+        IGenerateToken generateToken) : IRequestHandler<LoginUserCommand, Result>
     {
-        private readonly UserManager<BaseUser> _userManager;
-        private readonly SignInManager<BaseUser> _signInManager;
-        private readonly IGenerateToken _generateToken;
-
-        public LoginUserCommandHandler(SignInManager<BaseUser> signInManager, UserManager<BaseUser> userManager,
-            IGenerateToken generateToken)
-        {
-            _signInManager = signInManager;
-            _generateToken = generateToken;
-            _userManager = userManager;
-        }
+        private readonly UserManager<Student> _userManager = userManager;
+        private readonly SignInManager<Student> _signInManager = signInManager;
+        private readonly IGenerateToken _generateToken = generateToken;
 
         public async Task<Result> Handle(LoginUserCommand request, CancellationToken cancellationToken)
         {
-            BaseUser? user = await _userManager.FindByEmailAsync(request.Email);
+
+            Student? user = await _userManager.FindByEmailAsync(request.Email);
+
             if (user == null)
             {
-                return Result.Failure<LoginUserCommand>("Invalid login attempt.");
+                return Result.Failure<LoginUserCommand>("User Not Found.");
             }
-            
+
+            SignInResult signInResult = await _signInManager.PasswordSignInAsync(user, request.Password, isPersistent: false, lockoutOnFailure: true);
+
+            // Cast to specific user type if needed
+
             if (user.UserStatus != Status.Active)
             {
                 return Result.Failure<LoginUserCommand>($"User {request.Email} account is not active.");
             }
 
-            SignInResult result = await _signInManager.PasswordSignInAsync(user, request.Password, isPersistent: false, lockoutOnFailure: true);
-            
-            if (!result.Succeeded)
+
+            if (!signInResult.Succeeded)
             {
-                if (result.IsLockedOut)
+                if (signInResult.IsLockedOut)
                 {
                     user.UserStatus = Status.Suspended;
                     user.UserStatusDes = Status.Suspended.ToString();

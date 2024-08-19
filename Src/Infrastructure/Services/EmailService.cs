@@ -11,13 +11,36 @@ namespace Infrastructure.Services
         private readonly SmtpClient _smtpClient;
         private readonly string _fromEmail;
         private readonly IConfiguration _configuration;
+        private readonly string _password;
+        private readonly string smtpServer;
+        private readonly int port;
 
-        public EmailService(IConfiguration configuration, SmtpClient smtpClient)
+        public EmailService(IConfiguration configuration)
         {
-            _configuration = configuration;
-            _smtpClient = smtpClient;
-            _fromEmail = _configuration.GetConnectionString("Email");
+            IConfigurationSection emailConfig = configuration.GetSection("ConnectionStrings");
+            _fromEmail = emailConfig["Email"];
+            _password = emailConfig["Password"];
+            smtpServer = emailConfig["SmtpServer"];
+
+
+            if (!int.TryParse(emailConfig["Port"], out port))
+            {
+                throw new InvalidOperationException("Invalid port value in configuration");
+            }
+
+            _smtpClient = new SmtpClient(smtpServer, port)
+            {
+                Credentials = new NetworkCredential(_fromEmail, _password),
+                EnableSsl = true,
+                UseDefaultCredentials = false
+            };
         }
+        //public EmailService(IConfiguration configuration, SmtpClient smtpClient)
+        //{
+        //    _configuration = configuration;
+        //    _smtpClient = smtpClient;
+        //    _fromEmail = _configuration.GetConnectionString("Email");
+        //}
 
         public async Task<Result> SendEmailAsync(string toEmail, string subject, string body)
         {

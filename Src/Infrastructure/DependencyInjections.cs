@@ -5,6 +5,9 @@ using Application.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Domain.Entities;
+using Domain.Common.Entities;
 
 
 namespace Infrastructure
@@ -17,15 +20,39 @@ namespace Infrastructure
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
             
 
-            services.AddSingleton<SmtpClient>();
-            
-            
-            
-            services.AddScoped<IGenerateToken, GenerateTokenServive>(provider =>
+
+            services.AddSingleton<IEmailService>(provider =>
             {
-                var key = configuration["Jwt:Key"];
-                var issuer = configuration["Jwt:Issuer"];
-                var audience = configuration["Jwt:Audience"];
+                return new EmailService(configuration);
+            });
+
+
+            //Identity
+            services.AddIdentityCore<Student>()
+                    .AddRoles<IdentityRole>()
+                    .AddEntityFrameworkStores<ApplicationDbContext>()
+                    .AddApiEndpoints();
+            //Identity
+            services.AddIdentityCore<Teacher>()
+                    .AddRoles<IdentityRole>()
+                    .AddEntityFrameworkStores<ApplicationDbContext>()
+                    .AddApiEndpoints();
+
+            //Identity
+            services.AddIdentityCore<LearningAdmin>()
+                    .AddRoles<IdentityRole>()
+                    .AddEntityFrameworkStores<ApplicationDbContext>()
+                    .AddApiEndpoints();
+
+
+
+            var key = configuration["Jwt:Key"];
+            var issuer = configuration["Jwt:Issuer"];
+            var audience = configuration["Jwt:Audience"];
+
+            services.AddScoped<IGenerateToken, GenerateTokenService>(provider =>
+            {
+                
                 return new (key, issuer, audience);
             });
 

@@ -1,7 +1,12 @@
+using Application.Common.Models;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
+using Microsoft.Extensions.Configuration;
+using Serilog;
+//using Application.Users;
+
 
 namespace Application
 {
@@ -9,10 +14,17 @@ namespace Application
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
-            // services.AddMediatR(Assembly.GetExecutingAssembly());
-            
+            Assembly assembly = typeof(DependencyInjection).Assembly;
+
+            services.AddMediatR(configuration => configuration.RegisterServicesFromAssembly(assembly));
+
+            //services.AddValidatorsFromAssembly(assembly);
+
+            services.AddScoped<Result>();
             services.AddLogging();
             
+
+
             return services;
         }
     }

@@ -77,3 +77,4 @@ Desktop.ini
 # each user sets up their appSettings
 **/appsettings.json
 *.user
+**/obj/

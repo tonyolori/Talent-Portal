@@ -60,7 +60,9 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequireNonAlphanumeric = true;
     options.Password.RequiredLength = 6;
     options.Password.RequiredUniqueChars = 1;
-
+    options.Password.RequireLowercase = false;
+    options.Password.RequireUppercase = false;
+    
     // Lockout settings.
     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
     options.Lockout.MaxFailedAccessAttempts = 3;
