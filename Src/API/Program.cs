@@ -31,8 +31,6 @@ Log.Logger = new LoggerConfiguration()
 
 Log.Information("Starting up the service");
 
-
-
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -62,7 +60,7 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequiredUniqueChars = 1;
     options.Password.RequireLowercase = false;
     options.Password.RequireUppercase = false;
-    
+
     // Lockout settings.
     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
     options.Lockout.MaxFailedAccessAttempts = 3;
@@ -121,11 +119,9 @@ app.UseHttpsRedirection();
 app.UseRouting();
 app.UseCors();
 
-
-
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseMiddleware<ExceptionHandlerMiddleware>();
-// app.MapIdentityApi<ApplicationUser>();
+
 app.MapControllers();
 app.Run();

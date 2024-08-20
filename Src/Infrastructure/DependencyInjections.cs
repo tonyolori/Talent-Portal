@@ -1,6 +1,5 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System.Net.Mail;
 using Application.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.Services;
@@ -9,42 +8,38 @@ using Microsoft.AspNetCore.Identity;
 using Domain.Entities;
 using Domain.Common.Entities;
 
-
 namespace Infrastructure
 {
     public static class DependencyInjection
     {
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
+            // Register DbContext with the correct options
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
-            
-
 
             services.AddSingleton<IEmailService>(provider =>
             {
                 return new EmailService(configuration);
             });
 
-
-            //Identity
+            // Register Identity for Student
             services.AddIdentityCore<Student>()
                     .AddRoles<IdentityRole>()
                     .AddEntityFrameworkStores<ApplicationDbContext>()
                     .AddApiEndpoints();
-            //Identity
+
+            // Register Identity for Teacher
             services.AddIdentityCore<Teacher>()
                     .AddRoles<IdentityRole>()
                     .AddEntityFrameworkStores<ApplicationDbContext>()
                     .AddApiEndpoints();
 
-            //Identity
+            // Register Identity for LearningAdmin
             services.AddIdentityCore<LearningAdmin>()
                     .AddRoles<IdentityRole>()
                     .AddEntityFrameworkStores<ApplicationDbContext>()
                     .AddApiEndpoints();
-
-
 
             var key = configuration["Jwt:Key"];
             var issuer = configuration["Jwt:Issuer"];
@@ -52,11 +47,8 @@ namespace Infrastructure
 
             services.AddScoped<IGenerateToken, GenerateTokenService>(provider =>
             {
-                
-                return new (key, issuer, audience);
+                return new GenerateTokenService(key, issuer, audience);
             });
-
-            
 
             return services;
         }
