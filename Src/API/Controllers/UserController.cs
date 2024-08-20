@@ -25,6 +25,18 @@ namespace API.Controllers
         {
             return Ok(await _mediator.Send(command));
         }
+        
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgetPassword(ForgotPasswordCommand command)
+        {
+            return Ok(await _mediator.Send(command));
+        }
 
+        
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword(ResetPasswordCommand command)
+        {
+            return Ok(await _mediator.Send(command));
+        }
     }
 }
