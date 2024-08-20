@@ -15,7 +15,7 @@ public class RegisterStudentCommand : IRequest<Result>
         public string Email { get; set; }
         public string Password { get; set; } 
         public string Role { get; set; }
-        public DateTime DateOfBirth { get; set; }
+        public string DateOfBirth { get; set; }
         public Programme Programme { get; set; }
 }
 
@@ -75,6 +75,6 @@ public class RegisterStudentCommandHandler(
         }
 
         //await _emailSender.SendEmailAsync(request.Email, "Welcome", $"Welcome {request.FirstName}!");
-        return Result.Success<RegisterStudentCommand>( "Student registered successfully!", result );
+        return Result.Success<RegisterStudentCommand>( "Student registered successfully!", student );
     }
 }

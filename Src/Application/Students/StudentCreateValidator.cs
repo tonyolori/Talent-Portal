@@ -22,8 +22,8 @@ namespace Application.Students.Commands
                 .EmailAddress().WithMessage("A valid email address is required.");
 
             RuleFor(x => x.DateOfBirth)
-                .NotEmpty().WithMessage("Date of Birth is required.")
-                .LessThan(DateTime.Now).WithMessage("Date of Birth must be in the past.");
+                .NotEmpty().WithMessage("Date of Birth is required.");
+           
 
             RuleFor(user => user.Password)
                 .NotEmpty().WithMessage("Password is required.")

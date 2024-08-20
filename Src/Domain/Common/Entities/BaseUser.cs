@@ -8,8 +8,9 @@ public abstract class BaseUser : IdentityUser
     
     public string LastName { get; set; } = string.Empty;
     
-    public DateTime DateOfBirth;
+    public  string DateOfBirth { get; set; }
     
+    public string PasswordResetCode { get; set; }
     public UserRoles Role { get; set; }
 
     public string RoleDesc { get; set; }
