@@ -10,7 +10,7 @@ public abstract class BaseUser : IdentityUser
     
     public  string DateOfBirth { get; set; }
     
-    public string PasswordResetCode { get; set; }
+    public string? PasswordResetCode { get; set; }
     public UserRoles Role { get; set; }
 
     public string RoleDesc { get; set; }
@@ -19,9 +19,9 @@ public abstract class BaseUser : IdentityUser
         
     public string UserStatusDes { get; set; }
     
-    public DateTime CreatedDate { get; set; }
+    public DateTime? CreatedDate { get; set; }
     
-    public string LastModifiedBy { get; set; } = string.Empty;
+    public string? LastModifiedBy { get; set; } = string.Empty;
     
-    public DateTime LastModifiedDate { get; set; }
+    public DateTime? LastModifiedDate { get; set; }
 }

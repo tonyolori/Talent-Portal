@@ -1,6 +1,7 @@
 ﻿using Application.Common.Models;
 using Application.Extensions;
 using Application.Interfaces;
+using Domain.Common.Enum;
 using Domain.Entities;
 using Domain.Enum;
 using MediatR;
@@ -74,7 +75,7 @@ public class RegisterStudentCommandHandler(
             await _userManager.AddToRoleAsync(student, roleName);
         }
 
-        //await _emailSender.SendEmailAsync(request.Email, "Welcome", $"Welcome {request.FirstName}!");
+        await _emailSender.SendEmailAsync(request.Email,EmailType.WelcomeMessage, student.FirstName);
         return Result.Success<RegisterStudentCommand>( "Student registered successfully!", student );
     }
 }

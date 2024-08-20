@@ -2,6 +2,7 @@ using Serilog;
 using System.Text.Json;
 using Application.Common.Exceptions;
 using Application.Common.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Filters
 {
@@ -49,8 +50,12 @@ public class ExceptionHandlerMiddleware
                                                            .ToList();
                     msg = $"Errors: {string.Join("; ", errorMessages)}";
                     break;
+                case DbUpdateException ex:
+                        response.StatusCode = StatusCodes.Status400BadRequest;
+                        msg = "Update DB Error" + ex.Message;
+                        break;
 
-                default:
+                    default:
                     Log.Error(error.ToString());
                     response.StatusCode = StatusCodes.Status500InternalServerError;
                     break;
