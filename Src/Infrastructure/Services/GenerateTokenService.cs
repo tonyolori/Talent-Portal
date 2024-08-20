@@ -6,18 +6,11 @@ using Application.Interfaces;
 
 namespace Infrastructure.Services
 {
-    public class GenerateTokenServive : IGenerateToken
+    public class GenerateTokenService(string key, string issuer, string audience) : IGenerateToken
     {
-        private readonly string _key;
-        private readonly string _issuer;
-        private readonly string _audience;
-
-        public GenerateTokenServive(string key, string issuer, string audience)
-        {
-            _key = key;
-            _issuer = issuer;
-            _audience = audience;
-        }
+        private readonly string _key = key;
+        private readonly string _issuer = issuer;
+        private readonly string _audience = audience;
 
         public string GenerateToken(string email, string role)
         {

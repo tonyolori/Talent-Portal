@@ -1,11 +1,12 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System.Net.Mail;
 using Application.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.AspNetCore.Identity;
+using Domain.Entities;
+using Domain.Common.Entities;
 
 namespace Infrastructure
 {
@@ -13,23 +14,41 @@ namespace Infrastructure
     {
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
+            // Register DbContext with the correct options
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
-            
 
-            services.AddSingleton<SmtpClient>();
-            
-            
-            
-            services.AddScoped<IGenerateToken, GenerateTokenServive>(provider =>
+            services.AddSingleton<IEmailService>(provider =>
             {
-                var key = configuration["Jwt:Key"];
-                var issuer = configuration["Jwt:Issuer"];
-                var audience = configuration["Jwt:Audience"];
-                return new (key, issuer, audience);
+                return new EmailService(configuration);
             });
 
-            
+            // Register Identity for Student
+            services.AddIdentityCore<Student>()
+                    .AddRoles<IdentityRole>()
+                    .AddEntityFrameworkStores<ApplicationDbContext>()
+                    .AddApiEndpoints();
+
+            // Register Identity for Teacher
+            services.AddIdentityCore<Teacher>()
+                    .AddRoles<IdentityRole>()
+                    .AddEntityFrameworkStores<ApplicationDbContext>()
+                    .AddApiEndpoints();
+
+            // Register Identity for LearningAdmin
+            services.AddIdentityCore<LearningAdmin>()
+                    .AddRoles<IdentityRole>()
+                    .AddEntityFrameworkStores<ApplicationDbContext>()
+                    .AddApiEndpoints();
+
+            var key = configuration["Jwt:Key"];
+            var issuer = configuration["Jwt:Issuer"];
+            var audience = configuration["Jwt:Audience"];
+
+            services.AddScoped<IGenerateToken, GenerateTokenService>(provider =>
+            {
+                return new GenerateTokenService(key, issuer, audience);
+            });
 
             return services;
         }
