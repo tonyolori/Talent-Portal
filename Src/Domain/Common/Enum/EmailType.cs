@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 namespace Domain.Common.Enum;
     public enum EmailType
     {
-        WelcomeMessage = 1,
+        DefaultMessage = 1,
+        WelcomeMessage = 2,
+        VerificationMessage = 3,
+
     }
 

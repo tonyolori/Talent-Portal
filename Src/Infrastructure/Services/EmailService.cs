@@ -38,25 +38,33 @@ namespace Infrastructure.Services
             };
         }
 
-        public async Task<Result> SendEmailAsync(string toEmail, EmailType type, string firstName, string subject = "", string body = "")
+        public async Task<Result> SendWelcomeEmailAsync(string toEmail, string firstName)
+        {
+            string subject = EmailTemplate.GetSubject(firstName, "Revent Learning");
+            string body = EmailTemplate.GetBody(firstName, "Revent Learning");
+            MailMessage mailMessage = new (_fromEmail, toEmail, subject, body);
+
+            return await SendEmail(toEmail, mailMessage);
+        }
+
+        public async Task<Result> SendEmailAsync(string toEmail, string subject, string body)
+        {
+            MailMessage mailMessage = new(_fromEmail, toEmail, subject, body);
+
+            return await SendEmail(toEmail, mailMessage);
+        }
+
+        private async Task<Result> SendEmail(string toEmail, MailMessage mailMessage)
         {
             _smtpClient.Host = _smtpServer;
             _smtpClient.Port = _port;
             _smtpClient.Credentials = new NetworkCredential(_fromEmail, _password);
             _smtpClient.EnableSsl = true;
 
-            var mailMessage = new MailMessage();
-            if (type == EmailType.WelcomeMessage)
-            {
-                string s = EmailTemplate.GetSubject(firstName, "Revent Learning");
-                string b = EmailTemplate.GetBody(firstName, "Revent Learning");
-                mailMessage = new MailMessage(_fromEmail, toEmail, s, b);
-
-            }
             try
             {
                 await _smtpClient.SendMailAsync(mailMessage);
-                return Result.Success($"Registration Email successfully sent to {toEmail}");
+                return Result.Success($"Email successfully sent to {toEmail}");
             }
             catch (Exception ex)
             {
