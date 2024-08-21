@@ -37,11 +37,11 @@ public class RegisterStudentCommandHandler(
         // Validate the request
         await request.ValidateAsync(new StudentCreateValidator(), cancellationToken);
         
-        var studentExists = await _userManager.FindByEmailAsync(request.Email);
-        if (studentExists != null)
+        Student? Dbstudent = await _userManager.FindByEmailAsync(request.Email);
+        if (Dbstudent != null)
             return Result.Failure(request, "Student already exists");
 
-        var student = new Student
+        Student student = new()
         {
             UserName = request.Email,
             Email = request.Email,
@@ -62,11 +62,11 @@ public class RegisterStudentCommandHandler(
         IdentityResult result = await _userManager.CreateAsync(student, request.Password); 
         if (!result.Succeeded)
         {
-            var errors = string.Join("\n", result.Errors.Select(e => e.Description));
+            string errors = string.Join("\n", result.Errors.Select(e => e.Description));
             return Result.Failure("Student creation failed!\n" + errors);
         }
 
-        var roleName = request.Role; 
+        string roleName = request.Role; 
         if (!await _roleManager.RoleExistsAsync(roleName))
             await _roleManager.CreateAsync(new IdentityRole(roleName));
 
@@ -75,7 +75,7 @@ public class RegisterStudentCommandHandler(
             await _userManager.AddToRoleAsync(student, roleName);
         }
 
-        await _emailSender.SendEmailAsync(request.Email,EmailType.WelcomeMessage, student.FirstName);
-        return Result.Success<RegisterStudentCommand>( "Student registered successfully!", student );
+        await _emailSender.SendWelcomeEmailAsync(request.Email, student.FirstName);
+        return Result.Success<RegisterStudentCommand>( "Student registered successfully!", student);
     }
 }
