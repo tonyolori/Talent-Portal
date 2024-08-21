@@ -21,6 +21,13 @@ namespace API.Controllers
             return Ok(await _mediator.Send(command));
         }
 
+        
+        [HttpPost("confirm-registration")]
+        public async Task<IActionResult> ConfirmRegistration(ConfirmRegistrationCommand command)
+        {
+            return Ok(await _mediator.Send(command));
+        }
+
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginUserCommand command)
         {

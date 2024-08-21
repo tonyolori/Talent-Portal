@@ -5,6 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using Microsoft.Extensions.Configuration;
 using Serilog;
+using StackExchange.Redis;
+
 //using Application.Users;
 
 
@@ -18,7 +20,8 @@ namespace Application
 
             services.AddMediatR(configuration => configuration.RegisterServicesFromAssembly(assembly));
 
-            //services.AddValidatorsFromAssembly(assembly);
+            services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect("localhost"));
+          
 
             services.AddScoped<Result>();
             services.AddLogging();
