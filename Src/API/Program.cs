@@ -105,22 +105,31 @@ builder.Services.AddAuthorization();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+
+app.UseSwagger(); // Make Swagger available in all environments
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Talent Portal V1");
+    if (!app.Environment.IsDevelopment())
+    {
+        c.RoutePrefix = "swagger"; // Adjust if needed for non-development environments
+    }
+});
+
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
     app.UseDeveloperExceptionPage();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-    });
 }
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 app.UseRouting();
 app.UseCors();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapGet("/test", () => "Hello, world!"); // Test route to verify server is running
+
 app.UseMiddleware<ExceptionHandlerMiddleware>();
 
 app.MapControllers();

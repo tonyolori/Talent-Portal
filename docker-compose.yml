@@ -1,0 +1,58 @@
+
+services:
+  web:
+    image: talentportal:1.0
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8081:80"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ConnectionStrings__AzureConnection:  "Server=127.0.0.1:1434;Initial Catalog=Talent;Persist Security Info=False;User ID=sa;Password=Holushola99;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30"
+      Mail__Email: "Holutunde99@gmail.com"
+      Mail__Password: "nzdspnrikmvlhltc"
+      Mail__SmtpServer: "smtp.gmail.com"
+      Mail__Port: "587"
+      Mail__slack_url: "https://hooks.slack.com/services/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"
+      Jwt__Key: "eyJhbGciOiJIUzI1NiJ9.ew0KICAic3ViIjogIjEyMzQ1Njc4OTAiLA0KICAibmFtZSI6ICJBbmlzaCBOYXRoIiwNCiAgImlhdCI6IDE1MTYyMzkwMjINCn0.3cFrKnvRYywrxFpFT_lGgiQ0EefHOzSKfAOtOGAiwNw"
+      Jwt__Issuer: "your-issuer"
+      Jwt__Audience: "your-audience"
+      Seq__ServerUrl: "http://seq:5341"
+      REDIS_CONNECTIONSTRING: "redis:6379" # Connection string to Redis
+    depends_on:
+      - db
+      - redis
+      - seq
+    networks:
+      - app-network
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      SA_PASSWORD: "Holushola99"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1434:1433"
+    networks:
+      - app-network
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6380:6379"
+    networks:
+      - app-network
+
+  seq:
+    image: datalust/seq:latest
+    ports:
+      - "5341:5341"
+    environment:
+      ACCEPT_EULA: "Y"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
