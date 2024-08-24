@@ -9,6 +9,8 @@ COPY ["Src/Application/Application.csproj", "Src/Application/"]
 COPY ["Src/Infrastructure/Infrastructure.csproj", "Src/Infrastructure/"]
 
 # Restore dependencies
+
+
 RUN dotnet restore "Src/API/API.csproj"
 
 # Copy all other files

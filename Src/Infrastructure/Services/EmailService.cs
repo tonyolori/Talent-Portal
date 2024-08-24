@@ -19,7 +19,7 @@ namespace Infrastructure.Services
 
         public EmailService(IConfiguration configuration)
         {
-            IConfigurationSection emailConfig = configuration.GetSection("ConnectionStrings");
+            IConfigurationSection emailConfig = configuration.GetSection("Mail");
             _fromEmail = emailConfig["Email"];
             _password = emailConfig["Password"];
             _smtpServer = emailConfig["SmtpServer"];
