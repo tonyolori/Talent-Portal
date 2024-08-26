@@ -16,7 +16,7 @@ namespace Infrastructure
         {
             // Register DbContext with the correct options
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(configuration.GetConnectionString("AzureConnection")));
 
             services.AddSingleton<IEmailService>(provider =>
             {
