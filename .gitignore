@@ -43,7 +43,7 @@ yarn-error.log
 
 # ASP.NET
 App_Data/
-appsettings*.json
+#appsettings*.json
 
 # Environment files
 .env
