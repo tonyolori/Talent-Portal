@@ -4,5 +4,5 @@ namespace Application.Interfaces;
 
 public interface IGenerateToken
 {
-    string GenerateToken(string email, string role);
+    string GenerateToken(string userId, string email, string role);
 }

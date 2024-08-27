@@ -9,7 +9,7 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using StackExchange.Redis;
 
-namespace Application.Students.Commands;
+namespace Application.Auth.Commands;
 
 public class RegisterStudentCommand : IRequest<Result>
 {

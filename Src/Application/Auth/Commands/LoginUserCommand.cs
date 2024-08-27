@@ -7,7 +7,7 @@ using Domain.Entities;
 using Domain.Enum;
 using Microsoft.AspNetCore.Identity;
 
-namespace Application.Users.Commands;
+namespace Application.Auth.Commands;
 
 public class LoginUserCommand : IRequest<Result>
 {
@@ -67,7 +67,7 @@ public class StudentLoginCommandHandler(SignInManager<Student> signInManager,
             return Result.Failure<LoginUserCommand>("Invalid Email or Password");
         }
 
-        string token = _generateToken.GenerateToken(user.Email, user.RoleDesc);
+        string token = _generateToken.GenerateToken(user.Id,user.Email, user.RoleDesc);
         return Result.Success(token);
     }
     

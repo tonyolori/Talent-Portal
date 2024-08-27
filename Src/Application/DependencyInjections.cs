@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Serilog;
 using StackExchange.Redis;
 
-//using Application.Users;
+//using Application.Auth;
 
 
 namespace Application
