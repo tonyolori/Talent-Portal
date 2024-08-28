@@ -1,7 +1,6 @@
-using Application.Students.Commands;
-using Application.Users.Commands;
+using Application.Auth.Commands;
 
-//using Application.Users.Queries;
+//using Application.Auth.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,8 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers
 {
     [ApiController]
-    [Route("api/user")]
-    public class UserController(IMediator mediator) : ControllerBase
+    [Route("api/auth")]
+    public class Auth(IMediator mediator) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;
 

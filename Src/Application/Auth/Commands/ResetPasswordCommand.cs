@@ -5,7 +5,7 @@ using Application.Common.Models;
 using Application.Extensions;
 using Domain.Entities;
 
-namespace Application.Users.Commands
+namespace Application.Auth.Commands
 {
     public class ResetPasswordCommand : IRequest<Result>
     {

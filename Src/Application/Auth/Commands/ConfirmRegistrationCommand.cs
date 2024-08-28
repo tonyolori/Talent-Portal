@@ -1,14 +1,11 @@
 using Application.Common.Models;
-using Application.Interfaces;
 using Domain.Entities;
-using Domain.Enum;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using StackExchange.Redis;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace Application.Students.Commands;
+
+namespace Application.Auth.Commands;
 
 public class ConfirmRegistrationCommand : IRequest<Result>
 {

@@ -22,6 +22,8 @@ namespace Infrastructure
             {
                 return new EmailService(configuration);
             });
+            
+            services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
 
             // Register Identity for Student
             services.AddIdentityCore<Student>()

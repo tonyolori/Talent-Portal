@@ -7,22 +7,17 @@ using Microsoft.EntityFrameworkCore;
 namespace Infrastructure.Data;
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<BaseUser>(options), IDataContext
 {
-    public DbSet<Student> Students { get; set; }
-    public DbSet<Teacher> Teachers { get; set; }
-    public DbSet<LearningAdmin> LearningAdmins { get; set; }
-    public DbSet<ModuleTask> Tasks { get; set; }
-    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken)
+    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<BaseUser>(options), IApplicationDbContext
     {
-        return base.SaveChangesAsync(cancellationToken);
-    }
-    public Task<int> SaveChangesAsync()
-    {
-        return base.SaveChangesAsync();
-    }
-    public override int SaveChanges()
-    {
-        return base.SaveChanges();
-    }
+        public DbSet<Student> Students { get; set; }
+        
+        public DbSet<Teacher> Teachers { get; set; }
+        
+        public DbSet<LearningAdmin> LearningAdmins { get; set; }
+        
+        public DbSet<Module> Modules { get; set; }
+
+        
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
