@@ -15,11 +15,9 @@ namespace Application.Students.Queries
     public class GetUserByIdQueryHandler(UserManager<Student> userManager) : IRequestHandler<GetStudentByIdQuery, Result>
     {
         private readonly UserManager<Student> _userManager = userManager;
-        
 
         public async Task<Result> Handle(GetStudentByIdQuery request, CancellationToken cancellationToken)
         {
-            // Fetch the user by their ID
             Student user = await _userManager.FindByIdAsync(request.Id);
 
             if (user == null)
