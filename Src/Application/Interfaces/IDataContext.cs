@@ -7,7 +7,9 @@ namespace Application.Interfaces
     public interface IDataContext
     {
         public DbSet<Student> Students { get; set; }
-        //public DbSet<Teacher> Teachers { get; set; }
-        //public DbSet<LearningAdmin> LearningAdmins { get; set; }
+        public DbSet<Teacher> Teachers { get; set; }
+        public DbSet<LearningAdmin> LearningAdmins { get; set; }
+        public DbSet<ModuleTask> Tasks { get; set; }
+
     }
 }
