@@ -16,12 +16,14 @@ namespace Infrastructure
         {
             // Register DbContext with the correct options
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("AzureConnection")));
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
             services.AddSingleton<IEmailService>(provider =>
             {
                 return new EmailService(configuration);
             });
+            
+            services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
 
             // Register Identity for Student
             services.AddIdentityCore<Student>()
