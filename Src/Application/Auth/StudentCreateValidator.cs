@@ -1,9 +1,10 @@
 
 using System.Text.RegularExpressions;
+using Application.Auth.Commands;
 using Domain.Enum;
 using FluentValidation;
 
-namespace Application.Students.Commands
+namespace Application.Auth
 {
     public class StudentCreateValidator : AbstractValidator<RegisterStudentCommand>
     {

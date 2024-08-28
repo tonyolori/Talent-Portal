@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using StackExchange.Redis;
 
 
-namespace Application.Users.Commands
+namespace Application.Auth.Commands
 {
     public class ForgotPasswordCommand : IRequest<Result>
     {

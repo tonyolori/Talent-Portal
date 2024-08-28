@@ -12,7 +12,7 @@ namespace Infrastructure.Services
         private readonly string _issuer = issuer;
         private readonly string _audience = audience;
 
-        public string GenerateToken(string email, string role)
+        public string GenerateToken(string userId, string email, string role)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_key);
@@ -20,6 +20,7 @@ namespace Infrastructure.Services
             {
                 Subject = new ClaimsIdentity(new[]
                 {
+                    new Claim(ClaimTypes.NameIdentifier, userId),
                     new Claim(ClaimTypes.Email, email),
                     new Claim(ClaimTypes.Role, role)
                 }),
@@ -31,6 +32,5 @@ namespace Infrastructure.Services
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
-
     }
 }
