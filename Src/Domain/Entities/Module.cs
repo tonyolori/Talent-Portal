@@ -1,30 +1,36 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Domain.Entities;
 
 public class Module
 {
-    public string Id { get; set; } = Guid.NewGuid().ToString();
-
-    public string Title { get; set; }
+    public int Id { get; set; }
+    public Guid GuId { get; set; } = Guid.NewGuid();
+    public required string Title { get; set; }
     
-    public string ModuleImageUrl { get; set; }
+    public required string ModuleImageUrl { get; set; }
     
     public List<string> Topics { get; set; } = new();
 
-    public string Description { get; set; }
+    public required string Description { get; set; }
 
-    public string Objectives { get; set; }
+    public required string Objectives { get; set; }
 
-    public string FacilitatorName { get; set; }
+    public required string FacilitatorName { get; set; }
 
-    public string FacilitatorId { get; set; }
+    public required string FacilitatorId { get; set; }
 
     public DateTime StartDate { get; set; }
 
     public DateTime EndDate { get; set; }
     
-    public string Timeframe { get; set; }
-    
+    public required string Timeframe { get; set; }
+    public int ProgrammeId { get; set; }
+
+    [ForeignKey(nameof(ProgrammeId))]
+    public Programme Programme { get; set; }
+    public virtual ICollection<ModuleTask> ModuleTasks { get; set; }
     public string Progress { get; set; }
     
-    public string AdditionalResources { get; set; }
+    public string? AdditionalResources { get; set; }
 }

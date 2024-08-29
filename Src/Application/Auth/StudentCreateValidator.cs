@@ -36,8 +36,8 @@ namespace Application.Auth
                 .Must(role => Enum.TryParse<UserRoles>(role, true, out _))
                 .WithMessage("Invalid role specified. Allowed roles are Admin, Student, and Instructor");
 
-            RuleFor(x => x.Programme)
-                .IsInEnum().WithMessage("Invalid Programme.");
+            //RuleFor(x => x.Programme)
+            //    .IsInEnum().WithMessage("Invalid Programme.");
         }
 
         private static bool BeValidPassword(string password)
