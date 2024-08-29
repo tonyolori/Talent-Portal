@@ -26,7 +26,7 @@ namespace Infrastructure
             
             services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
 
-            // Register Identity for Student
+            // Register Identity for StudentController
             services.AddIdentityCore<Student>()
                     .AddRoles<IdentityRole>()
                     .AddEntityFrameworkStores<ApplicationDbContext>()

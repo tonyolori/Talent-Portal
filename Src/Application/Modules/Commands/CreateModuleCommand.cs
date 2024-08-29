@@ -15,6 +15,8 @@ namespace Application.Modules.Commands
         public IFormFile ModuleImage { get; set; }
         public string Description { get; set; }
         public string Objectives { get; set; }
+        
+        public int ProgrammeId { get; set; }
         public string FacilitatorName { get; set; }
         public string FacilitatorId { get; set; }
         public DateTime StartDate { get; set; }
@@ -60,6 +62,7 @@ namespace Application.Modules.Commands
                 ModuleImageUrl = moduleImageUrl,
                 Description = request.Description,
                 Objectives = request.Objectives,
+                ProgrammeId = request.ProgrammeId,
                 FacilitatorName = request.FacilitatorName,
                 FacilitatorId = request.FacilitatorId,
                 StartDate = request.StartDate,

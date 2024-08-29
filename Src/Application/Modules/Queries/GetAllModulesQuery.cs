@@ -28,7 +28,14 @@ namespace Application.Modules.Queries
                 return Result.Failure("No modules found.");
             }
 
-            return Result.Success(modules);
+            var response = new
+            {
+                modules,
+                modulesLength = modules.Count
+            };
+
+           
+            return Result.Success<GetAllModulesQuery>("Modules retrieved successfully.", response);
         }
     }
 }

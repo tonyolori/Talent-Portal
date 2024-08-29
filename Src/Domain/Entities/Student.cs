@@ -9,8 +9,11 @@ public class Student : BaseUser
     public int ProgrammeId { get; set; }
 
     [ForeignKey(nameof(ProgrammeId))]
+    
     public Programme Programme { get; set; }
+    
     public virtual ICollection<ModuleTask>? AssignedTasks { get; set; }
+    
     public virtual ICollection<Grade>? Grades { get; set; }
 
 }

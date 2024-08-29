@@ -12,21 +12,21 @@ namespace Application.Students.Queries
         
     }
 
-    public class GetUserByIdQueryHandler(UserManager<Student> userManager) : IRequestHandler<GetStudentByIdQuery, Result>
+    public class GetStudentByIdQueryHandler(UserManager<Student> userManager) : IRequestHandler<GetStudentByIdQuery, Result>
     {
         private readonly UserManager<Student> _userManager = userManager;
 
         public async Task<Result> Handle(GetStudentByIdQuery request, CancellationToken cancellationToken)
         {
-            Student user = await _userManager.FindByIdAsync(request.Id);
+            Student? student = await _userManager.FindByIdAsync(request.Id);
 
-            if (user == null)
+            if (student == null)
             {
-                return Result.Failure<GetStudentByIdQuery>("User Id does not exist");
+                return Result.Failure("Student Id does not exist");
             }
 
-            // Return the user or null if not found
-            return Result.Success(user);
+            
+            return Result.Success<GetStudentByIdQuery>("Student found,.", student);
         }
     }
 }

@@ -7,7 +7,7 @@ namespace Application.Modules.Queries
 {
     public class GetModuleByIdQuery : IRequest<Result>
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
     }
 
     public class GetModuleByIdQueryHandler : IRequestHandler<GetModuleByIdQuery, Result>
@@ -26,9 +26,9 @@ namespace Application.Modules.Queries
             if (module == null)
             {
                 return Result.Failure("Module not found.");
-            }
+            } 
 
-            return Result.Success(module);
+            return Result.Success<GetModuleByIdQuery>("Module found.", module);
         }
     }
 }

@@ -1,15 +1,12 @@
 using Domain.Common.Enum;
 using System.ComponentModel.DataAnnotations.Schema;
+using Domain.Common.Entities;
 
 namespace Domain.Entities;
 
-public class Topic
+public class Topic: BaseEntity
 
 {
-    public int Id { get; set; }
-
-    public Guid Guid { get; set; } = Guid.NewGuid();
-    
     public string Title { get; set; }
     
     public string MainContent { get; set; }

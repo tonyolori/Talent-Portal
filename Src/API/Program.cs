@@ -128,8 +128,6 @@ app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapGet("/test", () => "Hello, world!"); // Test route to verify server is running
-
 app.UseMiddleware<ExceptionHandlerMiddleware>();
 
 app.MapControllers();

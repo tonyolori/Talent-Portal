@@ -34,7 +34,7 @@ namespace Application.Auth
             RuleFor(user => user.Role)
                 .NotEmpty().WithMessage("Role is required")
                 .Must(role => Enum.TryParse<UserRoles>(role, true, out _))
-                .WithMessage("Invalid role specified. Allowed roles are Admin, Student, and Instructor");
+                .WithMessage("Invalid role specified. Allowed roles are Admin, StudentController, and Instructor");
 
             //RuleFor(x => x.Programme)
             //    .IsInEnum().WithMessage("Invalid Programme.");

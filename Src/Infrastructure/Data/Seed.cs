@@ -30,9 +30,9 @@
 //        context.AddRange(programmes);
 
 //        // Define sample data for Modules table
-//        List<Module> modules =
+//        List<ModuleController> modules =
 //            [
-//                new Module
+//                new ModuleController
 //                {
 //                    Id = 1,
 //                    GuId = Guid.NewGuid(),
@@ -68,7 +68,7 @@
 //// Add the task to your context or object collection
 //context.ModuleTasks.Add(task);
 
-//var module = new Module
+//var module = new ModuleController
 //{
 //    Title = "Web Development Fundamentals",
 //    ModuleImageUrl = "https://example.com/webdev-image.jpg",
@@ -91,7 +91,7 @@
 //        var roles = new List<AspNetRole>()
 //            {
 //                new AspNetRole { Id = "1", Name = "Administrator", NormalizedName = "ADMINISTRATOR" },
-//                new AspNetRole { Id = "2", Name = "Student", NormalizedName = "STUDENT" }
+//                new AspNetRole { Id = "2", Name = "StudentController", NormalizedName = "STUDENT" }
 //            };
 //        context.AddRange(roles);
 
@@ -120,7 +120,7 @@
 //                    LastName = "Smith",
 //                    DateOfBirth = DateTime.Parse("1995-02-15"),
 //                    Role = 2, // Reference role ID from roles list
-//                    RoleDesc = "Student",
+//                    RoleDesc = "StudentController",
 //                    IsVerified = true,
 //                    UserStatus = 1, // Define user status
 //                    UserStatusDes = "Active",
