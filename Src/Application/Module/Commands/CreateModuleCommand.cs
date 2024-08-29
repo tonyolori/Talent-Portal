@@ -4,6 +4,7 @@ using Application.Interfaces;
 using Domain.Entities;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
+using Domain.Dto;
 using Microsoft.AspNetCore.Http;
 
 namespace Application.Modules.Commands
@@ -12,7 +13,6 @@ namespace Application.Modules.Commands
     {
         public string Title { get; set; }
         public IFormFile ModuleImage { get; set; }
-        public List<string> Topics { get; set; }
         public string Description { get; set; }
         public string Objectives { get; set; }
         public string FacilitatorName { get; set; }
@@ -58,7 +58,6 @@ namespace Application.Modules.Commands
             {
                 Title = request.Title,
                 ModuleImageUrl = moduleImageUrl,
-                Topics = request.Topics,
                 Description = request.Description,
                 Objectives = request.Objectives,
                 FacilitatorName = request.FacilitatorName,
@@ -70,11 +69,12 @@ namespace Application.Modules.Commands
                 AdditionalResources = request.AdditionalResources
             };
 
-            // Save the module to the database
+            // Add the module to the context and save it to the database
             await _context.Modules.AddAsync(module, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
+            
 
-            return Result.Success("Module created successfully!", module);
+            return Result.Success<CreateModuleCommand>("Module created successfully!", module);
         }
     }
 }

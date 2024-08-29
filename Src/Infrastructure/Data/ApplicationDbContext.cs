@@ -13,14 +13,14 @@ namespace Infrastructure.Data
         public DbSet<Teacher> Teachers { get; set; }
         
         public DbSet<LearningAdmin> LearningAdmins { get; set; }
-        
         public DbSet<Module> Modules { get; set; }
-
         
+        public DbSet<Topic> Topics { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
         }
     }
 }

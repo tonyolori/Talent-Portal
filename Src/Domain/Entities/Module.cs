@@ -2,13 +2,16 @@ namespace Domain.Entities;
 
 public class Module
 {
-    public string Id { get; set; } = Guid.NewGuid().ToString();
+    public int Id { get; set; }
+
+    public Guid Guid { get; set; } = Guid.NewGuid();
 
     public string Title { get; set; }
-    
+        
     public string ModuleImageUrl { get; set; }
-    
-    public List<string> Topics { get; set; } = new();
+        
+    // Navigation property for the related topics
+    public ICollection<Topic> Topics { get; set; } = new List<Topic>();
 
     public string Description { get; set; }
 
@@ -21,10 +24,10 @@ public class Module
     public DateTime StartDate { get; set; }
 
     public DateTime EndDate { get; set; }
-    
+        
     public string Timeframe { get; set; }
-    
+        
     public string Progress { get; set; }
-    
+        
     public string AdditionalResources { get; set; }
 }
