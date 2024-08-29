@@ -13,20 +13,20 @@ public class GetTaskByIdQuery : IRequest<Result>
 
 }
 
-public class GetUserByIdQueryHandler(IApplicationDbContext context) : IRequestHandler<GetTaskByIdQuery, Result>
+public class GetTaskByIdQueryHandler(IApplicationDbContext context) : IRequestHandler<GetTaskByIdQuery, Result>
 {
     private readonly IApplicationDbContext _context = context;
 
 
     public async Task<Result> Handle(GetTaskByIdQuery request, CancellationToken cancellationToken)
     {
-        ModuleTask? task = await _context.Tasks.FirstOrDefaultAsync(t => t.Id == request.Id);
+        ModuleTask? task = await _context.Tasks.FindAsync(request.Id);
 
         if (task == null)
         {
             return Result.Failure<GetTaskByIdQuery>("User Id does not exist");
         }
 
-        return Result.Success(task);
+        return Result.Success<GetTaskByIdQuery>("Task found.", task);
     }
 }

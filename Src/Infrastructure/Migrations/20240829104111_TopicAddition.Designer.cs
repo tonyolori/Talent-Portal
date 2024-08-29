@@ -4,6 +4,7 @@ using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240829104111_TopicAddition")]
+    partial class TopicAddition
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -152,7 +155,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("Grade");
                 });
 
-            modelBuilder.Entity("Domain.Entities.ModuleController", b =>
+            modelBuilder.Entity("Domain.Entities.Module", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -459,7 +462,7 @@ namespace Infrastructure.Migrations
                     b.HasDiscriminator().HasValue("LearningAdmin");
                 });
 
-            modelBuilder.Entity("Domain.Entities.StudentController", b =>
+            modelBuilder.Entity("Domain.Entities.Student", b =>
                 {
                     b.HasBaseType("Domain.Common.Entities.BaseUser");
 
@@ -471,7 +474,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("ProgrammeId");
 
-                    b.HasDiscriminator().HasValue("StudentController");
+                    b.HasDiscriminator().HasValue("Student");
                 });
 
             modelBuilder.Entity("Domain.Entities.Teacher", b =>
@@ -487,12 +490,12 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Grade", b =>
                 {
-                    b.HasOne("Domain.Entities.StudentController", null)
+                    b.HasOne("Domain.Entities.Student", null)
                         .WithMany("Grades")
                         .HasForeignKey("StudentId");
                 });
 
-            modelBuilder.Entity("Domain.Entities.ModuleController", b =>
+            modelBuilder.Entity("Domain.Entities.Module", b =>
                 {
                     b.HasOne("Domain.Entities.Programme", "Programme")
                         .WithMany()
@@ -505,28 +508,28 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.ModuleTask", b =>
                 {
-                    b.HasOne("Domain.Entities.ModuleController", "ModuleController")
+                    b.HasOne("Domain.Entities.Module", "Module")
                         .WithMany("ModuleTasks")
                         .HasForeignKey("ModuleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.StudentController", null)
+                    b.HasOne("Domain.Entities.Student", null)
                         .WithMany("AssignedTasks")
                         .HasForeignKey("StudentId");
 
-                    b.Navigation("ModuleController");
+                    b.Navigation("Module");
                 });
 
             modelBuilder.Entity("Domain.Entities.Topic", b =>
                 {
-                    b.HasOne("Domain.Entities.ModuleController", "ModuleController")
+                    b.HasOne("Domain.Entities.Module", "Module")
                         .WithMany("Topics")
                         .HasForeignKey("ModuleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ModuleController");
+                    b.Navigation("Module");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -580,7 +583,7 @@ namespace Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Domain.Entities.StudentController", b =>
+            modelBuilder.Entity("Domain.Entities.Student", b =>
                 {
                     b.HasOne("Domain.Entities.Programme", "Programme")
                         .WithMany()
@@ -591,14 +594,14 @@ namespace Infrastructure.Migrations
                     b.Navigation("Programme");
                 });
 
-            modelBuilder.Entity("Domain.Entities.ModuleController", b =>
+            modelBuilder.Entity("Domain.Entities.Module", b =>
                 {
                     b.Navigation("ModuleTasks");
 
                     b.Navigation("Topics");
                 });
 
-            modelBuilder.Entity("Domain.Entities.StudentController", b =>
+            modelBuilder.Entity("Domain.Entities.Student", b =>
                 {
                     b.Navigation("AssignedTasks");
 

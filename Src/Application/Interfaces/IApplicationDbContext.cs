@@ -13,7 +13,10 @@ namespace Application.Interfaces
         public DbSet<Teacher> Teachers { get; set; }
         public DbSet<LearningAdmin> LearningAdmins { get; set; }
 
+        public DbSet<Topic> Topics { get; set; }
+        
         public DbSet<Programme> Programmes { get; set; }
+
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
 }

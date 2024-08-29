@@ -20,14 +20,19 @@ public class GetAllTasksQueryHandler(IApplicationDbContext context) : IRequestHa
 
     public async Task<Result> Handle(GetAllTasksQuery request, CancellationToken cancellationToken)
     {
-        List<ModuleTask>? task = await _context.Tasks.ToListAsync();
+        List<ModuleTask>? tasks = await _context.Tasks.ToListAsync();
 
-        if (task == null)
+        if (tasks == null)
         {
             return Result.Failure<GetAllTasksQuery>("No Tasks");
         }
 
+        var response = new  
+        {  
+            tasks , 
+            topicsLength = tasks.Count,  
+        };  
         // Return the user or null if not found
-        return Result.Success(task);
+        return Result.Success<GetAllTasksQuery>("Tasks retrieved successfully.", tasks);
     }
 }

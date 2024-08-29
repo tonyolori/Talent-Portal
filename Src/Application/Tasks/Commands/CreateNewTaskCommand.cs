@@ -3,18 +3,20 @@ using MediatR;
 using Domain.Entities;
 using Application.Interfaces;
 using Domain.Enum;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace Application.Tasks.Queries;
 
 public class CreateNewTaskCommand : IRequest<Result>
 {
-    public string Title;
+    public string Title { get; set; }
     public required string Description { get; set; }
     public required string Instructions { get; set; }
     public string? SubmissionLink { get; set; }
+    
     public DateTime SubmissionDate { get; set; }
-    public int ModuleId { get; set; } // Foreign key to Module
+    public int ModuleId { get; set; } // Foreign key to ModuleController
 
 }
 
@@ -24,17 +26,20 @@ public class CreateNewTaskCommandHandler(IApplicationDbContext Context) : IReque
 
     public async Task<Result> Handle(CreateNewTaskCommand request, CancellationToken cancellationToken)
     {
+        bool moduleExists = await _context.Modules.AnyAsync(m => m.Id == request.ModuleId, cancellationToken);  
+        if (!moduleExists)  
+        {  
+            return Result.Failure($"Module with ID {request.ModuleId} does not exist.");  
+        }  
        
         ModuleTask task = new()
         {
-            Guid = Guid.NewGuid(),
             Title = request.Title,
             Description = request.Description,
             Instructions = request.Instructions,
             SubmissionLink = request.SubmissionLink,
-            FacilitatorFeedBack = null,
             Status = ModuleTaskStatus.NotSubmitted,
-            ModuleId = 1 // Associate task with the created module
+            ModuleId = request.ModuleId // Associate task with the created module
         };
 
         await _context.Tasks.AddAsync(task);

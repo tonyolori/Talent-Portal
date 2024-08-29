@@ -1,8 +1,9 @@
 using Application.Auth.Commands;
 using Application.Modules.Commands;
+using Application.Modules.Queries;
 using Application.Students.Queries;
 
-//using Application.Auth.Queries;
+//using Application.AuthController.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +13,7 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("api/module")]
-    public class Module(IMediator mediator) : ControllerBase
+    public class ModuleController(IMediator mediator) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;
 
@@ -21,7 +22,20 @@ namespace API.Controllers
         {
             return Ok(await _mediator.Send(command));
         }
+        
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetModule(int id)
+        {
+            return Ok(await _mediator.Send(new GetModuleByIdQuery{Id =id}));
+        }
 
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAllModule()
+        {
+            return Ok(await _mediator.Send(new GetAllModulesQuery() { }));
+        }
+
+        
       
     }
 }

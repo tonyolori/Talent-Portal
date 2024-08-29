@@ -19,6 +19,7 @@ public class RegisterStudentCommand : IRequest<Result>
         public string Password { get; set; } 
         public string Role { get; set; }
         public DateTime DateOfBirth { get; set; }
+        
         public int ProgrammeId { get; set; }
 }
 
@@ -41,9 +42,9 @@ public class RegisterStudentCommandHandler(
         // Validate the request
         await request.ValidateAsync(new StudentCreateValidator(), cancellationToken);
         
-        Student? Dbstudent = await _userManager.FindByEmailAsync(request.Email);
-        if (Dbstudent != null)
-            return Result.Failure(request, "Student already exists");
+        Student? studentExist = await _userManager.FindByEmailAsync(request.Email);
+        if (studentExist != null)
+            return Result.Failure(request, "StudentController already exists");
 
         Student student = new()
         {
@@ -68,7 +69,7 @@ public class RegisterStudentCommandHandler(
         if (!result.Succeeded)
         {
             string errors = string.Join("\n", result.Errors.Select(e => e.Description));
-            return Result.Failure("Student creation failed!\n" + errors);
+            return Result.Failure("StudentController creation failed!\n" + errors);
         }
 
         string roleName = request.Role; 

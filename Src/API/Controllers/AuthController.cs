@@ -1,6 +1,6 @@
 using Application.Auth.Commands;
 
-//using Application.Auth.Queries;
+//using Application.AuthController.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +10,7 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("api/auth")]
-    public class Auth(IMediator mediator) : ControllerBase
+    public class AuthController(IMediator mediator) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;
 

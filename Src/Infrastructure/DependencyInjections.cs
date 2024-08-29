@@ -17,7 +17,7 @@ namespace Infrastructure
         {
             // Register DbContext with the correct options
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(configuration.GetConnectionString("AzureConnection")));
 
             services.AddSingleton<IEmailService>(provider =>
             {
@@ -26,7 +26,7 @@ namespace Infrastructure
             
             services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
 
-            // Register Identity for Student
+            // Register Identity for StudentController
             services.AddIdentityCore<Student>()
                     .AddRoles<IdentityRole>()
                     .AddEntityFrameworkStores<ApplicationDbContext>()
