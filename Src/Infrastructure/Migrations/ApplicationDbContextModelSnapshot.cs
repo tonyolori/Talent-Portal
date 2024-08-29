@@ -133,13 +133,34 @@ namespace Infrastructure.Migrations
                     b.UseTphMappingStrategy();
                 });
 
-            modelBuilder.Entity("Domain.Entities.Module", b =>
+            modelBuilder.Entity("Domain.Entities.Grade", b =>
                 {
-                    b.Property<string>("ModuleId")
+                    b.Property<Guid>("TaskId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("StudentId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<float>("Value")
+                        .HasColumnType("real");
+
+                    b.HasKey("TaskId");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("Grade");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Module", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<string>("AdditionalResources")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
@@ -157,6 +178,9 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("GuId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("ModuleImageUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -164,6 +188,9 @@ namespace Infrastructure.Migrations
                     b.Property<string>("Objectives")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProgrammeId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Progress")
                         .IsRequired()
@@ -180,39 +207,85 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ModuleId");
+                    b.Property<string>("Topics")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProgrammeId");
 
                     b.ToTable("Modules");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Topic", b =>
+            modelBuilder.Entity("Domain.Entities.ModuleTask", b =>
                 {
-                    b.Property<string>("TopicId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.Property<string>("MainContent")
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ModuleId")
+                    b.Property<string>("FacilitatorFeedBack")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("Guid")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Instructions")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ModuleId")
+                        .HasColumnType("int");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<string>("SubContent")
+                    b.Property<string>("StudentId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("SubmissionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("SubmissionLink")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("TopicId");
+                    b.HasKey("Id");
 
                     b.HasIndex("ModuleId");
 
-                    b.ToTable("Topics");
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("Tasks");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Programme", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Programmes");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -362,8 +435,10 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("EnrollmentDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Programme")
+                    b.Property<int>("ProgrammeId")
                         .HasColumnType("int");
+
+                    b.HasIndex("ProgrammeId");
 
                     b.HasDiscriminator().HasValue("Student");
                 });
@@ -379,13 +454,35 @@ namespace Infrastructure.Migrations
                     b.HasDiscriminator().HasValue("Teacher");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Topic", b =>
+            modelBuilder.Entity("Domain.Entities.Grade", b =>
+                {
+                    b.HasOne("Domain.Entities.Student", null)
+                        .WithMany("Grades")
+                        .HasForeignKey("StudentId");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Module", b =>
+                {
+                    b.HasOne("Domain.Entities.Programme", "Programme")
+                        .WithMany()
+                        .HasForeignKey("ProgrammeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Programme");
+                });
+
+            modelBuilder.Entity("Domain.Entities.ModuleTask", b =>
                 {
                     b.HasOne("Domain.Entities.Module", "Module")
-                        .WithMany("Topics")
+                        .WithMany("ModuleTasks")
                         .HasForeignKey("ModuleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Domain.Entities.Student", null)
+                        .WithMany("AssignedTasks")
+                        .HasForeignKey("StudentId");
 
                     b.Navigation("Module");
                 });
@@ -441,9 +538,27 @@ namespace Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Domain.Entities.Student", b =>
+                {
+                    b.HasOne("Domain.Entities.Programme", "Programme")
+                        .WithMany()
+                        .HasForeignKey("ProgrammeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Programme");
+                });
+
             modelBuilder.Entity("Domain.Entities.Module", b =>
                 {
-                    b.Navigation("Topics");
+                    b.Navigation("ModuleTasks");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Student", b =>
+                {
+                    b.Navigation("AssignedTasks");
+
+                    b.Navigation("Grades");
                 });
 #pragma warning restore 612, 618
         }

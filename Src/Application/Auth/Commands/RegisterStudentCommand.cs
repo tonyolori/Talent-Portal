@@ -19,7 +19,7 @@ public class RegisterStudentCommand : IRequest<Result>
         public string Password { get; set; } 
         public string Role { get; set; }
         public DateTime DateOfBirth { get; set; }
-        public Programme Programme { get; set; }
+        public int ProgrammeId { get; set; }
 }
 
 public class RegisterStudentCommandHandler(
@@ -58,7 +58,7 @@ public class RegisterStudentCommandHandler(
             IsVerified = false,
             UserStatus = Status.Inactive,
             UserStatusDes = Status.Active.ToString(),
-            Programme = request.Programme,
+            ProgrammeId = request.ProgrammeId,
             SecurityStamp = Guid.NewGuid().ToString(),
             CreatedDate = DateTime.UtcNow,
             LastModifiedDate = DateTime.UtcNow

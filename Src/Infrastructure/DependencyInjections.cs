@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Domain.Entities;
 using Domain.Common.Entities;
+using Application.Common.Models;
 
 namespace Infrastructure
 {
