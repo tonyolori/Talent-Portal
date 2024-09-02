@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class AddSubmissiontDetails : Migration
+    public partial class SubmissionDetails : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -35,11 +35,11 @@ namespace Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Value = table.Column<float>(type: "real", nullable: false),
+                    Grade = table.Column<float>(type: "real", nullable: true),
                     SubmissionLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FacilitatorFeedBack = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TaskStatus = table.Column<int>(type: "int", nullable: false),
-                    StudentId = table.Column<int>(type: "int", nullable: false),
+                    StudentId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     TaskId = table.Column<int>(type: "int", nullable: false),
                     Guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },

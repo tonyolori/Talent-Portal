@@ -39,10 +39,10 @@ public class TaskController(IMediator mediator) : Controller
     {
         return Ok(await _mediator.Send(new GetAllTasksQuery { }));
     }
-    //[HttpGet("grade")]
-    //public async Task<IActionResult> GetTaskGrade(Guid studentId, Guid taskId)
-    //{
-    //    return Ok(await _mediator.Send(new GetTaskGradeQuery { StudentId = studentId, ModuleTaskId= taskId }));
-    //}
+    [HttpGet("grade")]
+    public async Task<IActionResult> GetTaskGrade(string studentId, int taskId)
+    {
+        return Ok(await _mediator.Send(new GetTaskGradeQuery { StudentId = studentId, ModuleTaskId = taskId }));
+    }
 
 }

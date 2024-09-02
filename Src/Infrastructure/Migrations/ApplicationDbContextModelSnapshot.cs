@@ -275,11 +275,15 @@ namespace Infrastructure.Migrations
                     b.Property<string>("FacilitatorFeedBack")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<float?>("Grade")
+                        .HasColumnType("real");
+
                     b.Property<Guid>("Guid")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
+                    b.Property<string>("StudentId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("SubmissionLink")
                         .HasColumnType("nvarchar(max)");
@@ -289,9 +293,6 @@ namespace Infrastructure.Migrations
 
                     b.Property<int>("TaskStatus")
                         .HasColumnType("int");
-
-                    b.Property<float>("Value")
-                        .HasColumnType("real");
 
                     b.HasKey("Id");
 
