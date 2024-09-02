@@ -1,40 +1,47 @@
-﻿//using Application.Common.Models;
-//using Application.Interfaces;
-//using Domain.Entities;
-//using MediatR;
-//using Microsoft.AspNetCore.Identity;
-//using Microsoft.EntityFrameworkCore;
+﻿using Application.Common.Models;
+using Application.Interfaces;
+using Domain.Entities;
+using MediatR;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
-//namespace Application.Tasks.Queries;
+namespace Application.Tasks.Queries;
 
-//public class GetTaskGradeQuery : IRequest<Result>
-//{
-//    public Guid StudentId { get; set; }
-//    public Guid ModuleTaskId { get; set; }
-//}
+public class GetTaskGradeQuery : IRequest<Result>
+{
+    public string StudentId { get; set; }
+    public int ModuleTaskId { get; set; }
+}
 
-//public class GetTaskGradeQueryHandler(UserManager<Student> userManager) : IRequestHandler<GetTaskGradeQuery, Result>
-//{
-//    private readonly UserManager<Student> _userManager = userManager;
+public class GetTaskGradeQueryHandler(UserManager<Student> userManager, IApplicationDbContext context) : IRequestHandler<GetTaskGradeQuery, Result>
+{
+    private readonly UserManager<Student> _userManager = userManager;
+    private readonly IApplicationDbContext _context = context;
 
-//    public async Task<Result> Handle(GetTaskGradeQuery request, CancellationToken cancellationToken)
-//    {
-//        Student? student = await _userManager.FindByIdAsync(request.StudentId.ToString());
+    public async Task<Result> Handle(GetTaskGradeQuery request, CancellationToken cancellationToken)
+    {
+        Student? student = await _userManager.Users
+            .Include(s => s.AssignedTasks)
+            .FirstOrDefaultAsync(s => s.Id == request.StudentId, cancellationToken);
 
-//        if (student == null)
-//        {
-//            // Handle student not found scenario
-//            return Result.Failure("student Not found");
-//        }
-//        //var grade = await _context.Grades.FirstOrDefaultAsync(g => g.TaskId == taskId, cancellationToken);
-//        List<Grade>? grade = student.Grades?.Where(g => g.TaskId == request.ModuleTaskId ).ToList();
+        if (student == null)
+        {
+            return Result.Failure("Student Not Found");
+        }
 
-//        if (grade == null || !grade.Any())
-//        {
-//            // Handle task not assigned to student scenario
-//            return Result.Success(new List<Grade>());
-//        }
+        if (!student.AssignedTasks.Any(t => t.Id == request.ModuleTaskId))
+        {
+            return Result.Failure<float>("Task Not Found for Student");
+        }
 
-//        return Result.Success(grade);
-//    }
-//}
+        SubmissionDetails? submissionDetails = _context.SubmissionDetails.FirstOrDefault(s => s.TaskId == request.ModuleTaskId && s.StudentId == request.StudentId);
+
+        if (submissionDetails == null)
+        {
+            return Result.Failure<float>("No Submission Available");
+        }
+
+        return Result.Success(submissionDetails.Grade);
+    
+    }
+}
