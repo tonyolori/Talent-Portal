@@ -1,15 +1,10 @@
-﻿using Domain.Enum;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Domain.Common.Entities;
+
 
 namespace Domain.Entities
 {
-    public class Programme
+    public class Programme : BaseEntity
     {
-        public int Id { get; set; }
         public String Type { get; set; }
     }
 }

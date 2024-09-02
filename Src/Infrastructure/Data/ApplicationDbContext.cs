@@ -19,13 +19,19 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
     public DbSet<ModuleTask> Tasks { get; set; }
     public DbSet<Programme> Programmes { get; set; }
-    
+
     public DbSet<Topic> Topics { get; set; }
+    public DbSet<SubmissionDetails> SubmissionDetails { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder builder)
-        {
-            base.OnModelCreating(builder);
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        //builder.Entity<SubmissionDetails>()
+        //    .HasKey(t => new { t.TaskId, t.StudentId });
+        builder.Entity<SubmissionDetails>()
+            .HasIndex(s => new { s.TaskId, s.StudentId })
+            .IsUnique(true);
 
-        }
+        base.OnModelCreating(builder);
+    }
 
 }
