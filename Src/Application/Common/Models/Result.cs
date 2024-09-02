@@ -13,7 +13,7 @@ public class Result
     public string Error { get; set; }
     public string ExceptionError { get; set; }
     public string Message { get; set; }
-    public int Id { get; internal set; }
+    //public int Id { get; internal set; }
 
     internal Result(bool succeeded, string message, object entity = null, string exception = null)
     {

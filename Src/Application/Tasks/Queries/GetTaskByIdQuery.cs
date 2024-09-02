@@ -24,7 +24,7 @@ public class GetTaskByIdQueryHandler(IApplicationDbContext context) : IRequestHa
 
         if (task == null)
         {
-            return Result.Failure<GetTaskByIdQuery>("User Id does not exist");
+            return Result.Failure<GetTaskByIdQuery>("Task does not exist");
         }
 
         return Result.Success<GetTaskByIdQuery>("Task found.", task);

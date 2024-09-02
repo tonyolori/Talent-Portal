@@ -4,6 +4,7 @@ using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240830154423_AddGuidToProgramme")]
+    partial class AddGuidToProgramme
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -133,6 +136,25 @@ namespace Infrastructure.Migrations
                     b.UseTphMappingStrategy();
                 });
 
+            modelBuilder.Entity("Domain.Entities.Grade", b =>
+                {
+                    b.Property<Guid>("TaskId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("StudentId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<float>("Value")
+                        .HasColumnType("real");
+
+                    b.HasKey("TaskId");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("Grade");
+                });
+
             modelBuilder.Entity("Domain.Entities.Module", b =>
                 {
                     b.Property<int>("Id")
@@ -180,9 +202,6 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("StudentId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("Timeframe")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -194,8 +213,6 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ProgrammeId");
-
-                    b.HasIndex("StudentId");
 
                     b.ToTable("Modules");
                 });
@@ -215,6 +232,9 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("FacilitatorFeedBack")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<Guid>("Guid")
                         .HasColumnType("uniqueidentifier");
 
@@ -225,11 +245,17 @@ namespace Infrastructure.Migrations
                     b.Property<int>("ModuleId")
                         .HasColumnType("int");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
                     b.Property<string>("StudentId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("SubmissionDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("SubmissionLink")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -262,43 +288,6 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Programmes");
-                });
-
-            modelBuilder.Entity("Domain.Entities.SubmissionDetails", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("FacilitatorFeedBack")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("Guid")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SubmissionLink")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TaskId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TaskStatus")
-                        .HasColumnType("int");
-
-                    b.Property<float>("Value")
-                        .HasColumnType("real");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TaskId", "StudentId")
-                        .IsUnique();
-
-                    b.ToTable("SubmissionDetails");
                 });
 
             modelBuilder.Entity("Domain.Entities.Topic", b =>
@@ -502,6 +491,13 @@ namespace Infrastructure.Migrations
                     b.HasDiscriminator().HasValue("Teacher");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Grade", b =>
+                {
+                    b.HasOne("Domain.Entities.Student", null)
+                        .WithMany("Grades")
+                        .HasForeignKey("StudentId");
+                });
+
             modelBuilder.Entity("Domain.Entities.Module", b =>
                 {
                     b.HasOne("Domain.Entities.Programme", "Programme")
@@ -509,10 +505,6 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("ProgrammeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Domain.Entities.Student", null)
-                        .WithMany("Modules")
-                        .HasForeignKey("StudentId");
 
                     b.Navigation("Programme");
                 });
@@ -616,7 +608,7 @@ namespace Infrastructure.Migrations
                 {
                     b.Navigation("AssignedTasks");
 
-                    b.Navigation("Modules");
+                    b.Navigation("Grades");
                 });
 #pragma warning restore 612, 618
         }

@@ -13,9 +13,6 @@ public class CreateNewTaskCommand : IRequest<Result>
     public string Title { get; set; }
     public required string Description { get; set; }
     public required string Instructions { get; set; }
-    public string? SubmissionLink { get; set; }
-    
-    public DateTime SubmissionDate { get; set; }
     public int ModuleId { get; set; } // Foreign key to ModuleController
 
 }
@@ -37,8 +34,6 @@ public class CreateNewTaskCommandHandler(IApplicationDbContext Context) : IReque
             Title = request.Title,
             Description = request.Description,
             Instructions = request.Instructions,
-            SubmissionLink = request.SubmissionLink,
-            Status = ModuleTaskStatus.NotSubmitted,
             ModuleId = request.ModuleId // Associate task with the created module
         };
 
