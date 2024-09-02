@@ -36,8 +36,6 @@ public class AssignTaskToStudentCommandHandler : IRequestHandler<AssignTaskToStu
 
         //_context.Entry(student).Collection(s => s.AssignedTasks).Load();
 
-
-
         // Check if the task exists
         var task = await _context.Tasks.FindAsync(request.ModuleTaskId, cancellationToken);
         if (task == null)
@@ -52,10 +50,20 @@ public class AssignTaskToStudentCommandHandler : IRequestHandler<AssignTaskToStu
             return Result.Failure($"Student with ID {request.StudentId} is already assigned this task.");
         }
 
+        SubmissionDetails details = new()
+        {
+            Grade = 0,
+            TaskId = request.ModuleTaskId,
+            StudentId = request.StudentId,
+        };
+
+        //update the grade
+        _context.SubmissionDetails.Add(details);
+
         student.AssignedTasks.Add(task);
 
         await _userManager.UpdateAsync(student);
-        //_context.Students.Update(student);
+
         await _context.SaveChangesAsync(cancellationToken);
 
         return Result.Success("");

@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Domain.Entities;
 public class SubmissionDetails : BaseEntity
 {
-    public required float Value { get; set; }
+    public float? Grade { get; set; }
     public string? SubmissionLink { get; set; }
 
     public string? FacilitatorFeedBack { get; set; }
@@ -14,7 +14,7 @@ public class SubmissionDetails : BaseEntity
     public ModuleTaskStatus TaskStatus { get; set; } = ModuleTaskStatus.NotSubmitted;
 
     [ForeignKey(nameof(StudentId))]
-    public int StudentId { get; set; }
+    public string StudentId { get; set; }
 
     [ForeignKey(nameof(TaskId))]
     public int TaskId { get; set; }
