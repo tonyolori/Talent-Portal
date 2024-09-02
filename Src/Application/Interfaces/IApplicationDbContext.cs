@@ -14,7 +14,9 @@ namespace Application.Interfaces
         public DbSet<LearningAdmin> LearningAdmins { get; set; }
 
         public DbSet<Topic> Topics { get; set; }
-        
+        public DbSet<SubmissionDetails> SubmissionDetails { get; set; }
+
+
         public DbSet<Programme> Programmes { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);

@@ -9,7 +9,6 @@ namespace Application.Students.Queries
     public class GetStudentByIdQuery : IRequest<Result>
     {
         public string Id { get; set; }
-        
     }
 
     public class GetStudentByIdQueryHandler(UserManager<Student> userManager) : IRequestHandler<GetStudentByIdQuery, Result>
