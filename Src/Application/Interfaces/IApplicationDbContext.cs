@@ -15,6 +15,12 @@ namespace Application.Interfaces
 
         public DbSet<Topic> Topics { get; set; }
         public DbSet<SubmissionDetails> SubmissionDetails { get; set; }
+        
+        public DbSet<Quiz> Quizzes { get; set; }
+    
+        public DbSet<Question> Questions { get; set; }
+    
+        public DbSet<Answer> Answers { get; set; }
 
 
         public DbSet<Programme> Programmes { get; set; }
