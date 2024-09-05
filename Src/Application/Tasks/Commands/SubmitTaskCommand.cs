@@ -21,8 +21,9 @@ public class SubmitTaskCommandHandler(IApplicationDbContext context, UserManager
 
     public async Task<Result> Handle(SubmitTaskCommand request, CancellationToken cancellationToken)
     {
-        Student? student = await _userManager.FindByIdAsync(request.StudentId);
-
+        //Student? student = await _userManager.FindByIdAsync(request.StudentId);
+        Student? student = await _userManager.Users.Include(s => s.AssignedTasks)
+                                 .FirstOrDefaultAsync(s => s.Id == request.StudentId, cancellationToken);
         if (student == null)
         {
             return Result.Failure($"Student with ID {request.StudentId} not found.");
