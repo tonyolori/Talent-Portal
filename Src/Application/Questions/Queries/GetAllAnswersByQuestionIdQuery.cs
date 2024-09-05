@@ -4,7 +4,7 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Answers.Queries
+namespace Application.Questions.Queries
 {
     public class GetAllAnswersByQuestionIdQuery : IRequest<Result>
     {
