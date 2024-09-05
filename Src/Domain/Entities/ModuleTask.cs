@@ -11,7 +11,7 @@ public class ModuleTask: BaseEntity
     public required string Description { get; set; }
     public required string Instructions { get; set; }
     public DateTime CreatedDate { get; set; } = DateTime.Now;
-    public DateTime SubmissionDate { get; set; }
+    
     public int ModuleId { get; set; } // Foreign key to Module
     
     [ForeignKey(nameof(ModuleId))]

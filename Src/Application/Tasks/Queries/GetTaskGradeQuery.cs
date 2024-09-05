@@ -38,6 +38,12 @@ public class GetTaskGradeQueryHandler(UserManager<Student> userManager, IApplica
 
         if (submissionDetails == null)
         {
+            // create new details if null
+            SubmissionDetails details = new()
+            {
+                TaskId = request.ModuleTaskId,
+                StudentId = request.StudentId,
+            };
             return Result.Failure<float>("No Submission Available");
         }
 
