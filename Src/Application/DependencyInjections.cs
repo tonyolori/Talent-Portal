@@ -3,6 +3,7 @@ using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
+using Application.Paystack.Commands;
 using CloudinaryDotNet;
 using Microsoft.Extensions.Configuration;
 using Serilog;
@@ -20,7 +21,8 @@ namespace Application
             Assembly assembly = typeof(DependencyInjection).Assembly;
 
             services.AddMediatR(configuration => configuration.RegisterServicesFromAssembly(assembly));
-            
+            services.AddHttpClient<CreatePaymentCommandHandler>();
+            services.AddHttpClient<VerifyPaymentCommandHandler>();
             services.AddControllers()
                 .AddJsonOptions(options =>
                 {
