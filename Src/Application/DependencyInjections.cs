@@ -20,6 +20,12 @@ namespace Application
             Assembly assembly = typeof(DependencyInjection).Assembly;
 
             services.AddMediatR(configuration => configuration.RegisterServicesFromAssembly(assembly));
+            
+            services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+                });
 
             services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(configuration.GetConnectionString("redisConnection")));
         
