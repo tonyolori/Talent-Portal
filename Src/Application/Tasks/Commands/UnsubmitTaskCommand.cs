@@ -20,7 +20,9 @@ public class UnsubmitTaskCommandHandler(IApplicationDbContext context, UserManag
 
     public async Task<Result> Handle(UnsubmitTaskCommand request, CancellationToken cancellationToken)
     {
-        Student? student = await _userManager.FindByIdAsync(request.StudentId);
+        Student? student = await _userManager.Users.Include(s => s.AssignedTasks)
+                                 .FirstOrDefaultAsync(s => s.Id == request.StudentId, cancellationToken);
+        //Student? student = await _userManager.FindByIdAsync(request.StudentId);
 
         if (student == null)
         {
@@ -46,6 +48,10 @@ public class UnsubmitTaskCommandHandler(IApplicationDbContext context, UserManag
         if (submission == null)
         {
             return Result.Failure($"Submission Not found For Task with ID {request.TaskId} and Student with ID {request.StudentId}");
+        }
+        else if(submission.TaskStatus == ModuleTaskStatus.NotSubmitted)
+        {
+            Result.Success("Task Was Not Submitted previously");
         }
 
         submission.TaskStatus = ModuleTaskStatus.NotSubmitted;
