@@ -148,9 +148,6 @@ namespace Infrastructure.Migrations
                     b.Property<Guid>("Guid")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("IsCorrect")
-                        .HasColumnType("bit");
-
                     b.Property<int>("QuestionId")
                         .HasColumnType("int");
 
@@ -158,7 +155,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("Answers");
+                    b.ToTable("Answers", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Module", b =>
@@ -225,7 +222,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("Modules");
+                    b.ToTable("Modules", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.ModuleTask", b =>
@@ -269,7 +266,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("Tasks");
+                    b.ToTable("Tasks", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Programme", b =>
@@ -289,7 +286,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Programmes");
+                    b.ToTable("Programmes", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Question", b =>
@@ -299,6 +296,9 @@ namespace Infrastructure.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("CorrectOptionId")
+                        .HasColumnType("int");
 
                     b.Property<Guid>("Guid")
                         .HasColumnType("uniqueidentifier");
@@ -312,9 +312,11 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CorrectOptionId");
+
                     b.HasIndex("QuizId");
 
-                    b.ToTable("Questions");
+                    b.ToTable("Questions", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Quiz", b =>
@@ -328,18 +330,13 @@ namespace Infrastructure.Migrations
                     b.Property<Guid>("Guid")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("ModuleId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ModuleId");
-
-                    b.ToTable("Quizzes");
+                    b.ToTable("Quizzes", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.SubmissionDetails", b =>
@@ -377,7 +374,7 @@ namespace Infrastructure.Migrations
                     b.HasIndex("TaskId", "StudentId")
                         .IsUnique();
 
-                    b.ToTable("SubmissionDetails");
+                    b.ToTable("SubmissionDetails", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Topic", b =>
@@ -412,57 +409,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("ModuleId");
 
-                    b.ToTable("Topics");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Transaction", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("ApplicationType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("EducationalLevel")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("EmploymentStatus")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("Guid")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("PreferredProgramme")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TransactionReference")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Transactions");
+                    b.ToTable("Topics", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -674,20 +621,19 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Question", b =>
                 {
+                    b.HasOne("Domain.Entities.Answer", "CorrectOption")
+                        .WithMany()
+                        .HasForeignKey("CorrectOptionId");
+
                     b.HasOne("Domain.Entities.Quiz", "Quiz")
                         .WithMany("Questions")
                         .HasForeignKey("QuizId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Quiz");
-                });
+                    b.Navigation("CorrectOption");
 
-            modelBuilder.Entity("Domain.Entities.Quiz", b =>
-                {
-                    b.HasOne("Domain.Entities.Module", null)
-                        .WithMany("Quizzes")
-                        .HasForeignKey("ModuleId");
+                    b.Navigation("Quiz");
                 });
 
             modelBuilder.Entity("Domain.Entities.Topic", b =>
@@ -766,8 +712,6 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.Module", b =>
                 {
                     b.Navigation("ModuleTasks");
-
-                    b.Navigation("Quizzes");
 
                     b.Navigation("Topics");
                 });
