@@ -28,6 +28,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Answer> Answers { get; set; }
 
     public DbSet<Topic> Topics { get; set; }
+    
+    public DbSet<Transaction> Transactions { get; set; }
     public DbSet<SubmissionDetails> SubmissionDetails { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)

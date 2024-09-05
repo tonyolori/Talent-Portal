@@ -22,7 +22,7 @@ namespace Application.Interfaces
     
         public DbSet<Answer> Answers { get; set; }
 
-
+        public DbSet<Transaction> Transactions { get; set; }
         public DbSet<Programme> Programmes { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
