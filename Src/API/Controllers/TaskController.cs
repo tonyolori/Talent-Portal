@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Application.Tasks.Queries;
+using Application.Tasks.Commands;
 
 
 namespace API.Controllers;
@@ -44,5 +45,15 @@ public class TaskController(IMediator mediator) : Controller
     {
         return Ok(await _mediator.Send(new GetTaskGradeQuery { StudentId = studentId, ModuleTaskId = taskId }));
     }
+    [HttpPost("submit")]
+    public async Task<IActionResult> SubmitTask(SubmitTaskCommand command)
+    {
+        return Ok(await _mediator.Send(command));
+    }
+    [HttpPost("unsubmit")]
 
+    public async Task<IActionResult> UnsubmitTask(UnsubmitTaskCommand command)
+    {
+        return Ok(await _mediator.Send(command));
+    }
 }

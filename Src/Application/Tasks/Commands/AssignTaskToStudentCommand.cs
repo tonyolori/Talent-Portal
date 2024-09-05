@@ -6,22 +6,17 @@ using Domain.Enum;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 
+namespace Application.Tasks.Commands;
 public class AssignTaskToStudentCommand : IRequest<Result>
 {
     public string StudentId { get; set; }
     public int ModuleTaskId { get; set; }
 }
 
-public class AssignTaskToStudentCommandHandler : IRequestHandler<AssignTaskToStudentCommand, Result>
+public class AssignTaskToStudentCommandHandler(IApplicationDbContext context, UserManager<Student> userManager) : IRequestHandler<AssignTaskToStudentCommand, Result>
 {
-    private readonly IApplicationDbContext _context;
-    private readonly UserManager<Student> _userManager;
-
-    public AssignTaskToStudentCommandHandler(IApplicationDbContext context, UserManager<Student> userManager)
-    {
-        _context = context;
-        _userManager = userManager;
-    }
+    private readonly IApplicationDbContext _context = context;
+    private readonly UserManager<Student> _userManager = userManager;
 
     public async Task<Result> Handle(AssignTaskToStudentCommand request, CancellationToken cancellationToken)
     {
@@ -33,8 +28,6 @@ public class AssignTaskToStudentCommandHandler : IRequestHandler<AssignTaskToStu
         {
             return Result.Failure($"Student with ID {request.StudentId} not found.");
         }
-
-        //_context.Entry(student).Collection(s => s.AssignedTasks).Load();
 
         // Check if the task exists
         var task = await _context.Tasks.FindAsync(request.ModuleTaskId, cancellationToken);
@@ -52,9 +45,10 @@ public class AssignTaskToStudentCommandHandler : IRequestHandler<AssignTaskToStu
 
         SubmissionDetails details = new()
         {
-            Grade = 0,
             TaskId = request.ModuleTaskId,
             StudentId = request.StudentId,
+            TaskStatus = ModuleTaskStatus.NotSubmitted,
+            TaskStatusDesc = ModuleTaskStatus.NotSubmitted.ToString(),
         };
 
         //update the grade
