@@ -13,7 +13,8 @@ public class CreateNewTaskCommand : IRequest<Result>
     public string Title { get; set; }
     public required string Description { get; set; }
     public required string Instructions { get; set; }
-    public int ModuleId { get; set; } // Foreign key to ModuleController
+    public int ModuleId { get; set; } // Foreig
+                                      // n key to ModuleController
 
 }
 

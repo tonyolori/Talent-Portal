@@ -28,6 +28,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Answer> Answers { get; set; }
 
     public DbSet<Topic> Topics { get; set; }
+    
+    public DbSet<Transaction> Transactions { get; set; }
     public DbSet<SubmissionDetails> SubmissionDetails { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
@@ -52,6 +54,13 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             .WithMany(qu => qu.Questions)
             .HasForeignKey(q => q.QuizId)
             .OnDelete(DeleteBehavior.Restrict); 
+        
+        builder.Entity<Transaction>(entity =>  
+        {  
+            entity.Property(e => e.Amount)  
+                .HasColumnType("decimal(18, 2)") // Specify decimal type with precision and scale  
+                .HasPrecision(18, 2); // You can also use HasPrecision for clarity  
+        }); 
 
         base.OnModelCreating(builder);
     }

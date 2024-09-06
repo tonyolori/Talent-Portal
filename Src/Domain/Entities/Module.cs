@@ -10,7 +10,7 @@ namespace Domain.Entities
         
         public string ModuleImageUrl { get; set; }
 
-        public ICollection<Topic> Topics { get; set; } = new List<Topic>();
+        public virtual ICollection<Topic> Topics { get; set; } = new List<Topic>();
 
         public required string Description { get; set; }
 
@@ -32,6 +32,8 @@ namespace Domain.Entities
         public Programme Programme { get; set; }
 
         public virtual ICollection<ModuleTask> ModuleTasks { get; set; }
+        
+        public virtual ICollection<Quiz> Quizzes { get; set; } = new List<Quiz>();
 
         public string Progress { get; set; }
 
