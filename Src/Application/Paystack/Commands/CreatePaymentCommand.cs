@@ -35,8 +35,17 @@ namespace Application.Paystack.Commands
 
         public async Task<Result> Handle(CreatePaymentCommand request, CancellationToken cancellationToken)
         {
+            
+            // Check if the email belongs to a registered student
+            var studentExists = await _context.Students
+                .AnyAsync(s => s.Email == request.Email, cancellationToken);
+
+            if (!studentExists)
+            {
+                return Result.Failure("The email does not belong to a registered student.");
+            }
             // Retrieve Paystack secret key from configuration
-            var paystackSecretKey = _configuration["Paystack:SecretKey"];
+            string? paystackSecretKey = _configuration["Paystack:SecretKey"];
             if (string.IsNullOrEmpty(paystackSecretKey))
             {
                 return Result.Failure("Paystack secret key is not configured.");
@@ -49,8 +58,8 @@ namespace Application.Paystack.Commands
             var payload = new
             {
                 email = request.Email,
-                amount = request.Amount * 100, // Paystack requires amount in kobo (smallest currency unit)
-                callback_url = _configuration["Paystack:CallbackUrl"] // Use a configured callback URL
+                amount = request.Amount * 100,
+                callback_url = _configuration["Paystack:CallbackUrl"] 
             };
 
             // Send request to Paystack to initialize payment
