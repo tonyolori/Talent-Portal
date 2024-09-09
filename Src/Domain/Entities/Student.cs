@@ -15,9 +15,8 @@ public class Student : BaseUser
     
     public virtual ICollection<ModuleTask> AssignedTasks { get; set; }
 
-    //public ICollection<int>? ModuleId { get; set; }
-
-    //[ForeignKey(nameof(ModuleId))]
+    public virtual ICollection<Quiz> Quizzes { get; set; }
+    
     public virtual ICollection<Module> Modules { get; set; } 
 }
 

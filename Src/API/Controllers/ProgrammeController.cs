@@ -9,7 +9,7 @@ using Application.Programmes.Commands;
 namespace API.Controllers;
 
 [ApiController]
-[Route("api/Programmes")]
+[Route("api/programmes")]
 public class ProgrammeController(IMediator mediator) : Controller
 {
 
