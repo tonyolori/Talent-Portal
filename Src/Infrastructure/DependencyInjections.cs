@@ -53,7 +53,7 @@ namespace Infrastructure
                 return new GenerateTokenService(key, issuer, audience);
             });
 
-            services.AddHostedService<TaskNotificationService>();
+            //services.AddHostedService<TaskNotificationService>();
             return services;
         }
     }
