@@ -31,6 +31,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     
     public DbSet<Transaction> Transactions { get; set; }
     public DbSet<SubmissionDetails> SubmissionDetails { get; set; }
+    public DbSet<Notification> Notifications { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
