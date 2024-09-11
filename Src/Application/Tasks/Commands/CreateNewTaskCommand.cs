@@ -13,8 +13,9 @@ public class CreateNewTaskCommand : IRequest<Result>
     public string Title { get; set; }
     public required string Description { get; set; }
     public required string Instructions { get; set; }
-    public int ModuleId { get; set; } // Foreig
-                                      // n key to ModuleController
+    public int ModuleId { get; set; } 
+
+    public DateTime DueDate { get; set; }
 
 }
 
@@ -35,7 +36,8 @@ public class CreateNewTaskCommandHandler(IApplicationDbContext Context) : IReque
             Title = request.Title,
             Description = request.Description,
             Instructions = request.Instructions,
-            ModuleId = request.ModuleId // Associate task with the created module
+            ModuleId = request.ModuleId,
+            DueDate = request.DueDate,
         };
 
         await _context.Tasks.AddAsync(task);
