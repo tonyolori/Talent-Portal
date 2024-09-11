@@ -10,6 +10,7 @@ public class ModuleTask: BaseEntity
     public required string Title { get; set; }
     public required string Description { get; set; }
     public required string Instructions { get; set; }
+    
     public DateTime CreatedDate { get; set; } = DateTime.Now;
     public required DateTime DueDate { get; set; }
 
