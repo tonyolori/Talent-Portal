@@ -26,12 +26,7 @@ public class GetAllTasksQueryHandler(IApplicationDbContext context) : IRequestHa
         {
             return Result.Failure<GetAllTasksQuery>("No Tasks");
         }
-
-        var response = new  
-        {  
-            tasks , 
-            topicsLength = tasks.Count,  
-        };  
+  
         // Return the user or null if not found
         return Result.Success<GetAllTasksQuery>("Tasks retrieved successfully.", tasks);
     }
