@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Domain.Entities;
 using Domain.Common.Entities;
 using Application.Common.Models;
+using System;
 
 namespace Infrastructure
 {
@@ -53,7 +54,9 @@ namespace Infrastructure
                 return new GenerateTokenService(key, issuer, audience);
             });
 
-            //services.AddHostedService<TaskNotificationService>();
+            //services.AddSingleton<TaskNotificationService>();
+
+            services.AddHostedService<TaskNotificationService>();
             return services;
         }
     }

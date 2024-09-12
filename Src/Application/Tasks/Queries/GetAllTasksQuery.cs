@@ -10,7 +10,6 @@ namespace Application.Tasks.Queries;
 
 public class GetAllTasksQuery : IRequest<Result>
 {
-    public Guid Id { get; set; }
 
 }
 
@@ -21,11 +20,6 @@ public class GetAllTasksQueryHandler(IApplicationDbContext context) : IRequestHa
     public async Task<Result> Handle(GetAllTasksQuery request, CancellationToken cancellationToken)
     {
         List<ModuleTask>? tasks = await _context.Tasks.ToListAsync();
-
-        if (tasks == null)
-        {
-            return Result.Failure<GetAllTasksQuery>("No Tasks");
-        }
   
         // Return the user or null if not found
         return Result.Success<GetAllTasksQuery>("Tasks retrieved successfully.", tasks);

@@ -1,7 +1,6 @@
 ﻿using Application.Common.Models;
 using MediatR;
 using Domain.Entities;
-using Microsoft.AspNetCore.Identity;
 using Application.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
