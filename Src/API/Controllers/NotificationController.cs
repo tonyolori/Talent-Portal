@@ -2,12 +2,7 @@
 using Application.Tasks.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
- 
-using MediatR;
-using Microsoft.AspNetCore.Mvc;
-using Application.Tasks.Queries;
-using Application.Tasks.Commands;
-using Infrastructure.Services;
+using Application.Notifications.Queries;
 
 namespace API.Controllers;
 
@@ -18,9 +13,15 @@ public class NotificationController(IMediator mediator) : Controller {
 
 
     [HttpGet("getUnread/{studentId}")]
-    public IActionResult GetUnreadNotifications(int studentId)
+    public async Task<IActionResult> GetUnreadNotifications(string studentId)
     {
-        return Ok();
+        return Ok(await _mediator.Send(new GetUnreadNotificationsQuery { StudentId = studentId }));
+    }
+
+    [HttpGet("all")]
+    public async Task<IActionResult> GetAll()
+    {
+        return Ok(await _mediator.Send(new GetAllNotificationsQuery { }));
     }
 
 }
