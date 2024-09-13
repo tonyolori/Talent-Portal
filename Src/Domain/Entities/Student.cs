@@ -6,6 +6,12 @@ using System.Reflection;
 namespace Domain.Entities;
 public class Student : BaseUser
 {
+    
+     
+    public Status UserStatus { get; set; }
+    public string UserStatusDes { get; set; }
+    public bool IsVerified { get; set; }
+    public  DateTime DateOfBirth { get; set; }
     public DateTime EnrollmentDate { get; set; }
     public int ProgrammeId { get; set; }
 

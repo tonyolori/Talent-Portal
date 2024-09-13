@@ -6,7 +6,6 @@ using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using StackExchange.Redis;
 
-
 namespace Application.Auth.Commands
 {
     public class ForgotPasswordCommand : IRequest<Result>
@@ -29,23 +28,18 @@ namespace Application.Auth.Commands
 
         public async Task<Result> Handle(ForgotPasswordCommand request, CancellationToken cancellationToken)
         {
+            // Check if the user exists based on the provided email
             Student? user = await _userManager.FindByEmailAsync(request.Email);
             if (user == null)
             {
                 return Result.Failure("Email does not exist.");
             }
 
-            string verificationCode = GenerateCode.GenerateRegistrationCode();;
+            // Use the PasswordReset helper to send the password reset verification code
+            string verificationCode = await PasswordReset.SendPasswordResetVerificationCodeAsync(_redisDb.Multiplexer, _emailService, request.Email);
 
-            // Store the reset code in Redis with an expiration of 2 hours
-            await _redisDb.StringSetAsync($"PasswordResetCode:{request.Email}", verificationCode, TimeSpan.FromHours(2));
-
-            // Send the verification code to the user's email
-            await _emailService.SendEmailAsync(user.Email, "Password Reset Verification Code",
-                $"Your verification code is {verificationCode}");
-
-            return Result.Success<ForgotPasswordCommand>("Email verification code sent!", verificationCode);
+            // Return success result with the verification code
+            return Result.Success("Email verification code sent!", verificationCode);
         }
-        
     }
 }

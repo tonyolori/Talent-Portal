@@ -16,7 +16,7 @@ public class ProgrammeController(IMediator mediator) : Controller
 
     private readonly IMediator _mediator = mediator;
 
-    [HttpGet("")]
+    [HttpGet("all")]
     public async Task<IActionResult> GetAllProgrammes()
     {
         return Ok(await _mediator.Send(new GetAllProgrammesQuery { }));
