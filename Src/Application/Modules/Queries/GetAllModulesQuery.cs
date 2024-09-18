@@ -23,9 +23,9 @@ namespace Application.Modules.Queries
         {
             List<Module>? modules = await _context.Modules.ToListAsync(cancellationToken);
 
-            if (modules == null || !modules.Any())
+            if (modules == null || modules.Count == 0)
             {
-                return Result.Failure("No modules found.");
+                return Result.Success("No modules found.");
             }
 
             var response = new

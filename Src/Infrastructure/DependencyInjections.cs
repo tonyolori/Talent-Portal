@@ -18,10 +18,14 @@ namespace Infrastructure
         {
             // Register DbContext with the correct options
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("AzureConnection"),
+<<<<<<< Updated upstream
+                options.UseSqlServer(configuration.GetConnectionString("AzureConnection")));
+=======
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
                 builder =>
                     builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null)
                     ));
+>>>>>>> Stashed changes
 
             services.AddSingleton<IEmailService>(provider =>
             {
@@ -35,6 +39,13 @@ namespace Infrastructure
                     .AddRoles<IdentityRole>()
                     .AddEntityFrameworkStores<ApplicationDbContext>()
                     .AddApiEndpoints();
+            
+            // Register Identity for Teacher
+            services.AddIdentityCore<Admin>()
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddApiEndpoints();
+   
 
             // Register Identity for Teacher
             services.AddIdentityCore<Teacher>()
