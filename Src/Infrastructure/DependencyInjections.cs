@@ -16,9 +16,16 @@ namespace Infrastructure
     {
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
-            // Register DbContext with the correct options
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("AzureConnection")));
+                options.UseSqlServer(configuration.GetConnectionString("AzureConnection"),
+                    sqlServerOptionsAction: sqlOptions =>
+                    {
+                        sqlOptions.EnableRetryOnFailure(
+                            maxRetryCount: 5, // Number of retry attempts
+                            maxRetryDelay: TimeSpan.FromSeconds(10), // Delay between retries
+                            errorNumbersToAdd: null); // Optional: specific error numbers to retry on
+                    }));
+
 
             services.AddSingleton<IEmailService>(provider =>
             {
