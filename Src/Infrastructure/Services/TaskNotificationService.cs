@@ -1,30 +1,41 @@
 ﻿using Application.Interfaces;
 using Domain.Entities;
-using Domain.Enum;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System.Collections.Generic;
 
 namespace Infrastructure.Services;
 public class TaskNotificationService(IServiceProvider serviceProvider) : IHostedService, IDisposable
 {
     private readonly IServiceProvider _serviceProvider = serviceProvider;
-    //private readonly IApplicationDbContext _context = context;
     private Timer? _timer;
 
     public Task StartAsync(CancellationToken cancellationToken)
     {
-        _timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromSeconds(10)); // Adjust the interval as needed
+        _timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromSeconds(30000));
+
         return Task.CompletedTask;
     }
 
-    private async void DoWork(object state)
+    private async void DoWork(object? state)
     {
         using var scope = _serviceProvider.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<IApplicationDbContext>();
 
-        List<Tuple<ModuleTask, string>> overdueTasks = await GetOverdueTasks(context);
+        //First log it
+        DateTime time = DateTime.Now;
+        Random random = new();
+        int processID = random.Next(9999999, 999999999);
+        Notification notificationlog = new()
+        {
+            Title = "Server Log",
+            ShortMessage = "The server ran at " + time.ToShortTimeString(),
+            LongMessage = "The server ran at" + time.ToLongDateString() + ", " + time.ToLongTimeString() + $" process Id = {processID}",
+        };
+
+        await SendNotification(notificationlog, context);
+
+        List<(ModuleTask, string)> overdueTasks = await GetOverdueTasks(context);
 
         // Send notifications for each overdue task
         foreach (var taskData in overdueTasks)
@@ -72,28 +83,12 @@ public class TaskNotificationService(IServiceProvider serviceProvider) : IHosted
 
             await SendNotification(notification, context);
 
-
-            //now log it
-            Notification notificationlog = new()
-            {
-                Title = "log",
-                ShortMessage = "log",
-                LongMessage = message + """
-                        
-                    """,
-                TaskId = task.Id,
-                StudentId = studentId + " log",//get student id and place it here,
-
-            };
-
-            await SendNotification(notificationlog, context);
-
             //stop after 1 execution
-            _timer?.Change(Timeout.Infinite, 0);
+            await StopAsync(CancellationToken.None);
         }
     }
 
-    private async Task<List<Tuple<ModuleTask, string>>> GetOverdueTasks(IApplicationDbContext context)
+    private async Task<List<(ModuleTask, string)>> GetOverdueTasks(IApplicationDbContext context)
     {
         DateTime today = DateTime.Now;
         //var results = await (from task in context.Tasks
@@ -116,16 +111,9 @@ public class TaskNotificationService(IServiceProvider serviceProvider) : IHosted
                     submission
                 })
             .Where(x => x.task.DueDate < today && (int)x.submission.TaskStatus == 1)
-            .Select(x => new
-            {
-                x.task,
-                x.submission.StudentId
-            })
-            //.DistinctBy(t => t.task.Id)
             .ToList();
 
-        return results.Select(result => Tuple.Create(result.task, result.StudentId)).ToList();
-      //return results.Select(result => Tuple.Create(result.x, "jj")).ToList();
+        return results.Select(result => (result.task,result.submission.StudentId)).ToList();
     }
 
     //private async Task<List<ModuleTask>> GetOverdueTasks(IApplicationDbContext context)
@@ -153,10 +141,19 @@ public class TaskNotificationService(IServiceProvider serviceProvider) : IHosted
 
     private async Task SendNotification(Notification notification, IApplicationDbContext context)
     {
+        //TESTING PURPOSES, if student ID is empty just add and dont worry about duplicates
+        if(notification.StudentId == "")
+        {
+            context.Notifications.Add(notification);
+            await context.SaveChangesAsync(CancellationToken.None);
+            return;
+        }
+
+
         // Check if a notification already exists for the same StudentId and TaskId
         Notification? existingNotification = await context.Notifications
             .FirstOrDefaultAsync(n => n.StudentId == notification.StudentId && n.TaskId == notification.TaskId);
-
+        
         if (existingNotification != null)
         {
             // Update the existing notification if it exists
