@@ -19,6 +19,7 @@ public class CreateNewTaskCommand : IRequest<Result>
 
 }
 
+
 public class CreateNewTaskCommandHandler(IApplicationDbContext Context) : IRequestHandler<CreateNewTaskCommand, Result>
 {
     private readonly IApplicationDbContext _context = Context;

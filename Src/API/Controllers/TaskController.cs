@@ -33,7 +33,7 @@ public class TaskController(IMediator mediator) : Controller
     [HttpGet("student/{id}")]
     public async Task<IActionResult> GetAssignedTasks(string id)
     {
-        return Ok(await _mediator.Send(new GetAssignedTasksQuery { StudentGuid = id}));
+        return Ok(await _mediator.Send(new GetAssignedTasksQuery { StudentId = id}));
     }
     [HttpGet("all")]
     public async Task<IActionResult> GetAllTasks()

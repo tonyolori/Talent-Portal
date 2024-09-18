@@ -8,7 +8,7 @@ namespace Application.Tasks.Queries;
 
 public class GetAssignedTasksQuery : IRequest<Result>
 {
-    public string StudentGuid { get; set; }
+    public string StudentId { get; set; }
 }
 
 public class GetAssignedTasksQueryHandler(UserManager<Student> userManager) : IRequestHandler<GetAssignedTasksQuery, Result>
@@ -18,7 +18,7 @@ public class GetAssignedTasksQueryHandler(UserManager<Student> userManager) : IR
     public async Task<Result> Handle(GetAssignedTasksQuery request, CancellationToken cancellationToken)
     {
         Student? student = await _userManager.Users.Include(s => s.AssignedTasks)
-                                 .FirstOrDefaultAsync(s => s.Id == request.StudentGuid, cancellationToken);
+                                 .FirstOrDefaultAsync(s => s.Id == request.StudentId, cancellationToken);
         if (student == null)
         {
             // Handle student not found scenario
@@ -32,6 +32,10 @@ public class GetAssignedTasksQueryHandler(UserManager<Student> userManager) : IR
         }
         //List<ModuleTask>? assignedTasks =.ToList();
 
-        return Result.Success(student.AssignedTasks);
+        //return Result.Success(student.AssignedTasks);
+        // Order the assigned tasks by their created date (ascending)
+        List<ModuleTask> orderedTasks = student.AssignedTasks.OrderBy(t => t.CreatedDate).ToList();
+
+        return Result.Success(orderedTasks);
     }
 }
