@@ -10,6 +10,8 @@ namespace Infrastructure.Data;
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<BaseUser>(options), IApplicationDbContext
 {
     public DbSet<Student> Students { get; set; }
+    
+    public DbSet<Admin> Admins { get; set; }
 
     public DbSet<Teacher> Teachers { get; set; }
 

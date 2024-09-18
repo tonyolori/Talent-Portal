@@ -31,13 +31,6 @@ namespace Application.Auth
                 .Must(BeValidPassword)
                 .WithMessage("Password must be at least 8 characters long, including at least one number and one special character");
 
-            RuleFor(user => user.Role)
-                .NotEmpty().WithMessage("Role is required")
-                .Must(role => Enum.TryParse<UserRoles>(role, true, out _))
-                .WithMessage("Invalid role specified. Allowed roles are Admin, StudentController, and Instructor");
-
-            //RuleFor(x => x.Programme)
-            //    .IsInEnum().WithMessage("Invalid Programme.");
         }
 
         private static bool BeValidPassword(string password)

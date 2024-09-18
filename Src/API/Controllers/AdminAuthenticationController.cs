@@ -1,3 +1,4 @@
+using Application.Admins.Commands;
 using Application.Auth.Commands;
 
 //using Application.AuthController.Queries;
@@ -9,39 +10,33 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers
 {
     [ApiController]
-    [Route("api/auth")]
-    public class AuthController(IMediator mediator) : ControllerBase
+    [Route("api/admin")]
+    public class AdminAuthenticationController(IMediator mediator) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(RegisterStudentCommand command)
+        public async Task<IActionResult> Register(RegisterAdminCommand command)
         {
             return Ok(await _mediator.Send(command));
         }
-
         
-        [HttpPost("confirm-registration")]
-        public async Task<IActionResult> ConfirmRegistration(ConfirmRegistrationCommand command)
-        {
-            return Ok(await _mediator.Send(command));
-        }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginUserCommand command)
+        public async Task<IActionResult> Login(LoginAdminCommand command)
         {
             return Ok(await _mediator.Send(command));
         }
         
         [HttpPost("forgot-password")]
-        public async Task<IActionResult> ForgetPassword(ForgotPasswordCommand command)
+        public async Task<IActionResult> ForgetPassword(ForgotAdminPasswordCommand command)
         {
             return Ok(await _mediator.Send(command));
         }
 
         
         [HttpPost("reset-password")]
-        public async Task<IActionResult> ResetPassword(ResetPasswordCommand command)
+        public async Task<IActionResult> ResetPassword(ResetAdminPasswordCommand command)
         {
             return Ok(await _mediator.Send(command));
         }
