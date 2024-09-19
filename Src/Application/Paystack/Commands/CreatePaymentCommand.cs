@@ -5,6 +5,8 @@ using Application.Common.Models;
 using Application.Interfaces;
 using MediatR;
 using System.Text.Json.Serialization;
+using Domain.Enum;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -17,7 +19,7 @@ namespace Application.Paystack.Commands
         public string PreferredProgramme { get; set; }
         public string EducationalLevel { get; set; }
         public string EmploymentStatus { get; set; }
-        public string ApplicationType { get; set; }
+        public PaymentType ApplicationType { get; set; }
     }
 
     public class CreatePaymentCommandHandler : IRequestHandler<CreatePaymentCommand, Result>
@@ -25,9 +27,11 @@ namespace Application.Paystack.Commands
         private readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;
         private readonly IApplicationDbContext _context;
+        private readonly UserManager<Student> _userManager;
 
-        public CreatePaymentCommandHandler(HttpClient httpClient, IConfiguration configuration, IApplicationDbContext context)
+        public CreatePaymentCommandHandler(UserManager<Student> userManager,HttpClient httpClient, IConfiguration configuration, IApplicationDbContext context)
         {
+            _userManager = userManager;
             _httpClient = httpClient;
             _configuration = configuration;
             _context = context;
@@ -36,11 +40,10 @@ namespace Application.Paystack.Commands
         public async Task<Result> Handle(CreatePaymentCommand request, CancellationToken cancellationToken)
         {
             
-            // Check if the email belongs to a registered student
-            var studentExists = await _context.Students
-                .AnyAsync(s => s.Email == request.Email, cancellationToken);
-
-            if (!studentExists)
+           
+            Student? studentExists  = await _userManager.FindByEmailAsync(request.Email);
+         
+            if (studentExists == null)
             {
                 return Result.Failure("The email does not belong to a registered student.");
             }
@@ -87,14 +90,15 @@ namespace Application.Paystack.Commands
             // Store transaction details in the database
             var transaction = new Transaction
             {
+                StudentId = studentExists.Id,
                 TransactionReference = transactionReference,
                 Email = request.Email,
                 PreferredProgramme = request.PreferredProgramme,
                 EducationalLevel = request.EducationalLevel,
                 EmploymentStatus = request.EmploymentStatus,
-                ApplicationType = request.ApplicationType,
+                ApplicationType = request.ApplicationType.ToString(),
                 Amount = request.Amount,
-                Status = "Pending", // Initially set status as pending
+                TransactionStatus = "Pending",
                 CreatedAt = DateTime.UtcNow
             };
 

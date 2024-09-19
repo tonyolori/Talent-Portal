@@ -19,6 +19,10 @@ public class Student : BaseUser
     
     public Programme Programme { get; set; }
     
+    public PaymentType PaymentType { get; set; }
+    
+    public string PaymentTypeDes { get; set; }
+    
     public virtual ICollection<ModuleTask> AssignedTasks { get; set; }
 
     public virtual ICollection<Quiz> Quizzes { get; set; }
