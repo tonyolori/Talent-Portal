@@ -24,6 +24,7 @@ public class ReactivateInstructorCommand : IRequest<Result>
             }
 
             instructor.Status = Status.Active;
+            instructor.StatusDes = "Active";
 
             await _context.SaveChangesAsync(cancellationToken);
 

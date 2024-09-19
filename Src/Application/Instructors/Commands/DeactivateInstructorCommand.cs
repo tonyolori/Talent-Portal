@@ -24,6 +24,7 @@ public class DeactivateInstructorCommand : IRequest<Result>
             }
 
             instructor.Status = Status.Inactive;
+            instructor.StatusDes = "Inactive";
 
             await _context.SaveChangesAsync(cancellationToken);
 

@@ -8,11 +8,11 @@ namespace API.Controllers
 {
     [Route("api/instructor")]
     [ApiController]
-    public class InstructorController : ControllerBase
+    public class InstructorManagementController : ControllerBase
     {
         private readonly IMediator _mediator;
 
-        public InstructorController(IMediator mediator)
+        public InstructorManagementController(IMediator mediator)
         {
             _mediator = mediator;
         }
@@ -38,24 +38,24 @@ namespace API.Controllers
         public async Task<IActionResult> DeactivateInstructor(int id)
         {
     
-            return Ok(new DeactivateInstructorCommand { InstructorId = id });
+            return Ok(await _mediator.Send( new DeactivateInstructorCommand { InstructorId = id }));
           
         }
 
         [HttpPost("reactivate/{id}")]
         public async Task<IActionResult> ReactivateInstructor(int id)
         {
-            return Ok( new ReactivateInstructorCommand { InstructorId = id });
+            return Ok(await _mediator.Send( new ReactivateInstructorCommand { InstructorId = id }));
         }
         
         [HttpGet("{id}")]
         public async Task<IActionResult> GetInstructorById(int id)
         { 
-            return Ok(new GetInstructorByIdQuery { InstructorId = id });
+            return Ok(await _mediator.Send(new GetInstructorByIdQuery { InstructorId = id }));
 
         }
         
-        [HttpGet]
+        [HttpGet("all")]
         public async Task<IActionResult> GetAllInstructors()
         {
 
