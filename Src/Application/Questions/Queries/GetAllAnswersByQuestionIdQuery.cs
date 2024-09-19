@@ -31,7 +31,13 @@ namespace Application.Questions.Queries
             {
                 return Result.Failure("No answers found for the given question ID.");
             }
+            
+            var response = new  
+            {  
+                answers , 
+                answersLength = answers.Count,  
+            };  
 
-            return Result.Success<GetAllAnswersByQuestionIdQuery>($"All answers associated with {request.QuestionId}", answers);          }
+            return Result.Success<GetAllAnswersByQuestionIdQuery>($"All answers associated with {request.QuestionId}", response);          }
     }
 }

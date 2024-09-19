@@ -21,7 +21,6 @@ namespace Application.Students.Queries
 
         public async Task<Result> Handle(GetAllStudentsQuery request, CancellationToken cancellationToken)
         {
-            // Fetch all students
             List<Student>? students = await _userManager.Users.ToListAsync(cancellationToken);
 
             if (students == null || !students.Any())
@@ -29,7 +28,12 @@ namespace Application.Students.Queries
                 return Result.Failure("No students found.");
             }
 
-            return Result.Success(students);
+            var response = new  
+            {  
+                students , 
+                studentsLength = students.Count,  
+            };  
+            return Result.Success<GetAllStudentsQuery>("All students", response);
         }
     }
 }
