@@ -1,5 +1,6 @@
 
 using Application.Paystack.Commands;
+using Application.Paystack.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,18 +23,27 @@ public class PaymentController : ControllerBase
     [HttpPost("create")]
     public async Task<IActionResult> CreatePayment(CreatePaymentCommand command)
     {
-        var result = await _mediator.Send(command);
-    
-
-        return Ok(new { paymentUrl = result });
+        
+        return Ok(await _mediator.Send(command));
     }
 
     [HttpPost("verify")]
     public async Task<IActionResult> VerifyPayment(VerifyPaymentCommand command)
     {
-        var result = await _mediator.Send(command);
-   
 
-        return Ok(result);
+        return Ok(await _mediator.Send(command));
+    }
+    
+    
+    [HttpPost("payment-history/{studentId}")]
+    public async Task<IActionResult> GetStudentApplicationHistory(string  studentId)
+    {
+        return Ok(await _mediator.Send(new GetStudentPaymentHistoryQuery(){StudentId = studentId}));
+    }
+        
+    [HttpPost("payment-type/{studentId}")]
+    public async Task<IActionResult> GetStudentPaymentType(string  studentId)
+    {
+        return Ok(await _mediator.Send(new GetStudentPaymentTypeByIdQuery{StudentId = studentId}));
     }
 }

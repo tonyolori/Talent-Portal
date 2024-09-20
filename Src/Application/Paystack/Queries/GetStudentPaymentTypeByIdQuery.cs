@@ -3,23 +3,23 @@ using Application.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Students.Queries
+namespace Application.Paystack.Queries
 {
-    public class GetStudentProgrammePaymentTypeByIdQuery : IRequest<Result>
+    public class GetStudentPaymentTypeByIdQuery : IRequest<Result>
     {
         public string StudentId { get; set; }
     }
 
-    public class GetStudentProgrammePaymentTypeByIdQueryHandler : IRequestHandler<GetStudentProgrammePaymentTypeByIdQuery, Result>
+    public class GetStudentPaymentTypeByIdQueryHandler : IRequestHandler<GetStudentPaymentTypeByIdQuery, Result>
     {
         private readonly IApplicationDbContext _context;
 
-        public GetStudentProgrammePaymentTypeByIdQueryHandler(IApplicationDbContext context)
+        public GetStudentPaymentTypeByIdQueryHandler(IApplicationDbContext context)
         {
             _context = context;
         }
 
-        public async Task<Result> Handle(GetStudentProgrammePaymentTypeByIdQuery request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(GetStudentPaymentTypeByIdQuery request, CancellationToken cancellationToken)
         {
             // Retrieve student by ID
             var student = await _context.Students

@@ -8,9 +8,9 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Students.Queries
+namespace Application.Paystack.Queries
 {
-    public class GetStudentApplicationHistoryQuery : IRequest<Result>
+    public class GetStudentPaymentHistoryQuery : IRequest<Result>
     {
         public string StudentId { get; set; }
     }
@@ -24,19 +24,19 @@ namespace Application.Students.Queries
         public string PreferredProgramme { get; set; }
     }
 
-    public class GetStudentApplicationHistoryQueryHandler : IRequestHandler<GetStudentApplicationHistoryQuery, Result>
+    public class GetStudentPaymentHistoryQueryHandler : IRequestHandler<GetStudentPaymentHistoryQuery, Result>
     {
         private readonly IApplicationDbContext _context;
 
-        public GetStudentApplicationHistoryQueryHandler(IApplicationDbContext context)
+        public GetStudentPaymentHistoryQueryHandler(IApplicationDbContext context)
         {
             _context = context;
         }
 
-        public async Task<Result> Handle(GetStudentApplicationHistoryQuery request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(GetStudentPaymentHistoryQuery request, CancellationToken cancellationToken)
         {
             // Retrieve the student's transaction history from the database
-            var transactions = await _context.Transactions
+            List<Transaction>? transactions = await _context.Transactions
                 .Where(t => t.StudentId == request.StudentId)
                 .ToListAsync(cancellationToken);
 
