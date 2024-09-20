@@ -1,4 +1,5 @@
-﻿using Application.Modules.Commands;
+﻿using Application.Dashboard.Queries;
+using Application.Modules.Commands;
 using Application.Modules.Queries;
 using Application.Tasks.Queries;
 using MediatR;
@@ -14,19 +15,25 @@ public class DashboardController(IMediator mediator) : ControllerBase
     private readonly IMediator _mediator = mediator;
 
     [HttpGet("recent-tasks/{studentId}")]
-    public async Task<IActionResult> CreateModule(string studentId)
+    public async Task<IActionResult> recentTasks(string studentId)
     {
+        //this is on purpose, no need to create a new query
         GetAssignedTasksQuery query = new() { StudentId = studentId};
 
         return Ok(await _mediator.Send(query));
     }
 
-    [HttpGet("Curriculum")]
+    [HttpGet("curriculum")]
     public async Task<IActionResult> GetCurriculum(int programmeId)
     {
         return Ok(await _mediator.Send(new GetModulesInProgrammeQuery { Id = programmeId }));
     }
 
+    [HttpGet("module-overview")]
+    public async Task<IActionResult> GetModuleOverview(string studentId)
+    {
+        return Ok(await _mediator.Send(new GetProgressSummaryQuery { StudentId = studentId }));
+    }
     //[HttpGet("all")]
     //public async Task<IActionResult> GetAllModule()
     //{

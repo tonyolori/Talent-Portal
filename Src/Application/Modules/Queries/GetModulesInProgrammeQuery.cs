@@ -28,7 +28,7 @@ public class GetModulesInProgrammeQueryHandler : IRequestHandler<GetModulesInPro
         
         if (filteredModules == null || filteredModules.Count == 0)
         {
-            return Result.Failure("No modules found.");
+            return Result.Success("No modules found.");
         }
 
         return Result.Success<GetModulesInProgrammeQuery>("Modules retrieved successfully.", filteredModules);

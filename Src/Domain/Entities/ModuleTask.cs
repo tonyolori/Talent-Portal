@@ -18,4 +18,7 @@ public class ModuleTask: BaseEntity
     
     [ForeignKey(nameof(ModuleId))]
     public Module Module { get; set; }
+
+    [ForeignKey(nameof(ProgrammeId))]
+    public int ProgrammeId { get; set; }
 }

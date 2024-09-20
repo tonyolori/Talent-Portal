@@ -30,7 +30,7 @@ public class TaskNotificationService(IServiceProvider serviceProvider) : IHosted
         {
             Title = "Server Log",
             ShortMessage = "The server ran at " + time.ToShortTimeString(),
-            LongMessage = "The server ran at" + time.ToLongDateString() + ", " + time.ToLongTimeString() + $" process Id = {processID}",
+            LongMessage = "The server ran at " + time.ToLongDateString() + ", " + time.ToLongTimeString() + $" process Id = {processID}",
         };
 
         await SendNotification(notificationlog, context);
