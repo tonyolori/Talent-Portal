@@ -31,7 +31,7 @@ namespace Application.Questions.Commands
         public async Task<Result> Handle(CreateQuestionCommand request, CancellationToken cancellationToken)
         {
             // Check if the quiz exists
-            var quizExists = await _context.Quizzes.AnyAsync(q => q.Id == request.QuizId, cancellationToken);
+            bool quizExists = await _context.Quizzes.AnyAsync(q => q.Id == request.QuizId, cancellationToken);
             if (!quizExists)
             {
                 return Result.Failure("Quiz not found.");
@@ -53,7 +53,7 @@ namespace Application.Questions.Commands
             // Add options (answers) to the question
             foreach (var option in request.Options)
             {
-                var answer = new Answer
+                Answer answer = new ()
                 {
                     AnswerText = option.AnswerText,
                     IsCorrect = option.IsCorrect,
@@ -69,7 +69,7 @@ namespace Application.Questions.Commands
             // Save changes
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Result.Success("Question and options created successfully.");
+            return Result.Success<CreateQuestionCommand>("Question and options created successfully.", question);
         }
     }
 }

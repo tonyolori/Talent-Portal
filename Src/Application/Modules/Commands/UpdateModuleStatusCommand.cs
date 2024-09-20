@@ -46,7 +46,7 @@ namespace Application.Modules.Commands
             _context.Modules.Update(module);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Result.Success($"Module status updated to {request.ModuleStatus}.");
+            return Result.Success<UpdateModuleStatusCommand>($"Module status updated to {request.ModuleStatus}.", module);
         }
     }
 }

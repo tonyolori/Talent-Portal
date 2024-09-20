@@ -7,7 +7,6 @@ namespace Domain.Entities;
 public class Student : BaseUser
 {
     
-     
     public Status UserStatus { get; set; }
     public string UserStatusDes { get; set; }
     public bool IsVerified { get; set; }
