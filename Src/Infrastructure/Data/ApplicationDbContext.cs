@@ -45,7 +45,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         builder.Entity<SubmissionDetails>()
             .HasIndex(s => new { s.TaskId, s.StudentId })
             .IsUnique(true);
-        
   
         // Configure Answer-Question relationship
         builder.Entity<Answer>()
@@ -53,13 +52,49 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             .WithMany(q => q.Options)
             .HasForeignKey(a => a.QuestionId)
             .OnDelete(DeleteBehavior.Restrict); // or DeleteBehavior.NoAction
+        
+        // Configuring the relationship between Module and Topic  
+        builder.Entity<Topic>()  
+            .HasOne(t => t.Module)
+            .WithMany(m => m.Topics)  
+            .HasForeignKey(t => t.ModuleId) 
+            .OnDelete(DeleteBehavior.Cascade); // 
 
-        // Configure Question-Quiz relationship (if needed)
+        // Configuring the relationship between Module and ModuleTask  
+        builder.Entity<ModuleTask>()  
+            .HasOne(mt => mt.Module)  
+            .WithMany(m => m.ModuleTasks)  
+            .HasForeignKey(mt => mt.ModuleId) 
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // Configuring the relationship between Module and Quiz  
+        builder.Entity<Quiz>()  
+            .HasOne(q => q.Module)  
+            .WithMany(m => m.Quizzes)  
+            .HasForeignKey(q => q.ModuleId) 
+            .OnDelete(DeleteBehavior.Cascade); 
+
+        // Configuring the relationship between Module and Programme  
+        // builder.Entity<Module>()  
+        //     .HasOne(m => m.Programme)  
+        //     .WithMany(p => p.Modules)  
+        //     .HasForeignKey(m => m.ProgrammeId)  
+        //     .OnDelete(DeleteBehavior.Restrict);
+
+        // Configure Question-Quiz relationship 
         builder.Entity<Question>()
             .HasOne(q => q.Quiz)
             .WithMany(qu => qu.Questions)
             .HasForeignKey(q => q.QuizId)
             .OnDelete(DeleteBehavior.Restrict); 
+        
+        
+        // Configuring the relationship between Quiz and Student 
+        builder.Entity<Quiz>()
+            .HasOne(q => q.Student)
+            .WithMany(u => u.Quizzes)
+            .HasForeignKey(q => q.StudentId)
+            .OnDelete(DeleteBehavior.NoAction);        
         
         builder.Entity<Transaction>(entity =>  
         {  
