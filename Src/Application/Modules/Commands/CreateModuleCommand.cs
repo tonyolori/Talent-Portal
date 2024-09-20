@@ -5,6 +5,7 @@ using Domain.Entities;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 using Domain.Dto;
+using Domain.Enum;
 using Microsoft.AspNetCore.Http;
 
 namespace Application.Modules.Commands
@@ -64,6 +65,8 @@ namespace Application.Modules.Commands
                 Objectives = request.Objectives,
                 ProgrammeId = request.ProgrammeId,
                 FacilitatorName = request.FacilitatorName,
+                ModuleStatus = ModuleStatus.Pending,
+                ModuleStatusDes = "Pending",
                 FacilitatorId = request.FacilitatorId,
                 StartDate = request.StartDate,
                 EndDate = request.EndDate,

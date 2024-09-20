@@ -21,6 +21,7 @@ namespace API.Controllers
             return Ok(await _mediator.Send(new GetStudentByIdQuery{Id =id}));
         }
         
+        
         [HttpPost("all")]
         public async Task<IActionResult> GetAllStudent()
         {

@@ -4,6 +4,7 @@ using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240919132547_Instructor")]
+    partial class Instructor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -223,13 +226,6 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ModuleStatus")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ModuleStatusDes")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Objectives")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -404,7 +400,7 @@ namespace Infrastructure.Migrations
                     b.Property<Guid>("Guid")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("ModuleId")
+                    b.Property<int?>("ModuleId")
                         .HasColumnType("int");
 
                     b.Property<string>("StudentId")
@@ -815,17 +811,13 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Quiz", b =>
                 {
-                    b.HasOne("Domain.Entities.Module", "Module")
+                    b.HasOne("Domain.Entities.Module", null)
                         .WithMany("Quizzes")
-                        .HasForeignKey("ModuleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ModuleId");
 
                     b.HasOne("Domain.Entities.Student", null)
                         .WithMany("Quizzes")
                         .HasForeignKey("StudentId");
-
-                    b.Navigation("Module");
                 });
 
             modelBuilder.Entity("Domain.Entities.Topic", b =>

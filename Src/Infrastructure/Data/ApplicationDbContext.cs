@@ -28,6 +28,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Question> Questions { get; set; }
     
     public DbSet<Answer> Answers { get; set; }
+    
+    public DbSet<Instructor> Instructors { get; set; }
 
     public DbSet<Topic> Topics { get; set; }
     

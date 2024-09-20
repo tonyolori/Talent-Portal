@@ -25,6 +25,8 @@ namespace Application.Interfaces
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<Programme> Programmes { get; set; }
         public DbSet<Notification> Notifications { get; set; }
+        
+        public DbSet<Instructor> Instructors { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }

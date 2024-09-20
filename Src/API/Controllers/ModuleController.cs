@@ -23,6 +23,14 @@ namespace API.Controllers
             return Ok(await _mediator.Send(command));
         }
         
+        // PUT: api/Modules/UpdateStatus
+        [HttpPost("update-status")]
+        public async Task<IActionResult> UpdateModuleStatus( UpdateModuleStatusCommand command)
+        {
+
+            return Ok(await _mediator.Send(command));
+        }
+        
         [HttpGet("{id}")]
         public async Task<IActionResult> GetModule(int id)
         {

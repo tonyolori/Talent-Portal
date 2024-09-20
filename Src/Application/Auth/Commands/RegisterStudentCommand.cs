@@ -60,6 +60,8 @@ public class RegisterStudentCommandHandler(
             UserStatus = Status.Inactive,
             UserStatusDes = Status.Active.ToString(),
             ProgrammeId = request.ProgrammeId,
+            PaymentType = PaymentType.BootCampOnly,
+            PaymentTypeDes = "BootCamp",
             SecurityStamp = Guid.NewGuid().ToString(),
             CreatedDate = DateTime.UtcNow,
             LastModifiedDate = DateTime.UtcNow

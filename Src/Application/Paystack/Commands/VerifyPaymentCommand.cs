@@ -7,22 +7,28 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Text.Json.Serialization;
+using Domain.Enum;
+using Microsoft.AspNetCore.Identity;
 
 namespace Application.Paystack.Commands
 {
     public class VerifyPaymentCommand : IRequest<Result>
     {
+        
+        public string Email { get; set; }
         public string TransactionReference { get; set; }
     }
 
     public class VerifyPaymentCommandHandler : IRequestHandler<VerifyPaymentCommand, Result>
     {
+        private readonly UserManager<Student> _userManager;
         private readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;
         private readonly IApplicationDbContext _context;
 
-        public VerifyPaymentCommandHandler(HttpClient httpClient, IConfiguration configuration, IApplicationDbContext context)
+        public VerifyPaymentCommandHandler(UserManager<Student> userManager,HttpClient httpClient, IConfiguration configuration, IApplicationDbContext context)
         {
+            _userManager = userManager;
             _httpClient = httpClient;
             _configuration = configuration;
             _context = context;
@@ -30,6 +36,12 @@ namespace Application.Paystack.Commands
 
         public async Task<Result> Handle(VerifyPaymentCommand request, CancellationToken cancellationToken)
         {
+            
+            Student? studentExists  = await _userManager.FindByEmailAsync(request.Email);
+            if (studentExists == null)
+            {
+                return Result.Failure("The email does not belong to a registered student.");
+            }
             // Get Paystack secret key from configuration
             var paystackSecretKey = _configuration["Paystack:SecretKey"];
             if (string.IsNullOrEmpty(paystackSecretKey))
@@ -66,13 +78,16 @@ namespace Application.Paystack.Commands
             }
 
             // Update transaction status
-            transaction.Status = paymentStatus;
+            transaction.TransactionStatus = paymentStatus;
             _context.Transactions.Update(transaction);
             await _context.SaveChangesAsync(cancellationToken);
 
             // Check payment status and return appropriate result
             if (paymentStatus == "success")
             {
+                studentExists.PaymentType = PaymentType.BootCampOnly;
+                studentExists.PaymentTypeDes = PaymentType.BootCampOnly.ToString(); 
+                await _userManager.UpdateAsync(studentExists);
                 return Result.Success("Payment verified successfully.");
             }
 
