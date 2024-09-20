@@ -24,6 +24,7 @@ public class CreateInstructorCommand:IRequest<Result>
 
         public async Task<Result> Handle(CreateInstructorCommand request, CancellationToken cancellationToken)
         {
+            
         Instructor instructor = new ()
             {
                 Name = request.Name,

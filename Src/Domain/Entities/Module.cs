@@ -1,5 +1,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Security.Cryptography.X509Certificates;
 using Domain.Common.Entities;
+using Domain.Enum;
 
 
 namespace Domain.Entities
@@ -19,6 +21,10 @@ namespace Domain.Entities
         public required string FacilitatorName { get; set; }
 
         public required string FacilitatorId { get; set; }
+        
+        public ModuleStatus  ModuleStatus { get; set; }
+      
+        public string ModuleStatusDes { get; set; }
 
         public DateTime StartDate { get; set; }
 
