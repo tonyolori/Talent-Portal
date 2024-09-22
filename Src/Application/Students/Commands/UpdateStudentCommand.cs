@@ -1,9 +1,9 @@
 using Application.Common.Models;
 using Application.Interfaces;
-using Application.Topics.Commands;
 using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Auth.Commands
 {
@@ -12,17 +12,18 @@ namespace Application.Auth.Commands
         public string StudentId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public DateTime DateOfBirth { get; set; }
-        public int ProgrammeId { get; set; }
+        public string Programme { get; set; }  // Changed from ProgrammeId to Programme
     }
 
     public class UpdateStudentCommandHandler : IRequestHandler<UpdateStudentCommand, Result>
     {
         private readonly UserManager<Student> _userManager;
+        private readonly IApplicationDbContext _context;  // Injecting DbContext to access Programmes
 
-        public UpdateStudentCommandHandler(UserManager<Student> userManager)
+        public UpdateStudentCommandHandler(UserManager<Student> userManager, IApplicationDbContext context)
         {
             _userManager = userManager;
+            _context = context;
         }
 
         public async Task<Result> Handle(UpdateStudentCommand request, CancellationToken cancellationToken)
@@ -32,13 +33,22 @@ namespace Application.Auth.Commands
             if (student == null)
                 return Result.Failure("Student not found");
 
+            // Check if the programme exists
+            var existingProgramme = await _context.Programmes
+                .FirstOrDefaultAsync(p => p.Type == request.Programme, cancellationToken);
+
+            if (existingProgramme == null)
+            {
+                return Result.Failure($"Programme '{request.Programme}' does not exist");
+            }
+
             // Update the student details
             student.FirstName = request.FirstName;
             student.LastName = request.LastName;
-            student.DateOfBirth = request.DateOfBirth;
-            student.ProgrammeId = request.ProgrammeId;
+            student.ProgrammeId = existingProgramme.Id;  // Update with found ProgrammeId
             student.LastModifiedDate = DateTime.UtcNow;
 
+            // Attempt to update the student
             IdentityResult updateResult = await _userManager.UpdateAsync(student);
             if (!updateResult.Succeeded)
             {
@@ -46,7 +56,7 @@ namespace Application.Auth.Commands
                 return Result.Failure("Student update failed!\n" + errors);
             }
 
-            return Result.Success<UpdateTopicCommand>("Student updated successfully", student);
+            return Result.Success("Student updated successfully", student);
         }
     }
 }
