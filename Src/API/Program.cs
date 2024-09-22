@@ -18,7 +18,8 @@ var audience = configuration["Audience"];
 builder.Services.AddLogging();
 
 builder.Host.UseSerilog();
-builder.Services.AddControllers();
+builder.Services.AddControllers
+    ();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngularLocalhost", builder =>

@@ -22,10 +22,6 @@ namespace Application.Auth
                 .NotEmpty().WithMessage("Email is required.")
                 .EmailAddress().WithMessage("A valid email address is required.");
 
-            RuleFor(x => x.DateOfBirth)
-                .NotEmpty().WithMessage("Date of Birth is required.");
-           
-
             RuleFor(user => user.Password)
                 .NotEmpty().WithMessage("Password is required.")
                 .Must(BeValidPassword)

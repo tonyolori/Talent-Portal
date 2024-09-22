@@ -21,7 +21,6 @@ public class RegisterStudentCommand : IRequest<Result>
     public string LastName { get; set; }
     public string Email { get; set; }
     public string Password { get; set; } 
-    public DateTime DateOfBirth { get; set; }
     public string Programme { get; set; } 
 }
 
@@ -74,7 +73,6 @@ public class RegisterStudentCommandHandler : IRequestHandler<RegisterStudentComm
             Email = request.Email,
             FirstName = request.FirstName,
             LastName = request.LastName,
-            DateOfBirth = request.DateOfBirth,
             EnrollmentDate = DateTime.Now,
             Role = Enum.Parse<UserRoles>("Student", true),
             RoleDesc = "Student",
