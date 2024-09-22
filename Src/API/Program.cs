@@ -3,7 +3,7 @@ using System.Text;
 using API.Filters;
 using Application;
 using Infrastructure;
-using Infrastructure.Data;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Serilog;
 using Microsoft.AspNetCore.Identity;
@@ -19,6 +19,17 @@ builder.Services.AddLogging();
 
 builder.Host.UseSerilog();
 builder.Services.AddControllers();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularLocalhost", builder =>
+    {
+        builder.WithOrigins("http://localhost:4200")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials(); // If needed
+    });
+});
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddInfrastructureServices(builder.Configuration);
@@ -123,7 +134,7 @@ if (app.Environment.IsDevelopment())
 
 // app.UseHttpsRedirection();
 app.UseRouting();
-app.UseCors();
+app.UseCors("AllowAngularLocalhost");
 
 app.UseAuthentication();
 app.UseAuthorization();
