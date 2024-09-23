@@ -3,8 +3,6 @@ using Domain.Common.Entities;
 using Domain.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
-using System.Reflection.Emit;
 
 namespace Infrastructure.Data;
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<BaseUser>(options), IApplicationDbContext
@@ -60,12 +58,13 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             .HasForeignKey(t => t.ModuleId) 
             .OnDelete(DeleteBehavior.Cascade); // 
 
-        // Configuring the relationship between Module and ModuleTask  
-        builder.Entity<ModuleTask>()  
-            .HasOne(mt => mt.Module)  
-            .WithMany(m => m.ModuleTasks)  
-            .HasForeignKey(mt => mt.ModuleId) 
-            .OnDelete(DeleteBehavior.Cascade);
+        ////Relationship has been removed, tasks are now related to a program
+        //// Configuring the relationship between Module and ModuleTask  
+        //builder.Entity<ModuleTask>()  
+        //    .HasOne(mt => mt.Module)  
+        //    .WithMany(m => m.ModuleTasks)  
+        //    .HasForeignKey(mt => mt.ModuleId) 
+        //    .OnDelete(DeleteBehavior.Cascade);
 
         // Configuring the relationship between Module and Quiz  
         builder.Entity<Quiz>()  

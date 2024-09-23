@@ -9,5 +9,3 @@ public class ProgressSummary
     public int TotalTasks { get; set; }
     public int TotalTasksCompleted { get; set; }
 }
-{
-}
