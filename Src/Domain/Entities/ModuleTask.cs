@@ -14,11 +14,6 @@ public class ModuleTask: BaseEntity
     public DateTime CreatedDate { get; set; } = DateTime.Now;
     public required DateTime DueDate { get; set; }
 
-    public int ModuleId { get; set; } // Foreign key to Module
-    
-    [ForeignKey(nameof(ModuleId))]
-    public Module Module { get; set; }
-
     [ForeignKey(nameof(ProgrammeId))]
     public int ProgrammeId { get; set; }
 }

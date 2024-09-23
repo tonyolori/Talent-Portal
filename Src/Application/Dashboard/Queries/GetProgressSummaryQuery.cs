@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using System.Threading;
 using Domain.Enum;
-
+using Application.Modules.Queries;
 
 namespace Application.Dashboard.Queries;
 public class GetProgressSummaryQuery : IRequest<Result>
@@ -37,7 +37,6 @@ public class GetModuleOverviewQueryHandler : IRequestHandler<GetProgressSummaryQ
         }
 
         List<Module>? modules = await _context.Modules.Where((m) => m.ProgrammeId == student.ProgrammeId).ToListAsync(cancellationToken);
-        List<Quiz>? quizzes = await _context.Quizzes.Where((m) => m.ProgrammeId == student.ProgrammeId).ToListAsync(cancellationToken);
         List<ModuleTask>? tasks = await _context.Tasks.Where((m) => m.ProgrammeId == student.ProgrammeId).ToListAsync(cancellationToken);
 
         int totalModules = modules.Count;
@@ -46,11 +45,11 @@ public class GetModuleOverviewQueryHandler : IRequestHandler<GetProgressSummaryQ
 
         //quiz section = 
 
-        int totalQuizzes = quizzes.Count;
+        int totalQuizzes = await GetTotalQuizzes(student.ProgrammeId);
         int totalQuizzesCompleted = 1;
 
         int totalTasks = tasks.Count;
-        int totalTasksCompleted = await GetCompletedTasks(student.Id,_context);
+        int totalTasksCompleted = await GetCompletedTasks(student.Id);
 
         ProgressSummary progress =  new ()
         {
@@ -63,18 +62,27 @@ public class GetModuleOverviewQueryHandler : IRequestHandler<GetProgressSummaryQ
         };
 
 
-        return Result.Success<GetProgressSummaryQuery>("Modules retrieved successfully.", progress);
+        return Result.Success<GetProgressSummaryQuery>("Progress report retrieved successfully.", progress);
     }
 
-    private async Task<int> GetCompletedTasks(string studentId,IApplicationDbContext context)
+    private async Task<int> GetTotalQuizzes(int programmeId)
+    {
+        return await _context.Modules
+               .Where(m=> m.ProgrammeId == programmeId)
+               .Include(m => m.Quizzes)
+               .SelectMany(m => m.Quizzes)
+               .CountAsync();
+    }
+
+    private async Task<int> GetCompletedTasks(string studentId)
     {
         //get the tasks for the specific student
         Student? student = await _userManager.Users.Include(s => s.AssignedTasks)
                                  .FirstOrDefaultAsync(s => s.Id == studentId, CancellationToken.None);
 
-        int completedTasks = await context.Tasks
+        int completedTasks = await _context.Tasks
        .Join(
-           inner: context.SubmissionDetails.Where(sd => sd.StudentId == studentId),
+           inner: _context.SubmissionDetails.Where(sd => sd.StudentId == studentId),
            outerKeySelector :mt => mt.Id,
            innerKeySelector :sd => sd.TaskId,
            resultSelector :(mt, sd) => new { ModuleTask = mt, SubmissionDetails = sd })
