@@ -2,7 +2,6 @@
 using MediatR;
 using Domain.Entities;
 using Application.Interfaces;
-using Domain.Enum;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -38,7 +37,6 @@ public class CreateNewTaskCommandHandler(IApplicationDbContext Context) : IReque
             Title = request.Title,
             Description = request.Description,
             Instructions = request.Instructions,
-            ModuleId = request.ModuleId,
             DueDate = request.DueDate,
         };
 
