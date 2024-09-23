@@ -17,6 +17,7 @@ public class CreateNewTaskCommand : IRequest<Result>
 
     public DateTime DueDate { get; set; }
 
+    
 }
 
 

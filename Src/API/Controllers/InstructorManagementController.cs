@@ -19,7 +19,7 @@ namespace API.Controllers
         
         
         [HttpPost("create")]
-        public async Task<IActionResult> CreateInstructor([FromBody] CreateInstructorCommand command)
+        public async Task<IActionResult> CreateInstructor( CreateInstructorCommand command)
         {
             return Ok(await _mediator.Send(command));
          
@@ -27,7 +27,7 @@ namespace API.Controllers
 
       
         [HttpPost("update/{id}")]
-        public async Task<IActionResult> UpdateInstructor(int id, [FromBody] UpdateInstructorCommand command)
+        public async Task<IActionResult> UpdateInstructor( UpdateInstructorCommand command)
         { 
             return Ok( await _mediator.Send(command));
         
