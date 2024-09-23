@@ -1,6 +1,4 @@
 ﻿using Application.Dashboard.Queries;
-using Application.Modules.Commands;
-using Application.Modules.Queries;
 using Application.Tasks.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -29,8 +27,8 @@ public class DashboardController(IMediator mediator) : ControllerBase
         return Ok(await _mediator.Send(new GetModulesInProgrammeQuery { Id = programmeId }));
     }
 
-    [HttpGet("module-overview")]
-    public async Task<IActionResult> GetModuleOverview(string studentId)
+    [HttpGet("progress-summary")]
+    public async Task<IActionResult> GetProgressSummary(string studentId)
     {
         return Ok(await _mediator.Send(new GetProgressSummaryQuery { StudentId = studentId }));
     }

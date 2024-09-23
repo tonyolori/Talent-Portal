@@ -5,7 +5,7 @@ using Application.Interfaces;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Modules.Queries;
+namespace Application.Dashboard.Queries;
 
 public class GetModulesInProgrammeQuery : IRequest<Result>
 {
@@ -23,9 +23,12 @@ public class GetModulesInProgrammeQueryHandler : IRequestHandler<GetModulesInPro
 
     public async Task<Result> Handle(GetModulesInProgrammeQuery request, CancellationToken cancellationToken)
     {
-        List<Module>? modules = await _context.Modules.ToListAsync(cancellationToken);
-        List<Module>? filteredModules = modules.Where((m)=> m.ProgrammeId == request.Id).ToList();
-        
+        List<Module>? modules = await _context.Modules
+            .Include(m=>m.Topics)
+            .ToListAsync(cancellationToken);
+
+        List<Module>? filteredModules = modules.Where((m) => m.ProgrammeId == request.Id).ToList();
+
         if (filteredModules == null || filteredModules.Count == 0)
         {
             return Result.Success("No modules found.");

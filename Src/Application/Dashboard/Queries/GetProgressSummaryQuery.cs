@@ -46,7 +46,7 @@ public class GetModuleOverviewQueryHandler : IRequestHandler<GetProgressSummaryQ
         //quiz section = 
 
         int totalQuizzes = await GetTotalQuizzes(student.ProgrammeId);
-        int totalQuizzesCompleted = 1;
+        int totalQuizzesCompleted = 999999999; // dummy value until facilities to calculate this can be created
 
         int totalTasks = tasks.Count;
         int totalTasksCompleted = await GetCompletedTasks(student.Id);
