@@ -48,7 +48,7 @@ namespace Application.Paystack.Queries
             // Map each transaction to an ApplicationHistoryDto
             var applicationHistory = transactions.Select(MapToApplicationHistoryDto).ToList();
 
-            return Result.Success("Application history retrieved successfully.", applicationHistory);
+            return Result.Success<GetStudentPaymentHistoryQuery>("Application history retrieved successfully.", applicationHistory);
         }
 
         // Method to map a Transaction to ApplicationHistoryDto

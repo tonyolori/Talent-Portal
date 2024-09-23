@@ -19,6 +19,7 @@ builder.Services.AddLogging();
 
 builder.Host.UseSerilog();
 builder.Services.AddControllers
+    
     ();
 builder.Services.AddCors(options =>
 {
