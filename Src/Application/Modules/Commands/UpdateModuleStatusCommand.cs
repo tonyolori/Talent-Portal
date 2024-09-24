@@ -10,7 +10,7 @@ namespace Application.Modules.Commands
     public class UpdateModuleStatusCommand : IRequest<Result>
     {
         public int ModuleId { get; set; }
-        public string ModuleStatus { get; set; }  
+        public ModuleStatus ModuleStatus { get; set; }  
     }
 
     public class UpdateModuleStatusCommandHandler : IRequestHandler<UpdateModuleStatusCommand, Result>
@@ -33,15 +33,9 @@ namespace Application.Modules.Commands
                 return Result.Failure("Module not found.");
             }
 
-            // Convert string to ModuleStatus enum
-            if (!Enum.TryParse(request.ModuleStatus, true, out ModuleStatus status))
-            {
-                return Result.Failure("Invalid module status.");
-            }
-
             // Update the module status
-            module.ModuleStatus = status;
-            module.ModuleStatusDes = request.ModuleStatus; 
+            module.ModuleStatus =  request.ModuleStatus;
+            module.ModuleStatusDes = request.ModuleStatus.ToString(); 
 
             _context.Modules.Update(module);
             await _context.SaveChangesAsync(cancellationToken);

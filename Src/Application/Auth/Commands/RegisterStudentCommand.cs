@@ -80,7 +80,7 @@ public class RegisterStudentCommandHandler : IRequestHandler<RegisterStudentComm
             UserStatus = Status.Inactive,
             UserStatusDes = Status.Active.ToString(),
             ProgrammeId = existingProgramme.Id, // Save the ProgrammeId
-            PaymentType = PaymentType.BootCampOnly,
+            ApplicationType = ApplicationType.BootCamp,
             PaymentTypeDes = "BootCamp",
             SecurityStamp = Guid.NewGuid().ToString(),
             CreatedDate = DateTime.UtcNow,

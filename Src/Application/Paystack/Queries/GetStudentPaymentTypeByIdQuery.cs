@@ -34,7 +34,7 @@ namespace Application.Paystack.Queries
             // Retrieve the payment status and other relevant information
             var paymentType = new
             {
-                ProgrammePaymentType = student.PaymentType,
+                ProgrammePaymentType = student.ApplicationType,
                 student.PaymentTypeDes,
                 ProgrammeName = student.Programme
             };

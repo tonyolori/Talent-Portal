@@ -7,19 +7,20 @@ using MediatR;
 using System.Text.Json.Serialization;
 using Domain.Enum;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace Application.Paystack.Commands
 {
     public class CreatePaymentCommand : IRequest<Result>
     {
-        public string Email { get; set; }
+        
+        [JsonIgnore]
+        public string? Email { get; set; }
         public decimal Amount { get; set; }
         public string PreferredProgramme { get; set; }
-        public string EducationalLevel { get; set; }
-        public string EmploymentStatus { get; set; }
-        public PaymentType ApplicationType { get; set; }
+        public EmploymentStatus EmploymentStatus { get; set; }
+        public EducationalLevel EducationalLevel { get; set; }
+        public ApplicationType ApplicationType { get; set; }
     }
 
     public class CreatePaymentCommandHandler : IRequestHandler<CreatePaymentCommand, Result>
@@ -29,7 +30,7 @@ namespace Application.Paystack.Commands
         private readonly IApplicationDbContext _context;
         private readonly UserManager<Student> _userManager;
 
-        public CreatePaymentCommandHandler(UserManager<Student> userManager,HttpClient httpClient, IConfiguration configuration, IApplicationDbContext context)
+        public CreatePaymentCommandHandler(UserManager<Student> userManager, HttpClient httpClient, IConfiguration configuration, IApplicationDbContext context)
         {
             _userManager = userManager;
             _httpClient = httpClient;
@@ -39,14 +40,14 @@ namespace Application.Paystack.Commands
 
         public async Task<Result> Handle(CreatePaymentCommand request, CancellationToken cancellationToken)
         {
-            
-           
-            Student? studentExists  = await _userManager.FindByEmailAsync(request.Email);
-         
-            if (studentExists == null)
+            // Find the student by email
+            Student? student = await _userManager.FindByEmailAsync(request.Email);
+
+            if (student == null)
             {
                 return Result.Failure("The email does not belong to a registered student.");
             }
+
             // Retrieve Paystack secret key from configuration
             string? paystackSecretKey = _configuration["Paystack:SecretKey"];
             if (string.IsNullOrEmpty(paystackSecretKey))
@@ -61,8 +62,8 @@ namespace Application.Paystack.Commands
             var payload = new
             {
                 email = request.Email,
-                amount = request.Amount * 100,
-                callback_url = _configuration["Paystack:CallbackUrl"] 
+                amount = request.Amount * 100, // Paystack requires amount in kobo
+                callback_url = _configuration["Paystack:CallbackUrl"]
             };
 
             // Send request to Paystack to initialize payment
@@ -73,9 +74,6 @@ namespace Application.Paystack.Commands
             }
 
             // Parse the response from Paystack
-            var responseContent = await response.Content.ReadAsStringAsync(cancellationToken); // Log raw response
-            Console.WriteLine($"Paystack response: {responseContent}"); // Inspect full response
-
             var responseData = await response.Content.ReadFromJsonAsync<PaystackInitializeResponse>(cancellationToken: cancellationToken);
             if (responseData?.Data == null)
             {
@@ -86,17 +84,16 @@ namespace Application.Paystack.Commands
             string transactionReference = responseData.Data.Reference;
             string paymentUrl = responseData.Data.AuthorizationUrl;
 
-
             // Store transaction details in the database
             var transaction = new Transaction
             {
-                StudentId = studentExists.Id,
+                StudentId = student.Id,
                 TransactionReference = transactionReference,
                 Email = request.Email,
                 PreferredProgramme = request.PreferredProgramme,
                 EducationalLevel = request.EducationalLevel,
-                EmploymentStatus = request.EmploymentStatus,
-                ApplicationType = request.ApplicationType.ToString(),
+                EmploymentStatus = request.EmploymentStatus, 
+                ApplicationType = request.ApplicationType,
                 Amount = request.Amount,
                 TransactionStatus = "Pending",
                 CreatedAt = DateTime.UtcNow
@@ -106,12 +103,11 @@ namespace Application.Paystack.Commands
             await _context.SaveChangesAsync(cancellationToken);
 
             // Return the payment URL to redirect the user
-            return Result.Success<CreatePaymentCommand>("Authorization url", responseData.Data);
+            return Result.Success<CreatePaymentCommand>("Authorization URL", responseData.Data);
         }
     }
 
-
-
+    // Paystack response class
     public class PaystackInitializeResponse
     {
         [JsonPropertyName("status")]

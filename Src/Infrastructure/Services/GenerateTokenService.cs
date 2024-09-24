@@ -32,5 +32,27 @@ namespace Infrastructure.Services
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
+        
+        public string GetEmailFromToken(ClaimsPrincipal user)
+        {
+            var emailClaim = user.FindFirst(ClaimTypes.Email)?.Value;
+            if (emailClaim == null)
+            {
+                throw new UnauthorizedAccessException("Email not found in token.");
+            }
+
+            return emailClaim;
+        }
+        
+        public string GetIdFromToken(ClaimsPrincipal user)  
+        {  
+            var idClaim = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;  
+            if (idClaim == null)  
+            {  
+                throw new UnauthorizedAccessException("User ID not found in token.");  
+            }  
+
+            return idClaim;  
+        }  
     }
 }

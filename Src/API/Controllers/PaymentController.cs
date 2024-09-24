@@ -1,7 +1,9 @@
 
+using Application.Interfaces;
 using Application.Paystack.Commands;
 using Application.Paystack.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -15,15 +17,20 @@ public class PaymentController : ControllerBase
 {
     private readonly IMediator _mediator;
 
-    public PaymentController(IMediator mediator)
+    private readonly IGenerateToken _generateToken;
+
+    public PaymentController(IMediator mediator, IGenerateToken generateToken)
     {
         _mediator = mediator;
+        _generateToken = generateToken;
     }
 
+    // [Authorize]
     [HttpPost("create")]
     public async Task<IActionResult> CreatePayment(CreatePaymentCommand command)
     {
-        
+        string email = _generateToken.GetEmailFromToken(User);
+        command.Email = email;
         return Ok(await _mediator.Send(command));
     }
 

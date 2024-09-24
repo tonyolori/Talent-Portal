@@ -17,7 +17,7 @@ public class Student : BaseUser
     
     public Programme Programme { get; set; }
     
-    public PaymentType PaymentType { get; set; }
+    public ApplicationType ApplicationType { get; set; }
     
     public string PaymentTypeDes { get; set; }
     
