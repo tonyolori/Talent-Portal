@@ -1,8 +1,8 @@
-using Application.Auth;
 using Application.Common.Helpers;
 using Application.Common.Models;
 using Application.Extensions;
 using Application.Interfaces;
+using Application.LearningAdmins.Commands;
 using Domain.Common.Enum;
 using Domain.Entities;
 using Domain.Enum;
@@ -12,7 +12,7 @@ using StackExchange.Redis;
 
 namespace Application.Admins.Commands;
 
-public class RegisterAdminCommand : IRequest<Result>
+public class RegisterLearningAdminCommand : IRequest<Result>
 {
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -23,41 +23,40 @@ public class RegisterAdminCommand : IRequest<Result>
 
 public class RegisterAdminCommandHandler(
     IEmailService emailSender,
-    UserManager<Admin> userManager,
+    UserManager<LearningAdmin> userManager,
     RoleManager<IdentityRole> roleManager,
     IConnectionMultiplexer redis)
-    : IRequestHandler<RegisterAdminCommand, Result>
+    : IRequestHandler<RegisterLearningAdminCommand, Result>
 {
     private readonly IEmailService _emailSender = emailSender;
-    private readonly UserManager<Admin> _userManager = userManager;
+    private readonly UserManager<LearningAdmin> _userManager = userManager;
     private readonly RoleManager<IdentityRole> _roleManager = roleManager;
     private readonly IDatabase _redisDb = redis.GetDatabase();
 
    
-    public async Task<Result> Handle(RegisterAdminCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(RegisterLearningAdminCommand request, CancellationToken cancellationToken)
     {
         
-        // Validate the request
-        await request.ValidateAsync(new AdminCreateValidator(), cancellationToken);
+        await request.ValidateAsync(new LearningAdminCreateValidator(), cancellationToken);
         
-        Admin? adminExist = await _userManager.FindByEmailAsync(request.Email);
+        LearningAdmin? adminExist = await _userManager.FindByEmailAsync(request.Email);
         if (adminExist != null)
-            return Result.Failure(request, "StudentController already exists");
+            return Result.Failure(request, "Learning Admin already exists");
 
-        Admin admin = new()
+        LearningAdmin learningAdmin = new()
         {
             UserName = request.Email,
             Email = request.Email,
             FirstName = request.FirstName,
             LastName = request.LastName,
-            Role = Enum.Parse<UserRoles>("Admin", true), 
-            RoleDesc = "Admin",  
+            Role = UserRoles.Admin, 
+            RoleDesc = UserRoles.Admin.ToString(),  
             SecurityStamp = Guid.NewGuid().ToString(),
             CreatedDate = DateTime.UtcNow,
             LastModifiedDate = DateTime.UtcNow
         };
 
-        IdentityResult result = await _userManager.CreateAsync(admin, request.Password); 
+        IdentityResult result = await _userManager.CreateAsync(learningAdmin, request.Password); 
         if (!result.Succeeded)
         {
             string errors = string.Join("\n", result.Errors.Select(e => e.Description));
@@ -70,17 +69,10 @@ public class RegisterAdminCommandHandler(
 
         if (await _roleManager.RoleExistsAsync(roleName))
         {
-            await _userManager.AddToRoleAsync(admin, roleName);
+            await _userManager.AddToRoleAsync(learningAdmin, roleName);
         }
-
-        // Generate and save registration code to Redis
-        string registrationCode = GenerateCode.GenerateRegistrationCode();
-        await _redisDb.StringSetAsync($"RegistrationCode:{admin.Email}", registrationCode, TimeSpan.FromHours(2));
-
-        // Send the registration code to the user's email
-        await _emailSender.SendEmailAsync(admin.Email, "Registration Confirmation Code",
-            $"Your registration confirmation code is {registrationCode}");
-        return Result.Success<RegisterAdminCommand>("Registration code sent successfully! Please confirm your registration.", admin);
+        
+        return Result.Success<RegisterLearningAdminCommand>("Learning Admin successfully.", learningAdmin);
     }
 
   

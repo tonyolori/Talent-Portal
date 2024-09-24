@@ -17,7 +17,7 @@ namespace Infrastructure
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
+                options.UseSqlServer(configuration.GetConnectionString("AzureConnection"),
                     sqlServerOptionsAction: sqlOptions =>
                     {
                         sqlOptions.EnableRetryOnFailure(
@@ -40,18 +40,12 @@ namespace Infrastructure
                     .AddEntityFrameworkStores<ApplicationDbContext>()
                     .AddApiEndpoints();
             
-            // Register Identity for Teacher
-            services.AddIdentityCore<Admin>()
-                .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddApiEndpoints();
-   
-
-            // Register Identity for Teacher
-            services.AddIdentityCore<Teacher>()
+            // Register Identity for Instructor
+            services.AddIdentityCore<Instructor>()
                     .AddRoles<IdentityRole>()
                     .AddEntityFrameworkStores<ApplicationDbContext>()
                     .AddApiEndpoints();
+            
 
             // Register Identity for LearningAdmin
             services.AddIdentityCore<LearningAdmin>()

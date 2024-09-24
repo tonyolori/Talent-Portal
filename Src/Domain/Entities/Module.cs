@@ -25,6 +25,10 @@ namespace Domain.Entities
         public ModuleStatus  ModuleStatus { get; set; }
       
         public string ModuleStatusDes { get; set; }
+        
+        public StudentModuleProgress StudentModuleProgress { get; set; }
+        
+        public string StudentModuleProgressDes { get; set; }
 
         public DateTime StartDate { get; set; }
 
