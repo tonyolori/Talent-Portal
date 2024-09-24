@@ -37,7 +37,7 @@ public class RegisterStudentCommandHandler : IRequestHandler<RegisterStudentComm
         UserManager<Student> userManager,
         RoleManager<IdentityRole> roleManager,
         IConnectionMultiplexer redis,
-        IApplicationDbContext context) // Inject the context
+        IApplicationDbContext context) 
     {
         _emailSender = emailSender;
         _userManager = userManager;

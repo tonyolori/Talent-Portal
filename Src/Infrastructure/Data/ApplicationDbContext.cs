@@ -8,12 +8,12 @@ namespace Infrastructure.Data;
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<BaseUser>(options), IApplicationDbContext
 {
     public DbSet<Student> Students { get; set; }
-    
-    public DbSet<Admin> Admins { get; set; }
 
     public DbSet<Teacher> Teachers { get; set; }
 
     public DbSet<LearningAdmin> LearningAdmins { get; set; }
+    
+    public DbSet<Instructor> Instructors { get; set; }
 
     public DbSet<Module> Modules { get; set; }
 
@@ -26,8 +26,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Question> Questions { get; set; }
     
     public DbSet<Answer> Answers { get; set; }
-    
-    public DbSet<Instructor> Instructors { get; set; }
 
     public DbSet<Topic> Topics { get; set; }
     

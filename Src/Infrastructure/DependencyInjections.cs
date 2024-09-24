@@ -40,18 +40,12 @@ namespace Infrastructure
                     .AddEntityFrameworkStores<ApplicationDbContext>()
                     .AddApiEndpoints();
             
-            // Register Identity for Teacher
-            services.AddIdentityCore<Admin>()
-                .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddApiEndpoints();
-   
-
-            // Register Identity for Teacher
-            services.AddIdentityCore<Teacher>()
+            // Register Identity for Instructor
+            services.AddIdentityCore<Instructor>()
                     .AddRoles<IdentityRole>()
                     .AddEntityFrameworkStores<ApplicationDbContext>()
                     .AddApiEndpoints();
+            
 
             // Register Identity for LearningAdmin
             services.AddIdentityCore<LearningAdmin>()
