@@ -37,8 +37,8 @@ namespace Application.Paystack.Commands
         public async Task<Result> Handle(VerifyPaymentCommand request, CancellationToken cancellationToken)
         {
             
-            Student? studentExists  = await _userManager.FindByEmailAsync(request.Email);
-            if (studentExists == null)
+            Student? student  = await _userManager.FindByEmailAsync(request.Email);
+            if (student == null)
             {
                 return Result.Failure("The email does not belong to a registered student.");
             }
@@ -69,7 +69,7 @@ namespace Application.Paystack.Commands
             string paymentStatus = responseData.Data.Status;
 
             // Fetch the transaction from the database
-            var transaction = await _context.Transactions
+            Transaction? transaction = await _context.Transactions
                 .FirstOrDefaultAsync(t => t.TransactionReference == request.TransactionReference, cancellationToken);
 
             if (transaction == null)
@@ -85,9 +85,9 @@ namespace Application.Paystack.Commands
             // Check payment status and return appropriate result
             if (paymentStatus == "success")
             {
-                studentExists.PaymentType = PaymentType.BootCampOnly;
-                studentExists.PaymentTypeDes = PaymentType.BootCampOnly.ToString(); 
-                await _userManager.UpdateAsync(studentExists);
+                student.ApplicationType = transaction.ApplicationType;
+                student.PaymentTypeDes = transaction.ApplicationType.ToString(); 
+                await _userManager.UpdateAsync(student);
                 return Result.Success("Payment verified successfully.");
             }
 
