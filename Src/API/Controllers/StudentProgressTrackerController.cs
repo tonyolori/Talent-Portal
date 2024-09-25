@@ -20,8 +20,8 @@ public class StudentProgressController(IMediator mediator) : ControllerBase
         return Ok(await _mediator.Send(query));
     }
 
-    [HttpPost("allTasks")]
-    public async Task<IActionResult> GetModuleCompletionStatus(GetStudentTasksQuery query)
+    [HttpGet("allTasks")]
+    public async Task<IActionResult> GetModuleCompletionStatus([FromQuery]GetStudentTasksQuery query)
     {
         return Ok(await _mediator.Send(query));
     }

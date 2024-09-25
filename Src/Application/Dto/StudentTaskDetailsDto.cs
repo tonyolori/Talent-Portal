@@ -3,9 +3,8 @@ using Domain.Enum;
 using System.ComponentModel.DataAnnotations.Schema;
 
 
-namespace Domain.Common.Entities;
-
-public class StudentTaskDetails(ModuleTask task, SubmissionDetails details)
+namespace Application.Dto;
+public class StudentTaskDetailsDto(ModuleTask task, SubmissionDetails details)
 {
 
     // Fields from ModuleTask

@@ -1,6 +1,6 @@
 ﻿using Application.Common.Models;
+using Application.Dto;
 using Application.Interfaces;
-using Domain.Common.Entities;
 using Domain.Enum;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -22,51 +22,48 @@ public class GetStudentTasksQueryHandler(IApplicationDbContext context) : IReque
 
     public async Task<Result> Handle(GetStudentTasksQuery request, CancellationToken cancellationToken)
     {
-        List<StudentTaskDetails> tasks = await _context.Tasks
+        List<StudentTaskDetailsDto> tasks = await _context.Tasks
+       .AsNoTracking()
        .Join(
            inner: _context.SubmissionDetails,
            outerKeySelector: mt => mt.Id,
            innerKeySelector: sd => sd.TaskId,
-           resultSelector: (mt, sd) => new StudentTaskDetails(mt,sd))
+           resultSelector: (mt, sd) => new StudentTaskDetailsDto(mt,sd))
+       
          .ToListAsync(cancellationToken);
 
 
-        if (request.ProgrammeId != null)
-        {
-            tasks = FilterByProgramme(tasks, request.ProgrammeId);
-        }
+        tasks = tasks.Where(t =>
+                       (request.ProgrammeId == null || t.ProgrammeId == request.ProgrammeId)
+                    && (request.Status == null || t.TaskStatus == request.Status)
+                    && (request.Week == null || t.Week == request.Week))
+            .ToList();
 
-        if (request.Status != null)
-        {
-            tasks = FilterByStatus(tasks, request.Status);
-        }
+        //tasks = FilterByStatus(tasks,request.Status);
 
-        if (request.ProgrammeId != null)
-        {
-            tasks = FilterByWeek(tasks, request.Week);
-        }
+
 
         //distinct after to make sure we dont remove a valid entry during a filtering step
-        List<StudentTaskDetails> distinctTasks = tasks.DistinctBy(t => t.StudentId).ToList();
+        List<StudentTaskDetailsDto> distinctTasks = tasks.DistinctBy(t => t.StudentId).ToList();
 
         return Result.Success<GetStudentTasksQuery>("Tasks retrieved successfully.", tasks);
         }
 
-    private static List<StudentTaskDetails> FilterByProgramme(List<StudentTaskDetails> tasks, int? programmeId)
+
+    private static List<StudentTaskDetailsDto> FilterByProgramme(List<StudentTaskDetailsDto> tasks, int? programmeId)
     {
-        return tasks.Where(t=>t.ProgrammeId == programmeId).ToList();
+        return tasks.Where(t => t.ProgrammeId == programmeId).ToList();
     }
 
-    private static List<StudentTaskDetails> FilterByStatus(List<StudentTaskDetails> tasks, ModuleTaskStatus? status)
+    private static List<StudentTaskDetailsDto> FilterByStatus(List<StudentTaskDetailsDto> tasks, ModuleTaskStatus? status)
     {
         return tasks.Where(t => t.TaskStatus == status).ToList();
     }
 
-    private static List<StudentTaskDetails> FilterByWeek(List<StudentTaskDetails> tasks, int? week)
+    private static List<StudentTaskDetailsDto> FilterByWeek(List<StudentTaskDetailsDto> tasks, int? week)
     {
         return tasks.Where(t => t.Week == week).ToList();
     }
-
 }
 
 
