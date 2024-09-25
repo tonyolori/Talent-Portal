@@ -4,6 +4,7 @@ using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240923213622_TransactionFix")]
+    partial class TransactionFix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -148,6 +151,48 @@ namespace Infrastructure.Migrations
                     b.ToTable("Answers");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Instructor", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AssignedCourse")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateAdded")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("Guid")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StatusDes")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Instructors");
+                });
+
             modelBuilder.Entity("Domain.Entities.Module", b =>
                 {
                     b.Property<int>("Id")
@@ -204,13 +249,6 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("StudentId")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("StudentModuleProgress")
-                        .HasColumnType("int");
-
-                    b.Property<string>("StudentModuleProgressDes")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Timeframe")
                         .IsRequired()
@@ -668,30 +706,19 @@ namespace Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.Entities.Instructor", b =>
-                {
-                    b.HasBaseType("Domain.Common.Entities.BaseUser");
-
-                    b.Property<string>("AssignedCourse")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<string>("StatusDes")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasDiscriminator().HasValue("Instructor");
-                });
-
-            modelBuilder.Entity("Domain.Entities.LearningAdmin", b =>
+            modelBuilder.Entity("Domain.Entities.Admin", b =>
                 {
                     b.HasBaseType("Domain.Common.Entities.BaseUser");
 
                     b.Property<DateTime>("EnrollmentDate")
                         .HasColumnType("datetime2");
+
+                    b.HasDiscriminator().HasValue("Admin");
+                });
+
+            modelBuilder.Entity("Domain.Entities.LearningAdmin", b =>
+                {
+                    b.HasBaseType("Domain.Common.Entities.BaseUser");
 
                     b.HasDiscriminator().HasValue("LearningAdmin");
                 });

@@ -4,11 +4,11 @@ using Application.Auth.Commands;
 using Domain.Enum;  
 using FluentValidation;  
 
-namespace Application.Auth  
+namespace Application.LearningAdmins.Commands
 {  
-    public class AdminCreateValidator : AbstractValidator<RegisterAdminCommand>  
+    public class LearningAdminCreateValidator : AbstractValidator<RegisterLearningAdminCommand>  
     {  
-        public AdminCreateValidator()  
+        public LearningAdminCreateValidator()  
         {  
             RuleFor(x => x.FirstName)  
                 .NotEmpty().WithMessage("First Name is required.")  

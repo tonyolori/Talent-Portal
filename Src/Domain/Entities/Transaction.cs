@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Domain.Common.Entities;
+using Domain.Enum;
 
 namespace Domain.Entities;
 
@@ -8,9 +9,11 @@ public class Transaction:BaseEntity
     public string TransactionReference { get; set; }
     public string Email { get; set; }
     public string PreferredProgramme { get; set; }
-    public string EducationalLevel { get; set; }
-    public string EmploymentStatus { get; set; }
-    public string ApplicationType { get; set; }
+    public EducationalLevel EducationalLevel { get; set; }
+    public EmploymentStatus EmploymentStatus { get; set; }
+    public ApplicationType ApplicationType { get; set; }
+    
+    public PaymentStatus PaymentStatus { get; set; }
     public decimal Amount { get; set; }
     
     public string TransactionStatus { get; set; }

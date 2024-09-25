@@ -11,7 +11,7 @@ namespace Application.Quizzes.Commands
     {
         public int QuizId { get; set; }
         
-        public string NewStatus { get; set; }
+        public QuizStatus NewStatus { get; set; }
     }
 
     public class UpdateQuizStatusCommandHandler : IRequestHandler<UpdateQuizStatusCommand, Result>
@@ -33,14 +33,10 @@ namespace Application.Quizzes.Commands
             }
             
             
-            // Convert string to ModuleStatus enum
-            if (!Enum.TryParse(request.NewStatus, true, out QuizStatus status))
-            {
-                return Result.Failure("Invalid module status.");
-            }
+           
 
-            quiz.QuizStatus = status;
-            quiz.QuizStatusDes = request.NewStatus;
+            quiz.QuizStatus = request.NewStatus;
+            quiz.QuizStatusDes = request.NewStatus.ToString();
 
             await _context.SaveChangesAsync(cancellationToken);
 
