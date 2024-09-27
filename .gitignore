@@ -78,4 +78,3 @@ Desktop.ini
 #**/appsettings.json
 *.user
 **/obj/
-/Src/API/appsettings.json

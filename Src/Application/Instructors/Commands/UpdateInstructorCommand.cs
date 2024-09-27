@@ -10,7 +10,7 @@ public class UpdateInstructorCommand : IRequest<Result>
     public string Name { get; set; }
     public string Email { get; set; }
     public string AssignedCourse { get; set; }
-    public string Role { get; set; }
+    
 
     public class UpdateInstructorCommandHandler(IApplicationDbContext context) : IRequestHandler<UpdateInstructorCommand, Result>
     {
@@ -26,10 +26,9 @@ public class UpdateInstructorCommand : IRequest<Result>
                 return Result.Failure("Instructor not found.");
             }
 
-            instructor.Name = request.Name;
+            instructor.UserName = request.Name;
             instructor.Email = request.Email;
             instructor.AssignedCourse = request.AssignedCourse;
-            instructor.Role = request.Role;
 
             await _context.SaveChangesAsync(cancellationToken);
 

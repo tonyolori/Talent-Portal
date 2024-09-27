@@ -40,18 +40,12 @@ namespace Infrastructure
                     .AddEntityFrameworkStores<ApplicationDbContext>()
                     .AddApiEndpoints();
             
-            // Register Identity for Teacher
-            services.AddIdentityCore<Admin>()
-                .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddApiEndpoints();
-   
-
-            // Register Identity for Teacher
-            services.AddIdentityCore<Teacher>()
+            // Register Identity for Instructor
+            services.AddIdentityCore<Instructor>()
                     .AddRoles<IdentityRole>()
                     .AddEntityFrameworkStores<ApplicationDbContext>()
                     .AddApiEndpoints();
+            
 
             // Register Identity for LearningAdmin
             services.AddIdentityCore<LearningAdmin>()
@@ -59,13 +53,14 @@ namespace Infrastructure
                     .AddEntityFrameworkStores<ApplicationDbContext>()
                     .AddApiEndpoints();
 
-            var key = configuration["Jwt:Key"];
+            var accesskey = configuration["Jwt:AccessKey"];
+            var refreshkey =configuration["Jwt:RefreshKey"];
             var issuer = configuration["Jwt:Issuer"];
             var audience = configuration["Jwt:Audience"];
 
             services.AddScoped<IGenerateToken, GenerateTokenService>(provider =>
             {
-                return new GenerateTokenService(key, issuer, audience);
+                return new GenerateTokenService(accesskey, refreshkey, issuer, audience);
             });
 
             //services.AddSingleton<TaskNotificationService>();

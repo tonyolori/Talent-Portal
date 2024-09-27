@@ -37,7 +37,7 @@ public class RegisterStudentCommandHandler : IRequestHandler<RegisterStudentComm
         UserManager<Student> userManager,
         RoleManager<IdentityRole> roleManager,
         IConnectionMultiplexer redis,
-        IApplicationDbContext context) // Inject the context
+        IApplicationDbContext context) 
     {
         _emailSender = emailSender;
         _userManager = userManager;
@@ -80,7 +80,7 @@ public class RegisterStudentCommandHandler : IRequestHandler<RegisterStudentComm
             UserStatus = Status.Inactive,
             UserStatusDes = Status.Active.ToString(),
             ProgrammeId = existingProgramme.Id, // Save the ProgrammeId
-            PaymentType = PaymentType.BootCampOnly,
+            ApplicationType = ApplicationType.BootCamp,
             PaymentTypeDes = "BootCamp",
             SecurityStamp = Guid.NewGuid().ToString(),
             CreatedDate = DateTime.UtcNow,

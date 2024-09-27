@@ -4,11 +4,12 @@ using Microsoft.AspNetCore.Identity;
 using StackExchange.Redis;
 using Application.Common.Models;
 using Application.Extensions;
+using Application.LearningAdmins.Commands;
 using Domain.Entities;
 
-namespace Application.Auth.Commands
+namespace Application.Instructors.Commands
 {
-    public class ResetAdminPasswordCommand : IRequest<Result>
+    public class ResetInstructorPasswordCommand : IRequest<Result>
     {
         public string Email { get; set; }
         public string PasswordResetCode { get; set; }
@@ -17,32 +18,32 @@ namespace Application.Auth.Commands
         public string ConfirmPassword { get; set; }
     }
 
-    public class ResetAdminPasswordCommandHandler : IRequestHandler<ResetAdminPasswordCommand, Result>
+    public class ResetInstructorPasswordCommandHandler : IRequestHandler<ResetInstructorPasswordCommand, Result>
     {
-        private readonly UserManager<Admin> _userManager;
+        private readonly UserManager<LearningAdmin> _userManager;
         private readonly IDatabase _redisDb;
 
-        public ResetAdminPasswordCommandHandler(UserManager<Admin> userManager, IConnectionMultiplexer redis)
+        public ResetInstructorPasswordCommandHandler(UserManager<LearningAdmin> userManager, IConnectionMultiplexer redis)
         {
             _userManager = userManager;
             _redisDb = redis.GetDatabase();
         }
 
-        public async Task<Result> Handle(ResetAdminPasswordCommand request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(ResetInstructorPasswordCommand request, CancellationToken cancellationToken)
         {
-            Admin? admin = await _userManager.FindByEmailAsync(request.Email);
+            LearningAdmin? admin = await _userManager.FindByEmailAsync(request.Email);
             if (admin == null)
             {
-                return Result.Failure<ResetPasswordCommand>("Invalid email.");
+                return Result.Failure<ResetInstructorPasswordCommand>("Invalid email.");
             }
 
             string storedResetCode = await _redisDb.StringGetAsync($"PasswordResetCode:{request.Email}");
             if (string.IsNullOrEmpty(storedResetCode) || storedResetCode != request.PasswordResetCode)
             {
-                return Result.Failure<ResetPasswordCommand>("Invalid or expired password reset code.");
+                return Result.Failure<ResetInstructorPasswordCommand>("Invalid or expired password reset code.");
             }
 
-            await request.ValidateAsync(new AdminPasswordValidator(), cancellationToken);
+            await request.ValidateAsync(new InstructorPasswordValidator(), cancellationToken);
             admin.PasswordHash = _userManager.PasswordHasher.HashPassword(admin, request.NewPassword);
 
             IdentityResult result = await _userManager.UpdateAsync(admin);

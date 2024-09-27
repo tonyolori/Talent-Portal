@@ -1,12 +1,11 @@
 using System.Text.RegularExpressions;
-using Application.Auth.Commands;
 using FluentValidation;
 
-namespace Application.Admins.Commands
+namespace Application.Instructors.Commands
 {
-    public class AdminPasswordValidator : AbstractValidator<ResetAdminPasswordCommand>
+    public class InstructorPasswordValidator : AbstractValidator<ResetInstructorPasswordCommand>
     {
-        public AdminPasswordValidator()
+        public InstructorPasswordValidator()
         {
             // Email validation
             RuleFor(user => user.Email)

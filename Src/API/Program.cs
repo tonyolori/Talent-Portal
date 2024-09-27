@@ -11,7 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration.GetSection("Jwt");
-var key = Encoding.ASCII.GetBytes(configuration["Key"]);
+var key = Encoding.ASCII.GetBytes(configuration["AccessKey"]);
 var issuer = configuration["Issuer"];
 var audience = configuration["Audience"];
 
@@ -23,7 +23,7 @@ builder.Services.AddControllers
     ();
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAngularLocalhost", builder =>
+    options.AddPolicy("CorsPolicy", builder =>
     {
         builder.WithOrigins("http://localhost:4200")
             .AllowAnyHeader()
@@ -136,12 +136,15 @@ if (app.Environment.IsDevelopment())
 
 // app.UseHttpsRedirection();
 app.UseRouting();
-app.UseCors("AllowAngularLocalhost");
+app.UseCors(options =>
+    options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
+//app.UseMiddleware<AuthMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseMiddleware<ExceptionHandlerMiddleware>();
+
 
 app.MapControllers();
 app.Run();

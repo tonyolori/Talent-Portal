@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Domain.Enum;
 
 namespace Application.Paystack.Queries
 {
@@ -20,7 +21,7 @@ namespace Application.Paystack.Queries
         public DateTime ApplicationDate { get; set; }
         public decimal Amount { get; set; }
         public string TransactionStatus { get; set; }
-        public string ApplicationType { get; set; }
+        public ApplicationType ApplicationType { get; set; }
         public string PreferredProgramme { get; set; }
     }
 
