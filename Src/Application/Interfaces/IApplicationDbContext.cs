@@ -21,6 +21,9 @@ namespace Application.Interfaces
         public DbSet<Question> Questions { get; set; }
     
         public DbSet<Answer> Answers { get; set; }
+        
+        public DbSet<StudentModule> StudentModules { get; set; }
+
 
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<Programme> Programmes { get; set; }

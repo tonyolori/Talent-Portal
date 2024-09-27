@@ -34,8 +34,6 @@ namespace Application.Modules.Queries
                     Objectives = m.Objectives,
                     FacilitatorName = m.FacilitatorName,
                     FacilitatorId = m.FacilitatorId,
-                    StartDate = m.StartDate,
-                    EndDate = m.EndDate,
                     Timeframe = m.Timeframe,
                     ProgrammeId = m.ProgrammeId,
                     Progress = m.Progress,
