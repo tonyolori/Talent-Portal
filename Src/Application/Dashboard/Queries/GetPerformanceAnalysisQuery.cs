@@ -52,7 +52,7 @@ public class GetPerformanceAnalysisQueryHandler : IRequestHandler<GetPerformance
             Weeks= weeks,
         };
 
-        return Result.Success<GetPerformanceAnalysisQuery>("Query successful.");
+        return Result.Success<GetPerformanceAnalysisQuery>("Query successful.", performanceAnalysis);
     }
 
     public class PerformanceAnalysis
