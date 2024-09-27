@@ -47,7 +47,7 @@ public class LoginAdminCommandHandler(SignInManager<Instructor> signInManager,
             return Result.Failure<LoginInstructorCommand>("Invalid Email or Password");
         }
 
-        string token = _generateToken.GenerateToken(instructor.Id,instructor.Email, instructor.RoleDesc);
+        var token = _generateToken.GenerateTokens(instructor.Id,instructor.Email, instructor.RoleDesc);
         return Result.Success(token);
     }
     

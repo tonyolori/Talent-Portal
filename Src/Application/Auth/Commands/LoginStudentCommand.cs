@@ -1,3 +1,4 @@
+using Application.Common;
 using Application.Common.Helpers;
 using Application.Common.Models;
 using Application.Interfaces;
@@ -6,6 +7,7 @@ using StackExchange.Redis;
 using Domain.Entities;
 using Domain.Enum;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http;
 
 namespace Application.Auth.Commands;
 
@@ -15,22 +17,39 @@ public class LoginStudentCommand : IRequest<Result>
     public string Password { get; set; }
 }
 
-public class StudentLoginCommandHandler(SignInManager<Student> signInManager, 
-                                        UserManager<Student> userManager,
-                                        IGenerateToken generateToken, 
-                                        IEmailService emailService, 
-                                        IConnectionMultiplexer redis) 
-    : IRequestHandler<LoginStudentCommand, Result>
+public class TokenResponse
 {
-    private readonly UserManager<Student> _userManager = userManager;
-    private readonly SignInManager<Student> _signInManager = signInManager;
-    private readonly IGenerateToken _generateToken = generateToken;
-    private readonly IEmailService _emailService = emailService;
-    private readonly IDatabase _redisDb = redis.GetDatabase();
+    public string AccessToken { get; set; }
+    public string RefreshToken { get; set; }
+}
+
+public class StudentLoginCommandHandler : IRequestHandler<LoginStudentCommand, Result>
+{
+    private readonly UserManager<Student> _userManager;
+    private readonly SignInManager<Student> _signInManager;
+    private readonly IGenerateToken _generateToken;
+    private readonly IEmailService _emailService;
+    private readonly IDatabase _redisDb;
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
+    public StudentLoginCommandHandler(SignInManager<Student> signInManager, 
+                                      UserManager<Student> userManager,
+                                      IGenerateToken generateToken, 
+                                      IEmailService emailService, 
+                                      IConnectionMultiplexer redis,
+                                      IHttpContextAccessor httpContextAccessor)
+    {
+        _signInManager = signInManager;
+        _userManager = userManager;
+        _generateToken = generateToken;
+        _emailService = emailService;
+        _redisDb = redis.GetDatabase();
+        _httpContextAccessor = httpContextAccessor;
+    }
 
     public async Task<Result> Handle(LoginStudentCommand request, CancellationToken cancellationToken)
     {
-        Student? user = await _userManager.FindByEmailAsync(request.Email);
+        var user = await _userManager.FindByEmailAsync(request.Email);
 
         if (user == null)
         {
@@ -46,13 +65,13 @@ public class StudentLoginCommandHandler(SignInManager<Student> signInManager,
             await _redisDb.StringSetAsync($"ConfirmationCode:{request.Email}", confirmationCode, TimeSpan.FromHours(2));
 
             // Send the confirmation code to the user's email
-            await _emailService.SendEmailAsync(user.Email, "Account Confirmation Code",
+            await _emailService.SendEmailAsync(user.Email!, "Account Confirmation Code",
                 $"Your confirmation code is {confirmationCode}");
 
             return Result.Failure<LoginStudentCommand>($"User {request.Email} account is not verified. A new confirmation code has been sent.");
         }
 
-        SignInResult signInResult = await _signInManager.PasswordSignInAsync(user, request.Password, isPersistent: false, lockoutOnFailure: true);
+        var signInResult = await _signInManager.PasswordSignInAsync(user, request.Password, isPersistent: false, lockoutOnFailure: true);
 
         if (!signInResult.Succeeded)
         {
@@ -64,11 +83,20 @@ public class StudentLoginCommandHandler(SignInManager<Student> signInManager,
 
                 return Result.Failure<LoginStudentCommand>($"User {request.Email} account locked: Unsuccessful 3 login attempts.");
             }
+
             return Result.Failure<LoginStudentCommand>("Invalid Email or Password");
         }
 
-        string token = _generateToken.GenerateToken(user.Id,user.Email, user.RoleDesc);
-        return Result.Success(token);
+        var tokens = _generateToken.GenerateTokens(user.Id, user.Email!, user.RoleDesc);
+        
+        CookieHelper.SetTokensInCookies(_httpContextAccessor, tokens.AccessToken, tokens.RefreshToken);
+
+        var tokenResponse = new TokenResponse
+        {
+            AccessToken = tokens.AccessToken,
+            RefreshToken = tokens.RefreshToken
+        };
+
+        return Result.Success("Successfully logged in");
     }
-    
 }

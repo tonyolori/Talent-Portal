@@ -13,17 +13,31 @@ public static class PasswordReset
         // Get the Redis database instance
         var redisDb = redis.GetDatabase();
 
-        // Generate the verification code
-        string verificationCode = GenerateCode.GenerateRegistrationCode();
+        // Check if the verification code already exists in Redis
+        string existingCode = await redisDb.StringGetAsync($"PasswordResetCode:{email}");
 
-        // Store the reset code in Redis with an expiration of 2 hours
-        await redisDb.StringSetAsync($"PasswordResetCode:{email}", verificationCode, TimeSpan.FromHours(2));
+        // If a code already exists, use it
+        if (!string.IsNullOrEmpty(existingCode))
+        {
+            // Send the existing verification code to the user's email
+            await emailService.SendEmailAsync(email, "Password Reset Verification Code",
+                $"Your verification code is {existingCode}");
 
-        // Send the verification code to the user's email
+            // Return the existing verification code
+            return existingCode;
+        }
+
+        // Generate a new verification code if it doesn't exist
+        string newVerificationCode = GenerateCode.GenerateRegistrationCode();
+
+        // Store the new reset code in Redis with an expiration of 2 hours
+        await redisDb.StringSetAsync($"PasswordResetCode:{email}", newVerificationCode, TimeSpan.FromHours(2));
+
+        // Send the new verification code to the user's email
         await emailService.SendEmailAsync(email, "Password Reset Verification Code",
-            $"Your verification code is {verificationCode}");
+            $"Your verification code is {newVerificationCode}");
 
         // Return the generated verification code
-        return verificationCode;
+        return newVerificationCode;
     }
 }
