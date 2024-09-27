@@ -1,3 +1,4 @@
+using Application.Common;
 using Application.Common.Helpers;
 using Application.Common.Models;
 using Application.Interfaces;
@@ -5,6 +6,7 @@ using MediatR;
 using StackExchange.Redis;
 using Domain.Entities;
 using Domain.Enum;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 
 namespace Application.Instructors.Commands;
@@ -17,13 +19,14 @@ public class LoginInstructorCommand : IRequest<Result>
 
 public class LoginAdminCommandHandler(SignInManager<Instructor> signInManager, 
     UserManager<Instructor> userManager,
+    IHttpContextAccessor httpContextAccessor,
     IGenerateToken generateToken)
     : IRequestHandler<LoginInstructorCommand, Result>
 {
     private readonly UserManager<Instructor> _userManager = userManager;
     private readonly SignInManager<Instructor> _signInManager = signInManager;
     private readonly IGenerateToken _generateToken = generateToken;
-
+    private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
     public async Task<Result> Handle(LoginInstructorCommand request, CancellationToken cancellationToken)
     {
@@ -47,8 +50,17 @@ public class LoginAdminCommandHandler(SignInManager<Instructor> signInManager,
             return Result.Failure<LoginInstructorCommand>("Invalid Email or Password");
         }
 
-        string token = _generateToken.GenerateToken(instructor.Id,instructor.Email, instructor.RoleDesc);
-        return Result.Success(token);
+        var tokens = _generateToken.GenerateTokens(instructor.Id, instructor.Email!, instructor.RoleDesc);
+        
+        CookieHelper.SetTokensInCookies(_httpContextAccessor, tokens.AccessToken, tokens.RefreshToken);
+
+        var tokenResponse = new TokenResponse
+        {
+            AccessToken = tokens.AccessToken,
+            RefreshToken = tokens.RefreshToken
+        };
+
+        return Result.Success("Successfully logged in");
     }
     
 }

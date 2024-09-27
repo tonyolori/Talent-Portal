@@ -1,12 +1,19 @@
-﻿using System.Security.Claims;
+﻿using System.Security.Claims;  
 
-namespace Application.Interfaces;
+namespace Application.Interfaces  
+{  
+    public interface IGenerateToken  
+    {  
+        TokenResponse GenerateTokens(string userId, string email, string role);  
 
-public interface IGenerateToken
-{
-    string GenerateToken(string userId, string email, string role);
+        string GetEmailFromToken(ClaimsPrincipal user);  
 
-    string GetEmailFromToken(ClaimsPrincipal user);
+        string GetIdFromToken(ClaimsPrincipal user);  
+    }  
+}  
 
-    string GetIdFromToken(ClaimsPrincipal user);
+public class TokenResponse  
+{  
+    public string AccessToken { get; set; }  
+    public string RefreshToken { get; set; }  
 }

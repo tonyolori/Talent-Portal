@@ -17,7 +17,7 @@ namespace Infrastructure
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("AzureConnection"),
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
                     sqlServerOptionsAction: sqlOptions =>
                     {
                         sqlOptions.EnableRetryOnFailure(
@@ -53,13 +53,14 @@ namespace Infrastructure
                     .AddEntityFrameworkStores<ApplicationDbContext>()
                     .AddApiEndpoints();
 
-            var key = configuration["Jwt:Key"];
+            var accesskey = configuration["Jwt:AccessKey"];
+            var refreshkey =configuration["Jwt:RefreshKey"];
             var issuer = configuration["Jwt:Issuer"];
             var audience = configuration["Jwt:Audience"];
 
             services.AddScoped<IGenerateToken, GenerateTokenService>(provider =>
             {
-                return new GenerateTokenService(key, issuer, audience);
+                return new GenerateTokenService(accesskey, refreshkey, issuer, audience);
             });
 
             //services.AddSingleton<TaskNotificationService>();
