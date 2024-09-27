@@ -16,6 +16,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Instructor> Instructors { get; set; }
 
     public DbSet<Module> Modules { get; set; }
+    
+    public DbSet<StudentModule> StudentModules { get; set; }
 
     public DbSet<ModuleTask> Tasks { get; set; }
     
@@ -41,7 +43,11 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         builder.Entity<SubmissionDetails>()
             .HasIndex(s => new { s.TaskId, s.StudentId })
             .IsUnique(true);
-  
+        
+        builder.Entity<StudentModule>()
+            .HasIndex(sm => new { sm.StudentId, sm.ModuleId })
+            .IsUnique(true);
+        
         // Configure Answer-Question relationship
         builder.Entity<Answer>()
             .HasOne(a => a.Question)

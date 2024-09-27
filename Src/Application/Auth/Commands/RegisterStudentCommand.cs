@@ -83,7 +83,6 @@ public class RegisterStudentCommandHandler : IRequestHandler<RegisterStudentComm
             ApplicationType = ApplicationType.BootCamp,
             PaymentTypeDes = "BootCamp",
             SecurityStamp = Guid.NewGuid().ToString(),
-            CreatedDate = DateTime.UtcNow,
             LastModifiedDate = DateTime.UtcNow
         };
 

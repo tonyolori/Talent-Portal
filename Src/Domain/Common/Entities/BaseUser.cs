@@ -14,7 +14,7 @@ public abstract class BaseUser : IdentityUser
     public string RoleDesc { get; set; }
     
     
-    public DateTime? CreatedDate { get; set; }
+    public DateTime? CreatedDate { get; set; } = DateTime.UtcNow;
     
     public string? LastModifiedBy { get; set; } = string.Empty;
     

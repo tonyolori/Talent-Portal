@@ -11,9 +11,7 @@ namespace Domain.Entities
         public string Title { get; set; }
         
         public string ModuleImageUrl { get; set; }
-
-        public virtual ICollection<Topic> Topics { get; set; } = new List<Topic>();
-
+        
         public required string Description { get; set; }
 
         public required string Objectives { get; set; }
@@ -26,13 +24,6 @@ namespace Domain.Entities
       
         public string ModuleStatusDes { get; set; }
         
-        public StudentModuleProgress StudentModuleProgress { get; set; }
-        
-        public string StudentModuleProgressDes { get; set; }
-
-        public DateTime StartDate { get; set; }
-
-        public DateTime EndDate { get; set; }
 
         public required string Timeframe { get; set; }
 
@@ -41,9 +32,14 @@ namespace Domain.Entities
         [ForeignKey(nameof(ProgrammeId))]
         public Programme Programme { get; set; }
 
+        // Many-to-Many relationship
+        public virtual ICollection<StudentModule> StudentModules { get; set; } = new List<StudentModule>();
         public virtual ICollection<ModuleTask> ModuleTasks { get; set; }
         
         public virtual ICollection<Quiz> Quizzes { get; set; } = new List<Quiz>();
+        
+        public virtual ICollection<Topic> Topics { get; set; } = new List<Topic>();
+
 
         public string Progress { get; set; }
 
