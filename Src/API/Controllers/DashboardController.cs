@@ -32,12 +32,12 @@ public class DashboardController(IMediator mediator) : ControllerBase
     {
         return Ok(await _mediator.Send(new GetProgressSummaryQuery { StudentId = studentId }));
     }
-    //[HttpGet("all")]
-    //public async Task<IActionResult> GetAllModule()
-    //{
-    //    return Ok(await _mediator.Send(new GetAllModulesQuery() { }));
-    //}
 
+    [HttpGet("performanceAnalysis")]
+    public async Task<IActionResult> GetPerformanceAnalysis(string studentId)
+    {
+        return Ok(await _mediator.Send(new GetPerformanceAnalysisQuery { StudentId = studentId }));
+    }
 
 
 }
