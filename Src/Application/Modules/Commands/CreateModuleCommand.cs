@@ -18,14 +18,11 @@ namespace Application.Modules.Commands
         public int ProgrammeId { get; set; }
         public string FacilitatorName { get; set; }
         public string FacilitatorId { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
         public string Timeframe { get; set; }
         public string Progress { get; set; }
         public string AdditionalResources { get; set; }
         
-        // For StudentModule
-        public string StudentId { get; set; }
+ 
     }
 
     public class CreateModuleCommandHandler : IRequestHandler<CreateModuleCommand, Result>
@@ -77,25 +74,7 @@ namespace Application.Modules.Commands
             await _context.Modules.AddAsync(module, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
             
-                StudentModule studentModule = new ()
-                {
-                    StudentId = request.StudentId,
-                    ModuleId = module.Id, // After saving, module.Id will be setStudentModuleProgress = StudentModuleProgress.Pending,
-                    StudentModuleProgressDes = StudentModuleProgress.Pending.ToString()
-                };
-
-                await _context.StudentModules.AddAsync(studentModule, cancellationToken);
-                await _context.SaveChangesAsync(cancellationToken);
-
-
-                var studentModuleDetails = new
-                {
-                    module,
-                    studentModule
-
-                };
-
-            return Result.Success<CreateModuleCommand>("Module and StudentModule created successfully!", studentModuleDetails);
+            return Result.Success<CreateModuleCommand>("Module and StudentModule created successfully!", module);
         }
     }
 }

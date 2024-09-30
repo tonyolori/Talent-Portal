@@ -41,6 +41,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         //builder.Entity<SubmissionDetails>()
         //    .HasKey(t => new { t.TaskId, t.StudentId });
         builder.Entity<SubmissionDetails>()
+            
             .HasIndex(s => new { s.TaskId, s.StudentId })
             .IsUnique(true);
         
