@@ -12,25 +12,24 @@ public class StudentProgressController(IMediator mediator) : ControllerBase
     private readonly IMediator _mediator = mediator;
 
     [HttpGet("recent-tasks/{studentId}")]
-    public async Task<IActionResult> recentTasks(string studentId)
+    public async Task<IActionResult> RecentTasks(string studentId)
     {
-        //this is on purpose, no need to create a new query
         GetAssignedTasksQuery query = new() { StudentId = studentId };
 
         return Ok(await _mediator.Send(query));
     }
 
     [HttpGet("allTasks")]
-    public async Task<IActionResult> GetModuleCompletionStatus([FromQuery]GetStudentTasksQuery query)
+    public async Task<IActionResult> GetTaskCompletionStatus([FromQuery]GetStudentTasksQuery query)
     {
         return Ok(await _mediator.Send(query));
     }
 
-    //[HttpGet("completionStatus/{studentId}")]
-    //public async Task<IActionResult> GetModuleCompletionStatus(string studentId)
-    //{
-    //    return Ok(await _mediator.Send());
-    //}
-
+    [HttpGet("allModules")]
+    public async Task<IActionResult> GetModuleCompletionStatus([FromQuery] GetStudentModulesQuery query)
+    {
+        return Ok(await _mediator.Send(query));
+    }
+    
 
 }
