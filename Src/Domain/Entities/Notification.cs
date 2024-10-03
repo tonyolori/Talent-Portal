@@ -9,7 +9,7 @@ public class Notification : BaseEntity
     public required string Title;
     public required string ShortMessage { get; set; }
     public required string  LongMessage { get; set; }
-    public DateTime DateCreated { get; set; } = DateTime.Now;
+    public DateTime DateCreated { get; set; } = DateTime.UtcNow;
     public bool IsRead { get; set; }
     [ForeignKey(nameof(StudentId))]
     public string StudentId { get; set; } = string.Empty;

@@ -9,8 +9,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 {
     public DbSet<Student> Students { get; set; }
 
-    public DbSet<Teacher> Teachers { get; set; }
-
     public DbSet<LearningAdmin> LearningAdmins { get; set; }
     
     public DbSet<Instructor> Instructors { get; set; }

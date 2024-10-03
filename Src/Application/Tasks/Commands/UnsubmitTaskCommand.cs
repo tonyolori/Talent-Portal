@@ -57,7 +57,7 @@ public class UnsubmitTaskCommandHandler(IApplicationDbContext context, UserManag
         submission.TaskStatus = ModuleTaskStatus.NotSubmitted;
         submission.TaskStatusDesc = ModuleTaskStatus.NotSubmitted.ToString();
         submission.SubmissionLink = null;
-        submission.SubmissionDate = DateTime.Now;
+        submission.SubmissionDate = DateTime.UtcNow;
         _context.SubmissionDetails.Update(submission);
 
         await _context.SaveChangesAsync(cancellationToken);

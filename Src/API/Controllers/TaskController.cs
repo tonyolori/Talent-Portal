@@ -24,11 +24,11 @@ public class TaskController(IMediator mediator) : Controller
     {
         return Ok(await _mediator.Send(Command));
     }
-
+    
     [HttpGet("{id}")]
     public async Task<IActionResult> GetTask(int id)
     {
-        return Ok(await _mediator.Send(new GetTaskByIdQuery{Id = id}));
+        return Ok(await _mediator.Send(new GetTaskByIdQuery{TaskId = id}));
     }
     [HttpGet("student/{id}")]
     public async Task<IActionResult> GetAssignedTasks(string id)
@@ -55,5 +55,25 @@ public class TaskController(IMediator mediator) : Controller
     public async Task<IActionResult> UnsubmitTask(UnsubmitTaskCommand command)
     {
         return Ok(await _mediator.Send(command));
+    }
+    
+        
+    [HttpGet("instructor/{id}")]
+    public async Task<IActionResult> GetAllTaskByInstructor(string id)
+    {
+        return Ok(await _mediator.Send(new GetAllTaskByInstructorIdQuery{InstructorId = id}));
+    }
+    
+    [HttpGet("instructor/assigned/{id}")]
+    public async Task<IActionResult> GetAllAssignedTask(string id)
+    {
+        return Ok(await _mediator.Send(new GetAllAssignedTaskByInstructorIdQuery{InstructorId = id}));
+    }
+    
+        
+    [HttpGet("instructor/unassigned/{id}")]
+    public async Task<IActionResult> GetAllUnAssignedTask(string id)
+    {
+        return Ok(await _mediator.Send(new GetAllUnAssignedTaskByInstructorIdQuery(){InstructorId = id}));
     }
 }

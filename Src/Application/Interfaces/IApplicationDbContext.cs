@@ -10,7 +10,6 @@ namespace Application.Interfaces
         
         public DbSet<Module> Modules { get; set; }
         public DbSet<ModuleTask> Tasks { get; set; }
-        public DbSet<Teacher> Teachers { get; set; }
         public DbSet<LearningAdmin> LearningAdmins { get; set; }
 
         public DbSet<Topic> Topics { get; set; }
