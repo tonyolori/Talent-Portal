@@ -10,11 +10,11 @@ public class TaskNotificationService(IServiceProvider serviceProvider) : IHosted
     private readonly IServiceProvider _serviceProvider = serviceProvider;
     private Timer? _timer;
 
-    public Task StartAsync(CancellationToken cancellationToken)
+    public System.Threading.Tasks.Task StartAsync(CancellationToken cancellationToken)
     {
         _timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromSeconds(30000));
 
-        return Task.CompletedTask;
+        return System.Threading.Tasks.Task.CompletedTask;
     }
 
     private async void DoWork(object? state)
@@ -23,7 +23,7 @@ public class TaskNotificationService(IServiceProvider serviceProvider) : IHosted
         var context = scope.ServiceProvider.GetRequiredService<IApplicationDbContext>();
 
         //First log it
-        DateTime time = DateTime.Now;
+        DateTime time = DateTime.UtcNow;
         Random random = new();
         int processID = random.Next(9999999, 999999999);
         Notification notificationlog = new()
@@ -40,9 +40,9 @@ public class TaskNotificationService(IServiceProvider serviceProvider) : IHosted
         // Send notifications for each overdue task
         foreach (var taskData in overdueTasks)
         {
-            ModuleTask task = taskData.Item1;
+            ModuleTask moduleTask = taskData.Item1;
             string studentId = taskData.Item2;
-            TimeSpan timeRemaining = task.DueDate - DateTime.Now;
+            TimeSpan timeRemaining = moduleTask.DueDate - DateTime.UtcNow;
 
             int days = Math.Max(0, timeRemaining.Days);
             int hours = Math.Max(0, timeRemaining.Hours);
@@ -62,7 +62,7 @@ public class TaskNotificationService(IServiceProvider serviceProvider) : IHosted
             {
                 timeLeftMessage = $"{minutes} minute{(minutes > 1 ? "s" : "")}";
             }
-            string message = $"Your task '{task.Title}'  would be due in {timeLeftMessage}";
+            string message = $"Your task '{moduleTask.Title}'  would be due in {timeLeftMessage}";
 
             Notification notification = new()
             {
@@ -75,7 +75,7 @@ public class TaskNotificationService(IServiceProvider serviceProvider) : IHosted
 
                         Cheers, mate
                     """,
-                TaskId = task.Id,
+                TaskId = moduleTask.Id,
                 StudentId = studentId,//get student id and place it here,
 
             };
@@ -90,7 +90,7 @@ public class TaskNotificationService(IServiceProvider serviceProvider) : IHosted
 
     private async Task<List<(ModuleTask, string)>> GetOverdueTasks(IApplicationDbContext context)
     {
-        DateTime today = DateTime.Now;
+        DateTime today = DateTime.UtcNow;
         //var results = await (from task in context.Tasks
         //              join submission in context.SubmissionDetails on task.Id equals submission.TaskId
         //              where task.DueDate < today &&
@@ -139,7 +139,7 @@ public class TaskNotificationService(IServiceProvider serviceProvider) : IHosted
     //        .ToListAsync();
     //}
 
-    private async Task SendNotification(Notification notification, IApplicationDbContext context)
+    private async System.Threading.Tasks.Task SendNotification(Notification notification, IApplicationDbContext context)
     {
         //TESTING PURPOSES, if student ID is empty just add and dont worry about duplicates
         if(notification.StudentId == "")
@@ -159,7 +159,7 @@ public class TaskNotificationService(IServiceProvider serviceProvider) : IHosted
             // Update the existing notification if it exists
             existingNotification.ShortMessage = notification.ShortMessage;
             existingNotification.LongMessage = notification.LongMessage;
-            existingNotification.DateCreated = DateTime.Now;
+            existingNotification.DateCreated = DateTime.UtcNow;
         }
         else
         {
@@ -170,10 +170,10 @@ public class TaskNotificationService(IServiceProvider serviceProvider) : IHosted
         await context.SaveChangesAsync(CancellationToken.None);
     }
 
-    public Task StopAsync(CancellationToken cancellationToken)
+    public System.Threading.Tasks.Task StopAsync(CancellationToken cancellationToken)
     {
         _timer?.Change(Timeout.Infinite, 0);
-        return Task.CompletedTask;
+        return System.Threading.Tasks.Task.CompletedTask;
     }
 
     public void Dispose()

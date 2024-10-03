@@ -16,7 +16,7 @@ public class DeactivateInstructorCommand : IRequest<Result>
 
         public async Task<Result> Handle(DeactivateInstructorCommand request, CancellationToken cancellationToken)
         {
-            Domain.Entities.Instructor? instructor = await _context.Instructors.FindAsync(request.InstructorId);
+            Instructor? instructor = await _context.Instructors.FindAsync(request.InstructorId);
 
             if (instructor == null)
             {

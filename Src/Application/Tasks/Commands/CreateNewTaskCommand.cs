@@ -12,8 +12,9 @@ public class CreateNewTaskCommand : IRequest<Result>
     public string Title { get; set; }
     public required string Description { get; set; }
     public required string Instructions { get; set; }
-    public int ModuleId { get; set; } 
-
+    public int ModuleId { get; set; }
+    
+    public string InstructorId { get; set; }
     public DateTime DueDate { get; set; }
 
     
@@ -26,23 +27,31 @@ public class CreateNewTaskCommandHandler(IApplicationDbContext Context) : IReque
 
     public async Task<Result> Handle(CreateNewTaskCommand request, CancellationToken cancellationToken)
     {
+        Instructor? instructor = await _context.Instructors.FindAsync(request.InstructorId);
+
+        if (instructor == null)
+        {
+            return Result.Failure($"Instructor with ID {request.InstructorId} not found.");
+        }
+        
         bool moduleExists = await _context.Modules.AnyAsync(m => m.Id == request.ModuleId, cancellationToken);  
         if (!moduleExists)  
         {  
             return Result.Failure($"Module with ID {request.ModuleId} does not exist.");  
         }  
        
-        ModuleTask task = new()
+        ModuleTask moduleTask = new()
         {
+            InstructorId = instructor.Id,
             Title = request.Title,
             Description = request.Description,
             Instructions = request.Instructions,
             DueDate = request.DueDate,
         };
 
-        await _context.Tasks.AddAsync(task);
+        await _context.Tasks.AddAsync(moduleTask);
         await _context.SaveChangesAsync(CancellationToken.None);
 
-        return Result.Success(task);
+        return Result.Success(moduleTask);
     }
 }

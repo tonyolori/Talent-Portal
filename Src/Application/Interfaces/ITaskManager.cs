@@ -13,9 +13,9 @@ public interface ITaskManager
 {
     public Task<List<ModuleTask>> GetAllTasks();
     public Task<ModuleTask?> GetTaskById(Guid taskId);
-    public Task CreateTask(ModuleTask task);
-    public Task UpdateTask(ModuleTask task);
-    public Task DeleteTask(Guid taskId);
+    public System.Threading.Tasks.Task CreateTask(ModuleTask moduleTask);
+    public System.Threading.Tasks.Task UpdateTask(ModuleTask moduleTask);
+    public System.Threading.Tasks.Task DeleteTask(Guid taskId);
 
     public Task<List<ModuleTask?>> GetTasksByStatus(ModuleTaskStatus status);
 

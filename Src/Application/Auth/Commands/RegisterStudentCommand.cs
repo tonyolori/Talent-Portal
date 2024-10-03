@@ -73,7 +73,7 @@ public class RegisterStudentCommandHandler : IRequestHandler<RegisterStudentComm
             Email = request.Email,
             FirstName = request.FirstName,
             LastName = request.LastName,
-            EnrollmentDate = DateTime.Now,
+            EnrollmentDate = DateTime.UtcNow,
             Role = Enum.Parse<UserRoles>("Student", true),
             RoleDesc = "Student",
             IsVerified = false,

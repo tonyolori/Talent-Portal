@@ -16,15 +16,30 @@ namespace Infrastructure
     {
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
-                    sqlServerOptionsAction: sqlOptions =>
-                    {
-                        sqlOptions.EnableRetryOnFailure(
-                            maxRetryCount: 5, // Number of retry attempts
-                            maxRetryDelay: TimeSpan.FromSeconds(10), // Delay between retries
-                            errorNumbersToAdd: null); // Optional: specific error numbers to retry on
-                    }));
+            // Register DbContext based on environment configuration (e.g., PostgreSQL or SQL Server)
+            var usePostgres = bool.Parse(configuration["UsePostgres"] ?? "false");
+            
+            if (usePostgres)
+            {
+                services.AddDbContext<ApplicationDbContext>(options =>
+                    options.UseMySql(  
+                        configuration.GetConnectionString("RailwayConnection"),  
+                        ServerVersion.AutoDetect(configuration.GetConnectionString("RailwayConnection")))); 
+
+            }
+            else
+            {
+                services.AddDbContext<ApplicationDbContext>(options =>
+                    options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
+                        sqlOptions =>
+                        {
+                            sqlOptions.EnableRetryOnFailure(
+                                maxRetryCount: 5, // Retry attempts
+                                maxRetryDelay: TimeSpan.FromSeconds(10), // Delay between retries
+                                errorNumbersToAdd: null // Optional error numbers
+                            );
+                        }));
+            }
 
 
             services.AddSingleton<IEmailService>(provider =>
