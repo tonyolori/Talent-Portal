@@ -13,7 +13,7 @@ public class GetStudentTasksQuery : IRequest<Result>
     public int? ProgrammeId { get; set; }
     public ModuleTaskStatus? Status { get; set; }
     public int? Week { get; set; }
-
+    public required string StudentId {  get; set; }
 }
 
 public class GetStudentTasksQueryHandler(IApplicationDbContext context) : IRequestHandler<GetStudentTasksQuery, Result>
@@ -22,13 +22,14 @@ public class GetStudentTasksQueryHandler(IApplicationDbContext context) : IReque
 
     public async Task<Result> Handle(GetStudentTasksQuery request, CancellationToken cancellationToken)
     {
-        List<StudentTaskDetailsDto> tasks = await _context.Tasks
+        List<StudentTaskDetailsDto> tasks = await _context.SubmissionDetails
        .AsNoTracking()
+       .Where(sd => sd.StudentId.Equals(request.StudentId))
        .Join(
-           inner: _context.SubmissionDetails,
-           outerKeySelector: mt => mt.Id,
-           innerKeySelector: sd => sd.TaskId,
-           resultSelector: (mt, sd) => new StudentTaskDetailsDto(mt,sd))
+           inner: _context.Tasks,
+           outerKeySelector: sd => sd.TaskId,
+           innerKeySelector: mt => mt.Id,
+           resultSelector: (sd, mt) => new StudentTaskDetailsDto(mt, sd))
        
          .ToListAsync(cancellationToken);
 
