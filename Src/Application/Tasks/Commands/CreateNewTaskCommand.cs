@@ -40,9 +40,8 @@ public class CreateNewTaskCommandHandler(IApplicationDbContext Context) : IReque
             return Result.Failure($"Module with ID {request.ModuleId} does not exist.");  
         }  
        
-        ModuleTask moduleTask = new()
         //TODO: update the task command to reflect the fact that tasks are linked to programmes
-        ModuleTask task = new()
+        ModuleTask moduleTask = new()
         {
             InstructorId = instructor.Id,
             Title = request.Title,
