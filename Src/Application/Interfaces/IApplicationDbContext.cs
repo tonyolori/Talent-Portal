@@ -1,5 +1,7 @@
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
 
 
 namespace Application.Interfaces
@@ -29,6 +31,8 @@ namespace Application.Interfaces
         public DbSet<Notification> Notifications { get; set; }
         
         public DbSet<Instructor> Instructors { get; set; }
+
+        //public DatabaseFacade Database { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }

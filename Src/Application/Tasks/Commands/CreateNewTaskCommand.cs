@@ -41,6 +41,8 @@ public class CreateNewTaskCommandHandler(IApplicationDbContext Context) : IReque
         }  
        
         ModuleTask moduleTask = new()
+        //TODO: update the task command to reflect the fact that tasks are linked to programmes
+        ModuleTask task = new()
         {
             InstructorId = instructor.Id,
             Title = request.Title,
