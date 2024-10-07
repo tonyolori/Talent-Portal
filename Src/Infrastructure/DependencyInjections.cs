@@ -17,14 +17,12 @@ namespace Infrastructure
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
             // Register DbContext based on environment configuration (e.g., PostgreSQL or SQL Server)
-            var usePostgres = bool.Parse(configuration["UsePostgres"] ?? "false");
+            var Onliinedb = bool.Parse(configuration["Onliinedb"] ?? "false");
             
-            if (usePostgres)
+            if (Onliinedb)
             {
                 services.AddDbContext<ApplicationDbContext>(options =>
-                    options.UseMySql(  
-                        configuration.GetConnectionString("RailwayConnection"),  
-                        ServerVersion.AutoDetect(configuration.GetConnectionString("RailwayConnection")))); 
+                    options.UseSqlServer(configuration.GetConnectionString("AzureConnection")));
 
             }
             else
