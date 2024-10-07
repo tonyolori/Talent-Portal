@@ -54,7 +54,7 @@ public class SubmitTaskCommandHandler(IApplicationDbContext context, UserManager
                 TaskStatusDesc = ModuleTaskStatus.Submitted.ToString(),
                 StudentId = request.StudentId,
                 SubmissionLink = request.SubmissionLink,
-                SubmissionDate = DateTime.Now
+                SubmissionDate = DateTime.UtcNow
             };
             _context.SubmissionDetails.Add(submission);
         }
@@ -62,7 +62,7 @@ public class SubmitTaskCommandHandler(IApplicationDbContext context, UserManager
         submission.TaskStatus = ModuleTaskStatus.Submitted;
         submission.TaskStatusDesc = ModuleTaskStatus.Submitted.ToString();
         submission.SubmissionLink = request.SubmissionLink;
-        submission.SubmissionDate = DateTime.Now;
+        submission.SubmissionDate = DateTime.UtcNow;
         _context.SubmissionDetails.Update(submission);
 
         await _context.SaveChangesAsync(cancellationToken);

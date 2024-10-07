@@ -4,19 +4,19 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace Application.Dto;
-public class StudentTaskDetailsDto(ModuleTask task, SubmissionDetails details)
+public class StudentTaskDetailsDto(ModuleTask moduleTask, SubmissionDetails details)
 {
 
     // Fields from ModuleTask
-    public string Title { get; set; } = task.Title;
-    public string Description { get; set; } = task.Description;
-    public string Instructions { get; set; } = task.Instructions;
-    public DateTime CreatedDate { get; set; } = task.CreatedDate;
-    public DateTime DueDate { get; set; } = task.DueDate;
+    public string Title { get; set; } = moduleTask.Title;
+    public string Description { get; set; } = moduleTask.Description;
+    public string Instructions { get; set; } = moduleTask.Instructions;
+    public DateTime CreatedDate { get; set; } = moduleTask.CreatedDate;
+    public DateTime DueDate { get; set; } = moduleTask.DueDate;
     [ForeignKey(nameof(ProgrammeId))]
-    public int ProgrammeId { get; set; } = task.ProgrammeId;
+    public int ProgrammeId { get; set; } = moduleTask.ProgrammeId;
 
-    public int Week { get; set; } = task.Week;
+    public int Week { get; set; } = moduleTask.Week;
 
     // Fields from SubmissionDetails
     public float? Grade { get; set; } = details.Grade;

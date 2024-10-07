@@ -31,9 +31,7 @@ namespace Domain.Entities
 
         [ForeignKey(nameof(ProgrammeId))]
         public Programme Programme { get; set; }
-
-        // Many-to-Many relationship
-        public virtual ICollection<StudentModule> StudentModules { get; set; } = new List<StudentModule>();
+        
         public virtual ICollection<ModuleTask> ModuleTasks { get; set; }
         
         public virtual ICollection<Quiz> Quizzes { get; set; } = new List<Quiz>();
