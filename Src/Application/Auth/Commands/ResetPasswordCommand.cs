@@ -1,16 +1,14 @@
-using MediatR;
-using Microsoft.AspNetCore.Identity;
-using StackExchange.Redis;
 using Application.Common.Models;
 using Application.Extensions;
 using Domain.Entities;
+using MediatR;
+using Microsoft.AspNetCore.Identity;
 
 namespace Application.Auth.Commands
 {
     public class ResetPasswordCommand : IRequest<Result>
     {
         public string Email { get; set; }
-        public string PasswordResetCode { get; set; }
         public string NewPassword { get; set; }
         public string ConfirmPassword { get; set; }
     }
@@ -18,12 +16,12 @@ namespace Application.Auth.Commands
     public class ResetPasswordCommandHandler : IRequestHandler<ResetPasswordCommand, Result>
     {
         private readonly UserManager<Student> _userManager;
-        private readonly IDatabase _redisDb;
+        private readonly IMediator _mediator;
 
-        public ResetPasswordCommandHandler(UserManager<Student> userManager, IConnectionMultiplexer redis)
+        public ResetPasswordCommandHandler(UserManager<Student> userManager, IMediator mediator)
         {
             _userManager = userManager;
-            _redisDb = redis.GetDatabase();
+            _mediator = mediator;
         }
 
         public async Task<Result> Handle(ResetPasswordCommand request, CancellationToken cancellationToken)
@@ -34,26 +32,22 @@ namespace Application.Auth.Commands
                 return Result.Failure<ResetPasswordCommand>("Invalid email.");
             }
 
-            string storedResetCode = await _redisDb.StringGetAsync($"PasswordResetCode:{request.Email}");
-            if (string.IsNullOrEmpty(storedResetCode) || storedResetCode != request.PasswordResetCode)
-            {
-                return Result.Failure<ResetPasswordCommand>("Invalid or expired password reset code.");
-            }
-
+            // Validate password using custom validator
             await request.ValidateAsync(new PasswordValidator(), cancellationToken);
 
+            // Hash the new password
             user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, request.NewPassword);
 
+            // Update user with the new password
             IdentityResult result = await _userManager.UpdateAsync(user);
             if (!result.Succeeded)
             {
                 return Result.Failure("Failed to reset the password.");
             }
 
-            // Remove the reset code from Redis after successful password reset
-            await _redisDb.KeyDeleteAsync($"PasswordResetCode:{request.Email}");
-
+            // Success response
             return Result.Success("Password reset successfully.");
         }
     }
 }
+
