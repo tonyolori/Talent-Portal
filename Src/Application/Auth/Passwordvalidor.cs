@@ -13,10 +13,6 @@ namespace Application.Auth
                 .NotEmpty().WithMessage("Email is required.")
                 .EmailAddress().WithMessage("Invalid email format.");
 
-            // Password reset code validation
-            RuleFor(user => user.PasswordResetCode)
-                .NotEmpty().WithMessage("Password reset code is required.");
-
             // New password validation
             RuleFor(user => user.NewPassword)
                 .NotEmpty().WithMessage("New password is required.")
