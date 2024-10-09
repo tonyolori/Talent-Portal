@@ -39,6 +39,12 @@ namespace API.Controllers
         {  
             return Ok(await _mediator.Send(command));  
         }  
+        
+        [HttpPost("verify-reset-code")]  
+        public async Task<IActionResult> VerifyResetCode(VerifyForgotPasswordCodeCommand command)  
+        {  
+            return Ok(await _mediator.Send(command));  
+        }  
 
         [HttpPost("reset-password")]  
         public async Task<IActionResult> ResetPassword(ResetPasswordCommand command)  
