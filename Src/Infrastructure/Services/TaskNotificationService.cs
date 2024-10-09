@@ -22,18 +22,6 @@ public class TaskNotificationService(IServiceProvider serviceProvider) : IHosted
         using var scope = _serviceProvider.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<IApplicationDbContext>();
 
-        //First log it
-        DateTime time = DateTime.UtcNow;
-        Random random = new();
-        int processID = random.Next(9999999, 999999999);
-        Notification notificationlog = new()
-        {
-            Title = "Server Log",
-            ShortMessage = "The server ran at " + time.ToShortTimeString(),
-            LongMessage = "The server ran at " + time.ToLongDateString() + ", " + time.ToLongTimeString() + $" process Id = {processID}",
-        };
-
-        await SendNotification(notificationlog, context);
 
         List<(ModuleTask, string)> overdueTasks = await GetOverdueTasks(context);
 
