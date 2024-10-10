@@ -129,15 +129,6 @@ public class TaskNotificationService(IServiceProvider serviceProvider) : IHosted
 
     private async System.Threading.Tasks.Task SendNotification(Notification notification, IApplicationDbContext context)
     {
-        //TESTING PURPOSES, if student ID is empty just add and dont worry about duplicates
-        if(notification.StudentId == "")
-        {
-            context.Notifications.Add(notification);
-            await context.SaveChangesAsync(CancellationToken.None);
-            return;
-        }
-
-
         // Check if a notification already exists for the same StudentId and TaskId
         Notification? existingNotification = await context.Notifications
             .FirstOrDefaultAsync(n => n.StudentId == notification.StudentId && n.TaskId == notification.TaskId);

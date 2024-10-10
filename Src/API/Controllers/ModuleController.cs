@@ -32,7 +32,7 @@ namespace API.Controllers
         }
         
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetModule(int id)
+        public async Task<IActionResult> GetModuleById(int id)
         {
             return Ok(await _mediator.Send(new GetModuleByIdQuery{Id =id}));
         }
@@ -43,7 +43,18 @@ namespace API.Controllers
             return Ok(await _mediator.Send(new GetAllModulesQuery() { }));
         }
 
-        
-      
+        [HttpGet("programme/{Id}")]
+        public async Task<IActionResult> GetModuleByProgrammeId(int Id)
+        {
+            return Ok(await _mediator.Send(new GetModulesByProgrammeIdQuery { ProgrammeId = Id }));
+        }
+
+        [HttpPost("delete/{Id}")]
+        public async Task<IActionResult> DeleteModuleById(int Id)
+        {
+            return Ok(await _mediator.Send(new DeleteModuleByIdQuery { Id = Id }));
+        }
+
+
     }
 }
