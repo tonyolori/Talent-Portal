@@ -22,7 +22,7 @@ namespace Infrastructure
             if (Onliinedb)
             {
                 services.AddDbContext<ApplicationDbContext>(options =>
-                    options.UseSqlServer(configuration.GetConnectionString("AzureConnection")));
+                    options.UseSqlServer(configuration.GetConnectionString("SmarterAspConnection")));
 
             }
             else

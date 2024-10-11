@@ -30,7 +30,7 @@ namespace Application.Modules.Queries
             List<Module> module = _context.Modules.Where(
                 m=> m.ProgrammeId == request.ProgrammeId).ToList();
 
-            return Result.Success<GetModulesByProgrammeIdQuery>("Modules retreived successfully", module);
+            return Result.Success<GetModulesByProgrammeIdQuery>("Modules retrieved successfully", module);
         }
     }
 }
