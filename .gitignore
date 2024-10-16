@@ -78,3 +78,5 @@ Desktop.ini
 #**/appsettings.json
 *.user
 **/obj/
+/Src/API/.config/dotnet-tools.json
+/Src/API/Properties/PublishProfiles
