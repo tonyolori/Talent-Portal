@@ -15,11 +15,11 @@ namespace Application.Auth.Commands
 
     public class ForgotPasswordCommandHandler : IRequestHandler<ForgotPasswordCommand, Result>
     {
-        private readonly UserManager<Student> _userManager;
+        private readonly UserManager<User> _userManager;
         private readonly IEmailService _emailService;
         private readonly IDatabase _redisDb;
 
-        public ForgotPasswordCommandHandler(UserManager<Student> userManager, IEmailService emailService, IConnectionMultiplexer redis)
+        public ForgotPasswordCommandHandler(UserManager<User> userManager, IEmailService emailService, IConnectionMultiplexer redis)
         {
             _userManager = userManager;
             _emailService = emailService;
@@ -29,7 +29,7 @@ namespace Application.Auth.Commands
         public async Task<Result> Handle(ForgotPasswordCommand request, CancellationToken cancellationToken)
         {
             // Check if the user exists based on the provided email
-            Student? user = await _userManager.FindByEmailAsync(request.Email);
+            User? user = await _userManager.FindByEmailAsync(request.Email);
             if (user == null)
             {
                 return Result.Failure("Email does not exist.");
@@ -39,7 +39,7 @@ namespace Application.Auth.Commands
             string verificationCode = await PasswordReset.SendPasswordResetVerificationCodeAsync(_redisDb.Multiplexer, _emailService, request.Email);
 
             // Return success result with the verification code
-            return Result.Success("Email verification code sent!", verificationCode);
+            return Result.Success<ForgotPasswordCommand>("Email verification code sent!", verificationCode);
         }
     }
 }

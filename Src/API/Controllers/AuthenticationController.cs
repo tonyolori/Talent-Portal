@@ -6,17 +6,17 @@ namespace API.Controllers
 {  
     [ApiController]  
     [Route("api/auth")]  
-    public class StudentAuthenticationController : ControllerBase 
+    public class AuthenticationController : ControllerBase 
     {  
         private readonly IMediator _mediator;  
 
-        public StudentAuthenticationController(IMediator mediator, IHttpContextAccessor httpContextAccessor) // Update constructor  
+        public AuthenticationController(IMediator mediator, IHttpContextAccessor httpContextAccessor) // Update constructor  
         {  
             _mediator = mediator;  
         }  
 
         [HttpPost("register")]  
-        public async Task<IActionResult> Register(RegisterStudentCommand command)  
+        public async Task<IActionResult> Register(RegisterUserCommand command)  
         {  
             return Ok(await _mediator.Send(command));  
         }  
@@ -28,7 +28,7 @@ namespace API.Controllers
         }  
 
         [HttpPost("login")]  
-        public async Task<IActionResult> Login(LoginStudentCommand command)  
+        public async Task<IActionResult> Login(LoginUserCommand command)  
         {  
 
             return Ok(await _mediator.Send(command));  

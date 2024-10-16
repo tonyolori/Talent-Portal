@@ -20,7 +20,7 @@ namespace Application.Paystack.Commands
         public string PreferredProgramme { get; set; }
         public EmploymentStatus EmploymentStatus { get; set; }
         public EducationalLevel EducationalLevel { get; set; }
-        public ApplicationType ApplicationType { get; set; }
+        public PaymentType PaymentType { get; set; }
     }
 
     public class CreatePaymentCommandHandler : IRequestHandler<CreatePaymentCommand, Result>
@@ -28,9 +28,9 @@ namespace Application.Paystack.Commands
         private readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;
         private readonly IApplicationDbContext _context;
-        private readonly UserManager<Student> _userManager;
+        private readonly UserManager<User> _userManager;
 
-        public CreatePaymentCommandHandler(UserManager<Student> userManager, HttpClient httpClient, IConfiguration configuration, IApplicationDbContext context)
+        public CreatePaymentCommandHandler(UserManager<User> userManager, HttpClient httpClient, IConfiguration configuration, IApplicationDbContext context)
         {
             _userManager = userManager;
             _httpClient = httpClient;
@@ -41,7 +41,7 @@ namespace Application.Paystack.Commands
         public async Task<Result> Handle(CreatePaymentCommand request, CancellationToken cancellationToken)
         {
             // Find the student by email
-            Student? student = await _userManager.FindByEmailAsync(request.Email);
+            User? student = await _userManager.FindByEmailAsync(request.Email);
 
             if (student == null)
             {
@@ -93,7 +93,7 @@ namespace Application.Paystack.Commands
                 PreferredProgramme = request.PreferredProgramme,
                 EducationalLevel = request.EducationalLevel,
                 EmploymentStatus = request.EmploymentStatus, 
-                ApplicationType = request.ApplicationType,
+                PaymentType = request.PaymentType,
                 Amount = request.Amount,
                 TransactionStatus = "Pending",
                 CreatedAt = DateTime.UtcNow

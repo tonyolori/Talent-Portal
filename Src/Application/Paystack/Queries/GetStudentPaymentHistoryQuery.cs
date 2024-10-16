@@ -21,7 +21,7 @@ namespace Application.Paystack.Queries
         public DateTime ApplicationDate { get; set; }
         public decimal Amount { get; set; }
         public string TransactionStatus { get; set; }
-        public ApplicationType ApplicationType { get; set; }
+        public PaymentType PaymentType { get; set; }
         public string PreferredProgramme { get; set; }
     }
 
@@ -60,7 +60,7 @@ namespace Application.Paystack.Queries
                 ApplicationDate = transaction.CreatedAt,
                 Amount = transaction.Amount,
                 TransactionStatus = transaction.TransactionStatus, 
-                ApplicationType = transaction.ApplicationType,
+                PaymentType = transaction.PaymentType,
                 PreferredProgramme = transaction.PreferredProgramme
             };
         }

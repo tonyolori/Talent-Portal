@@ -6,9 +6,9 @@ using FluentValidation;
 
 namespace Application.Auth
 {
-    public class StudentCreateValidator : AbstractValidator<RegisterStudentCommand>
+    public class UserCreateValidator : AbstractValidator<RegisterUserCommand>
     {
-        public StudentCreateValidator()
+        public UserCreateValidator()
         {
             RuleFor(x => x.FirstName)
                 .NotEmpty().WithMessage("First Name is required.")

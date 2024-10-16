@@ -8,12 +8,11 @@ namespace Application.Interfaces
 {
     public interface IApplicationDbContext
     {
-        public DbSet<Student> Students { get; set; }
+        public DbSet<User> User { get; set; }
         
         public DbSet<Module> Modules { get; set; }
         public DbSet<ModuleTask> Tasks { get; set; }
-        public DbSet<LearningAdmin> LearningAdmins { get; set; }
-
+        
         public DbSet<Topic> Topics { get; set; }
         public DbSet<SubmissionDetails> SubmissionDetails { get; set; }
         
@@ -24,13 +23,10 @@ namespace Application.Interfaces
         public DbSet<Answer> Answers { get; set; }
         
         public DbSet<StudentModule> StudentModules { get; set; }
-
-
+        
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<Programme> Programmes { get; set; }
         public DbSet<Notification> Notifications { get; set; }
-        
-        public DbSet<Instructor> Instructors { get; set; }
 
         //public DatabaseFacade Database { get; set; }
 

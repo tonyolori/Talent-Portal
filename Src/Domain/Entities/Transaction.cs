@@ -11,7 +11,7 @@ public class Transaction:BaseEntity
     public string PreferredProgramme { get; set; }
     public EducationalLevel EducationalLevel { get; set; }
     public EmploymentStatus EmploymentStatus { get; set; }
-    public ApplicationType ApplicationType { get; set; }
+    public PaymentType PaymentType { get; set; }
     
     public PaymentStatus PaymentStatus { get; set; }
     public decimal Amount { get; set; }
@@ -22,7 +22,7 @@ public class Transaction:BaseEntity
 
     [ForeignKey(nameof(StudentId))]
     
-    public Student Student { get; set; }
+    public User User { get; set; }
     
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 }

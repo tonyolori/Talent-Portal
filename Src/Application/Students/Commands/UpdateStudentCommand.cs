@@ -1,6 +1,7 @@
 using Application.Common.Models;
 using Application.Interfaces;
 using Domain.Entities;
+using Domain.Enum;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -17,10 +18,10 @@ namespace Application.Auth.Commands
 
     public class UpdateStudentCommandHandler : IRequestHandler<UpdateStudentCommand, Result>
     {
-        private readonly UserManager<Student> _userManager;
+        private readonly UserManager<User> _userManager;
         private readonly IApplicationDbContext _context;  // Injecting DbContext to access Programmes
 
-        public UpdateStudentCommandHandler(UserManager<Student> userManager, IApplicationDbContext context)
+        public UpdateStudentCommandHandler(UserManager<User> userManager, IApplicationDbContext context)
         {
             _userManager = userManager;
             _context = context;
@@ -29,8 +30,8 @@ namespace Application.Auth.Commands
         public async Task<Result> Handle(UpdateStudentCommand request, CancellationToken cancellationToken)
         {
             // Find the student by ID
-            Student? student = await _userManager.FindByIdAsync(request.StudentId);
-            if (student == null)
+            User? student = await _userManager.FindByIdAsync(request.StudentId);
+            if (student == null || student.UserType != UserType.Student)
                 return Result.Failure("Student not found");
 
             // Check if the programme exists

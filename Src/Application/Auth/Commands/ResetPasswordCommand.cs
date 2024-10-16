@@ -15,10 +15,10 @@ namespace Application.Auth.Commands
 
     public class ResetPasswordCommandHandler : IRequestHandler<ResetPasswordCommand, Result>
     {
-        private readonly UserManager<Student> _userManager;
+        private readonly UserManager<User> _userManager;
         private readonly IMediator _mediator;
 
-        public ResetPasswordCommandHandler(UserManager<Student> userManager, IMediator mediator)
+        public ResetPasswordCommandHandler(UserManager<User> userManager, IMediator mediator)
         {
             _userManager = userManager;
             _mediator = mediator;
@@ -26,7 +26,7 @@ namespace Application.Auth.Commands
 
         public async Task<Result> Handle(ResetPasswordCommand request, CancellationToken cancellationToken)
         {
-            Student? user = await _userManager.FindByEmailAsync(request.Email);
+            User? user = await _userManager.FindByEmailAsync(request.Email);
             if (user == null)
             {
                 return Result.Failure<ResetPasswordCommand>("Invalid email.");

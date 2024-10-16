@@ -1,34 +1,45 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-
-namespace Application.Instructors.Queries;
-
 using MediatR;
 using Application.Common.Models;
 using Application.Interfaces;
 using Domain.Entities;
+using Domain.Enum;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 public class GetAllInstructorsQuery : IRequest<Result>
 {
-  public class GetAllInstructorsQueryHandler(IApplicationDbContext context) : IRequestHandler<GetAllInstructorsQuery, Result>
-  {
-    private readonly IApplicationDbContext _context = context;
-
-    public async Task<Result> Handle(GetAllInstructorsQuery request, CancellationToken cancellationToken)
+    public class GetAllInstructorsQueryHandler : IRequestHandler<GetAllInstructorsQuery, Result>
     {
-      List<Instructor>? instructors = await _context.Instructors.ToListAsync(cancellationToken);
+        private readonly UserManager<User> _userManager;
 
-      if (!instructors.Any())
-      {
-        return Result.Failure<Instructor>("Instructor not found.");
-      }
-      
-      var response = new  
-      {  
-        instructors , 
-        InstructorsLength = instructors.Count,  
-      };  
-      
-      return Result.Success<GetAllInstructorsQuery>("All Instructors", response);
+        public GetAllInstructorsQueryHandler(UserManager<User> userManager)
+        {
+            _userManager = userManager;
+        }
+
+        public async Task<Result> Handle(GetAllInstructorsQuery request, CancellationToken cancellationToken)
+        {
+            // Get all users of type Instructor
+            List<User> instructors = await _userManager.Users
+                .Where(u => u.UserType == UserType.Instructor)
+                .ToListAsync(cancellationToken);
+
+            if (!instructors.Any())
+            {
+                return Result.Failure("No instructors found.");
+            }
+
+            var response = new
+            {
+                Instructors = instructors,
+                InstructorsLength = instructors.Count
+            };
+
+            return Result.Success("All Instructors", response);
+        }
     }
-  }
 }

@@ -4,20 +4,20 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Reflection;
 
 namespace Domain.Entities;
-public class Student : BaseUser
+public class User : BaseUser
 {
     
-    public Status UserStatus { get; set; }
-    public string UserStatusDes { get; set; }
     public bool IsVerified { get; set; }
-    public DateTime EnrollmentDate { get; set; }
+
     public int ProgrammeId { get; set; }
 
     [ForeignKey(nameof(ProgrammeId))]
     
     public Programme Programme { get; set; }
     
-    public ApplicationType ApplicationType { get; set; }
+    public string AssignedCourse { get; set; }
+    
+    public PaymentType PaymentType { get; set; }
     
     public string PaymentTypeDes { get; set; }
     

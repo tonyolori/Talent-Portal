@@ -21,12 +21,12 @@ namespace Application.Paystack.Commands
 
     public class VerifyPaymentCommandHandler : IRequestHandler<VerifyPaymentCommand, Result>
     {
-        private readonly UserManager<Student> _userManager;
+        private readonly UserManager<User> _userManager;
         private readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;
         private readonly IApplicationDbContext _context;
 
-        public VerifyPaymentCommandHandler(UserManager<Student> userManager,HttpClient httpClient, IConfiguration configuration, IApplicationDbContext context)
+        public VerifyPaymentCommandHandler(UserManager<User> userManager,HttpClient httpClient, IConfiguration configuration, IApplicationDbContext context)
         {
             _userManager = userManager;
             _httpClient = httpClient;
@@ -37,7 +37,7 @@ namespace Application.Paystack.Commands
         public async Task<Result> Handle(VerifyPaymentCommand request, CancellationToken cancellationToken)
         {
             
-            Student? student  = await _userManager.FindByEmailAsync(request.Email);
+            User? student  = await _userManager.FindByEmailAsync(request.Email);
             if (student == null)
             {
                 return Result.Failure("The email does not belong to a registered student.");
@@ -85,8 +85,8 @@ namespace Application.Paystack.Commands
             // Check payment status and return appropriate result
             if (paymentStatus == "success")
             {
-                student.ApplicationType = transaction.ApplicationType;
-                student.PaymentTypeDes = transaction.ApplicationType.ToString(); 
+                student.PaymentType = transaction.PaymentType;
+                student.PaymentTypeDes = transaction.PaymentType.ToString(); 
                 await _userManager.UpdateAsync(student);
                 return Result.Success("Payment verified successfully.");
             }
