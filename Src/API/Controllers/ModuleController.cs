@@ -18,7 +18,7 @@ namespace API.Controllers
         private readonly IMediator _mediator = mediator;
 
         [HttpPost("create-module")]
-        public async Task<IActionResult> CreateModule(CreateModuleCommand command)
+        public async Task<IActionResult> CreateModule([FromForm]CreateModuleCommand command)
         {
             return Ok(await _mediator.Send(command));
         }

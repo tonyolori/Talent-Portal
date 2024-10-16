@@ -30,6 +30,8 @@ namespace Application.Interfaces
 
         //public DatabaseFacade Database { get; set; }
 
+        //public DatabaseFacade Database { get; set; }
+
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
 }
