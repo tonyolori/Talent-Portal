@@ -1,5 +1,4 @@
 using Application.Instructors.Commands;
-using Application.Instructors.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,22 +7,15 @@ namespace API.Controllers
 {
     [Route("api/instructor")]
     [ApiController]
-    public class InstructorManagementController : ControllerBase
+    public class InstructorController : ControllerBase
     {
         private readonly IMediator _mediator;
 
-        public InstructorManagementController(IMediator mediator)
+        public InstructorController(IMediator mediator)
         {
             _mediator = mediator;
         }
         
-        
-        [HttpPost("create")]
-        public async Task<IActionResult> CreateInstructor( CreateInstructorCommand command)
-        {
-            return Ok(await _mediator.Send(command));
-         
-        }
 
       
         [HttpPost("update/{id}")]
@@ -35,7 +27,7 @@ namespace API.Controllers
 
 
         [HttpPost("deactivate/{id}")]
-        public async Task<IActionResult> DeactivateInstructor(int id)
+        public async Task<IActionResult> DeactivateInstructor(string id)
         {
     
             return Ok(await _mediator.Send( new DeactivateInstructorCommand { InstructorId = id }));
@@ -43,13 +35,13 @@ namespace API.Controllers
         }
 
         [HttpPost("reactivate/{id}")]
-        public async Task<IActionResult> ReactivateInstructor(int id)
+        public async Task<IActionResult> ReactivateInstructor(string id)
         {
             return Ok(await _mediator.Send( new ReactivateInstructorCommand { InstructorId = id }));
         }
         
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetInstructorById(int id)
+        public async Task<IActionResult> GetInstructorById(string id)
         { 
             return Ok(await _mediator.Send(new GetInstructorByIdQuery { InstructorId = id }));
 

@@ -36,7 +36,6 @@ namespace Application.Modules.Queries
                     FacilitatorId = m.FacilitatorId,
                     Timeframe = m.Timeframe,
                     ProgrammeId = m.ProgrammeId,
-                    Progress = m.Progress,
                     AdditionalResources = m.AdditionalResources,
                     TotalTopics = m.Topics.Count, 
                     TotalModuleTasks = m.ModuleTasks.Count, 

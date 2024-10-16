@@ -48,23 +48,12 @@ namespace Infrastructure
             services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
 
             // Register Identity for StudentController
-            services.AddIdentityCore<Student>()
+            services.AddIdentityCore<User>()
                     .AddRoles<IdentityRole>()
                     .AddEntityFrameworkStores<ApplicationDbContext>()
                     .AddApiEndpoints();
             
-            // Register Identity for Instructor
-            services.AddIdentityCore<Instructor>()
-                    .AddRoles<IdentityRole>()
-                    .AddEntityFrameworkStores<ApplicationDbContext>()
-                    .AddApiEndpoints();
-            
-
-            // Register Identity for LearningAdmin
-            services.AddIdentityCore<LearningAdmin>()
-                    .AddRoles<IdentityRole>()
-                    .AddEntityFrameworkStores<ApplicationDbContext>()
-                    .AddApiEndpoints();
+        
 
             var accesskey = configuration["Jwt:AccessKey"];
             var refreshkey =configuration["Jwt:RefreshKey"];

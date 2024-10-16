@@ -14,9 +14,9 @@ namespace Application.Auth.Commands
 
     public class DeactivateStudentCommandHandler : IRequestHandler<DeactivateStudentCommand, Result>
     {
-        private readonly UserManager<Student> _userManager;
+        private readonly UserManager<User> _userManager;
 
-        public DeactivateStudentCommandHandler(UserManager<Student> userManager)
+        public DeactivateStudentCommandHandler(UserManager<User> userManager)
         {
             _userManager = userManager;
         }
@@ -24,8 +24,8 @@ namespace Application.Auth.Commands
         public async Task<Result> Handle(DeactivateStudentCommand request, CancellationToken cancellationToken)
         {
             // Find the student by ID
-            Student? student = await _userManager.FindByIdAsync(request.StudentId);
-            if (student == null)
+            User? student = await _userManager.FindByIdAsync(request.StudentId);
+            if (student == null  || student.UserType != UserType.Student)
                 return Result.Failure("Student not found");
 
             // Set the student status to Inactive

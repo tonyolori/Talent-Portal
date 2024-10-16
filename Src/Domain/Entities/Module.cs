@@ -35,11 +35,8 @@ namespace Domain.Entities
         public virtual ICollection<ModuleTask> ModuleTasks { get; set; }
         
         public virtual ICollection<Quiz> Quizzes { get; set; } = new List<Quiz>();
-        
+
         public virtual ICollection<Topic> Topics { get; set; } = new List<Topic>();
-
-
-        public string Progress { get; set; }
 
         public string? AdditionalResources { get; set; }
     }

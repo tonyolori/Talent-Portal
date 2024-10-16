@@ -30,6 +30,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Folder Include="LearningAdmins\Commands\" />
 	  <Folder Include="Notifications\Commands\" />
 	</ItemGroup>
 	

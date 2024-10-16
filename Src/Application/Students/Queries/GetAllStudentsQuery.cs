@@ -12,16 +12,16 @@ namespace Application.Students.Queries
 
     public class GetAllStudentsQueryHandler : IRequestHandler<GetAllStudentsQuery, Result>
     {
-        private readonly UserManager<Student> _userManager;
+        private readonly UserManager<User> _userManager;
 
-        public GetAllStudentsQueryHandler(UserManager<Student> userManager)
+        public GetAllStudentsQueryHandler(UserManager<User> userManager)
         {
             _userManager = userManager;
         }
 
         public async Task<Result> Handle(GetAllStudentsQuery request, CancellationToken cancellationToken)
         {
-            List<Student>? students = await _userManager.Users.ToListAsync(cancellationToken);
+            List<User>? students = await _userManager.Users.ToListAsync(cancellationToken);
 
             if (students == null || !students.Any())
             {

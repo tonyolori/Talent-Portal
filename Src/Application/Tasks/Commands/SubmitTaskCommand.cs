@@ -14,16 +14,16 @@ public class SubmitTaskCommand : IRequest<Result>
     public required string SubmissionLink { get; set; }
 }
 
-public class SubmitTaskCommandHandler(IApplicationDbContext context, UserManager<Student> userManager) : IRequestHandler<SubmitTaskCommand, Result>
+public class SubmitTaskCommandHandler(IApplicationDbContext context, UserManager<User> userManager) : IRequestHandler<SubmitTaskCommand, Result>
 {
     private readonly IApplicationDbContext _context = context;
-    private readonly UserManager<Student> _userManager = userManager;
+    private readonly UserManager<User> _userManager = userManager;
 
     public async Task<Result> Handle(SubmitTaskCommand request, CancellationToken cancellationToken)
     {
         //Student? student = await _userManager.FindByIdAsync(request.StudentId);
-        Student? student = await _userManager.Users.Include(s => s.AssignedTasks)
-                                 .FirstOrDefaultAsync(s => s.Id == request.StudentId, cancellationToken);
+        User? student = await _userManager.Users.Include(s => s.AssignedTasks)
+                                 .FirstOrDefaultAsync(s => s.Id == request.StudentId && s.UserType == UserType.Student, cancellationToken);
         if (student == null)
         {
             return Result.Failure($"Student with ID {request.StudentId} not found.");

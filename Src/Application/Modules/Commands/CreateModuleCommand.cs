@@ -19,8 +19,8 @@ namespace Application.Modules.Commands
         public string FacilitatorName { get; set; }
         public string FacilitatorId { get; set; }
         public string Timeframe { get; set; }
-        public string Progress { get; set; }
-        public string AdditionalResources { get; set; }
+        
+        public string? AdditionalResources { get; set; }
         
  
     }
@@ -67,7 +67,6 @@ namespace Application.Modules.Commands
                 ModuleStatus = ModuleStatus.Pending,
                 ModuleStatusDes = ModuleStatus.Pending.ToString(),
                 Timeframe = request.Timeframe,
-                Progress = request.Progress,
                 AdditionalResources = request.AdditionalResources
             };
 

@@ -1,5 +1,5 @@
 namespace Domain.Enum;
-public enum UserRoles
+public enum UserType
 {
     Admin = 1,
     Instructor = 2,

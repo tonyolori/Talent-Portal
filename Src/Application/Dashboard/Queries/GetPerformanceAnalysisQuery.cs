@@ -16,9 +16,9 @@ public class GetPerformanceAnalysisQuery : IRequest<Result>
 public class GetPerformanceAnalysisQueryHandler : IRequestHandler<GetPerformanceAnalysisQuery, Result>
 {
     private readonly IApplicationDbContext _context;
-    private readonly UserManager<Student> _userManager;
+    private readonly UserManager<User> _userManager;
 
-    public GetPerformanceAnalysisQueryHandler(IApplicationDbContext context, UserManager<Student> userManager)
+    public GetPerformanceAnalysisQueryHandler(IApplicationDbContext context, UserManager<User> userManager)
     {
         _context = context;
         _userManager = userManager;
@@ -26,9 +26,9 @@ public class GetPerformanceAnalysisQueryHandler : IRequestHandler<GetPerformance
 
     public async Task<Result> Handle(GetPerformanceAnalysisQuery request, CancellationToken cancellationToken)
     {
-        Student? student = await _userManager.Users.Include(s => s.AssignedTasks)
+        User? student = await _userManager.Users.Include(s => s.AssignedTasks)
                                  .FirstOrDefaultAsync(s => s.Id == request.StudentId, cancellationToken);
-        if (student == null)
+        if (student == null || student.UserType != UserType.Student)
         {
             // Handle student not found scenario
             return Result.Failure("student Not found");
@@ -67,7 +67,7 @@ public class GetPerformanceAnalysisQueryHandler : IRequestHandler<GetPerformance
 
     private async Task<float?> GetStudentScore(string studentId,DateTime startWeek)
     {
-        Student? student = await _userManager.Users.Include(s => s.AssignedTasks)
+        User? student = await _userManager.Users.Include(s => s.AssignedTasks)
                                 .FirstOrDefaultAsync(s => s.Id == studentId, CancellationToken.None);
 
         DateTime oneWeekAhead = startWeek.Add(TimeSpan.FromDays(7));
@@ -104,7 +104,7 @@ public class GetPerformanceAnalysisQueryHandler : IRequestHandler<GetPerformance
     private async Task<int> GetCompletedTasks(string studentId)
     {
         //get the tasks for the specific student
-        Student? student = await _userManager.Users.Include(s => s.AssignedTasks)
+        User? student = await _userManager.Users.Include(s => s.AssignedTasks)
                                  .FirstOrDefaultAsync(s => s.Id == studentId, CancellationToken.None);
 
         int completedTasks = await _context.Tasks

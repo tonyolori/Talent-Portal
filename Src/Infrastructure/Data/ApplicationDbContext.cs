@@ -8,12 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 namespace Infrastructure.Data;
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<BaseUser>(options), IApplicationDbContext
 {
-    public DbSet<Student> Students { get; set; }
-
-    public DbSet<LearningAdmin> LearningAdmins { get; set; }
-    
-    public DbSet<Instructor> Instructors { get; set; }
-
+    public DbSet<User> User { get; set; }
     public DbSet<Module> Modules { get; set; }
     
     public DbSet<StudentModule> StudentModules { get; set; }
@@ -94,7 +89,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         
         // Configuring the relationship between Quiz and Student 
         builder.Entity<Quiz>()
-            .HasOne(q => q.Student)
+            .HasOne(q => q.User)
             .WithMany(u => u.Quizzes)
             .HasForeignKey(q => q.StudentId)
             .OnDelete(DeleteBehavior.NoAction);        

@@ -13,16 +13,15 @@ public class UnsubmitTaskCommand : IRequest<Result>
     public required string StudentId { get; set; }
 }
 
-public class UnsubmitTaskCommandHandler(IApplicationDbContext context, UserManager<Student> userManager) : IRequestHandler<UnsubmitTaskCommand, Result>
+public class UnsubmitTaskCommandHandler(IApplicationDbContext context, UserManager<User> userManager) : IRequestHandler<UnsubmitTaskCommand, Result>
 {
     private readonly IApplicationDbContext _context = context;
-    private readonly UserManager<Student> _userManager = userManager;
+    private readonly UserManager<User> _userManager = userManager;
 
     public async Task<Result> Handle(UnsubmitTaskCommand request, CancellationToken cancellationToken)
     {
-        Student? student = await _userManager.Users.Include(s => s.AssignedTasks)
-                                 .FirstOrDefaultAsync(s => s.Id == request.StudentId, cancellationToken);
-        //Student? student = await _userManager.FindByIdAsync(request.StudentId);
+        User? student = await _userManager.Users.Include(s => s.AssignedTasks)
+                                 .FirstOrDefaultAsync(s => s.Id == request.StudentId && s.UserType == UserType.Student, cancellationToken);
 
         if (student == null)
         {

@@ -1,6 +1,6 @@
 namespace Domain.Enum;
 
-public enum ApplicationType
+public enum PaymentType
 {
     BootCamp = 1,
     BootCampAndCohort = 2 

@@ -1,6 +1,7 @@
 ﻿using Application.Common.Models;
 using Application.Interfaces;
 using Domain.Entities;
+using Domain.Enum;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -13,16 +14,16 @@ public class GetTaskGradeQuery : IRequest<Result>
     public int ModuleTaskId { get; set; }
 }
 
-public class GetTaskGradeQueryHandler(UserManager<Student> userManager, IApplicationDbContext context) : IRequestHandler<GetTaskGradeQuery, Result>
+public class GetTaskGradeQueryHandler(UserManager<User> userManager, IApplicationDbContext context) : IRequestHandler<GetTaskGradeQuery, Result>
 {
-    private readonly UserManager<Student> _userManager = userManager;
+    private readonly UserManager<User> _userManager = userManager;
     private readonly IApplicationDbContext _context = context;
 
     public async Task<Result> Handle(GetTaskGradeQuery request, CancellationToken cancellationToken)
     {
-        Student? student = await _userManager.Users
+        User? student = await _userManager.Users
             .Include(s => s.AssignedTasks)
-            .FirstOrDefaultAsync(s => s.Id == request.StudentId, cancellationToken);
+            .FirstOrDefaultAsync(s => s.Id == request.StudentId&& s.UserType == UserType.Student, cancellationToken);
 
         if (student == null)
         {

@@ -14,16 +14,16 @@ public class ConfirmRegistrationCommand : IRequest<Result>
 }
 
 public class ConfirmRegistrationCommandHandler(
-    UserManager<Student> userManager,
+    UserManager<User> userManager,
     IConnectionMultiplexer redis)
     : IRequestHandler<ConfirmRegistrationCommand, Result>
 {
-    private readonly UserManager<Student> _userManager = userManager;
+    private readonly UserManager<User> _userManager = userManager;
     private readonly IDatabase _redisDb = redis.GetDatabase();
 
     public async Task<Result> Handle(ConfirmRegistrationCommand request, CancellationToken cancellationToken)
     {
-        Student? student = await _userManager.FindByEmailAsync(request.Email);
+        User? student = await _userManager.FindByEmailAsync(request.Email);
         if (student == null)
             return Result.Failure("Student not found.");
 

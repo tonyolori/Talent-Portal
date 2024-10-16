@@ -11,13 +11,13 @@ namespace Application.Students.Queries
         public string Id { get; set; }
     }
 
-    public class GetStudentByIdQueryHandler(UserManager<Student> userManager) : IRequestHandler<GetStudentByIdQuery, Result>
+    public class GetStudentByIdQueryHandler(UserManager<User> userManager) : IRequestHandler<GetStudentByIdQuery, Result>
     {
-        private readonly UserManager<Student> _userManager = userManager;
+        private readonly UserManager<User> _userManager = userManager;
 
         public async Task<Result> Handle(GetStudentByIdQuery request, CancellationToken cancellationToken)
         {
-            Student? student = await _userManager.FindByIdAsync(request.Id);
+            User? student = await _userManager.FindByIdAsync(request.Id);
 
             if (student == null)
             {

@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Application.Auth.Commands;
 
-public class LoginStudentCommand : IRequest<Result>
+public class LoginUserCommand : IRequest<Result>
 {
     public string Email { get; set; }
     public string Password { get; set; }
@@ -23,17 +23,17 @@ public class TokenResponse
     public string RefreshToken { get; set; }
 }
 
-public class StudentLoginCommandHandler : IRequestHandler<LoginStudentCommand, Result>
+public class StudentLoginCommandHandler : IRequestHandler<LoginUserCommand, Result>
 {
-    private readonly UserManager<Student> _userManager;
-    private readonly SignInManager<Student> _signInManager;
+    private readonly UserManager<User> _userManager;
+    private readonly SignInManager<User> _signInManager;
     private readonly IGenerateToken _generateToken;
     private readonly IEmailService _emailService;
     private readonly IDatabase _redisDb;
     private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public StudentLoginCommandHandler(SignInManager<Student> signInManager, 
-                                      UserManager<Student> userManager,
+    public StudentLoginCommandHandler(SignInManager<User> signInManager, 
+                                      UserManager<User> userManager,
                                       IGenerateToken generateToken, 
                                       IEmailService emailService, 
                                       IConnectionMultiplexer redis,
@@ -47,13 +47,13 @@ public class StudentLoginCommandHandler : IRequestHandler<LoginStudentCommand, R
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public async Task<Result> Handle(LoginStudentCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(LoginUserCommand request, CancellationToken cancellationToken)
     {
-        var user = await _userManager.FindByEmailAsync(request.Email);
+        User? user = await _userManager.FindByEmailAsync(request.Email);
 
         if (user == null)
         {
-            return Result.Failure<LoginStudentCommand>("User Not Found.");
+            return Result.Failure<LoginUserCommand>("User Not Found.");
         }
 
         if (!user.IsVerified)
@@ -68,7 +68,7 @@ public class StudentLoginCommandHandler : IRequestHandler<LoginStudentCommand, R
             await _emailService.SendEmailAsync(user.Email!, "Account Confirmation Code",
                 $"Your confirmation code is {confirmationCode}");
 
-            return Result.Failure<LoginStudentCommand>($"User {request.Email} account is not verified. A new confirmation code has been sent.");
+            return Result.Failure<LoginUserCommand>($"User {request.Email} account is not verified. A new confirmation code has been sent.");
         }
 
         var signInResult = await _signInManager.PasswordSignInAsync(user, request.Password, isPersistent: false, lockoutOnFailure: true);
@@ -81,13 +81,13 @@ public class StudentLoginCommandHandler : IRequestHandler<LoginStudentCommand, R
                 user.UserStatusDes = Status.Suspended.ToString();
                 await _userManager.UpdateAsync(user);
 
-                return Result.Failure<LoginStudentCommand>($"User {request.Email} account locked: Unsuccessful 3 login attempts.");
+                return Result.Failure<LoginUserCommand>($"User {request.Email} account locked: Unsuccessful 3 login attempts.");
             }
 
-            return Result.Failure<LoginStudentCommand>("Invalid Email or Password");
+            return Result.Failure<LoginUserCommand>("Invalid Email or Password");
         }
 
-        var tokens = _generateToken.GenerateTokens(user.Id, user.Email!, user.RoleDesc);
+        var tokens = _generateToken.GenerateTokens(user.Id, user.Email!, user.UserType.ToString());
         
         CookieHelper.SetTokensInCookies(_httpContextAccessor, tokens.AccessToken, tokens.RefreshToken);
 

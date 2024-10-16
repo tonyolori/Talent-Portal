@@ -14,10 +14,10 @@ public class VerifyForgotPasswordCodeCommand : IRequest<Result>
 
 public class VerifyForgotPasswordCodeCommandHandler : IRequestHandler<VerifyForgotPasswordCodeCommand, Result>
 {
-    private readonly UserManager<Student> _userManager;
+    private readonly UserManager<User> _userManager;
     private readonly IDatabase _redisDb;
 
-    public VerifyForgotPasswordCodeCommandHandler(UserManager<Student> userManager, IConnectionMultiplexer redis)
+    public VerifyForgotPasswordCodeCommandHandler(UserManager<User> userManager, IConnectionMultiplexer redis)
     {
         _userManager = userManager;
         _redisDb = redis.GetDatabase();
@@ -25,7 +25,7 @@ public class VerifyForgotPasswordCodeCommandHandler : IRequestHandler<VerifyForg
 
     public async Task<Result> Handle(VerifyForgotPasswordCodeCommand request, CancellationToken cancellationToken)
     {
-        Student? user = await _userManager.FindByEmailAsync(request.Email);
+        User? user = await _userManager.FindByEmailAsync(request.Email);
         if (user == null)
         {
             return Result.Failure<VerifyForgotPasswordCodeCommand>("Invalid email.");

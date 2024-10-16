@@ -1,6 +1,9 @@
 using Application.Common.Models;
 using Application.Interfaces;
+using Domain.Entities;
+using Domain.Enum;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Paystack.Queries
@@ -12,19 +15,21 @@ namespace Application.Paystack.Queries
 
     public class GetStudentPaymentTypeByIdQueryHandler : IRequestHandler<GetStudentPaymentTypeByIdQuery, Result>
     {
+        private readonly UserManager<User> _userManager;
         private readonly IApplicationDbContext _context;
 
-        public GetStudentPaymentTypeByIdQueryHandler(IApplicationDbContext context)
+        public GetStudentPaymentTypeByIdQueryHandler(UserManager<User> userManager, IApplicationDbContext context)
         {
+            _userManager = userManager;
             _context = context;
         }
 
         public async Task<Result> Handle(GetStudentPaymentTypeByIdQuery request, CancellationToken cancellationToken)
         {
-            // Retrieve student by ID
-            var student = await _context.Students
-                .Include(s => s.Programme)  // Including related programme if needed
-                .FirstOrDefaultAsync(s => s.Id == request.StudentId, cancellationToken);
+            // Retrieve student from UserManager
+            var student = await _userManager.Users
+                .Include(s => s.Programme) // Including related programme if needed
+                .FirstOrDefaultAsync(u => u.Id == request.StudentId && u.UserType == UserType.Student, cancellationToken);
 
             if (student == null)
             {
@@ -34,7 +39,7 @@ namespace Application.Paystack.Queries
             // Retrieve the payment status and other relevant information
             var paymentType = new
             {
-                ProgrammePaymentType = student.ApplicationType,
+                ProgrammePaymentType = student.PaymentType,
                 student.PaymentTypeDes,
                 ProgrammeName = student.Programme
             };

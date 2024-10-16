@@ -1,5 +1,6 @@
 ﻿using Application.Common.Models;
 using Domain.Entities;
+using Domain.Enum;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -11,14 +12,14 @@ public class GetAssignedTasksQuery : IRequest<Result>
     public string StudentId { get; set; }
 }
 
-public class GetAssignedTasksQueryHandler(UserManager<Student> userManager) : IRequestHandler<GetAssignedTasksQuery, Result>
+public class GetAssignedTasksQueryHandler(UserManager<User> userManager) : IRequestHandler<GetAssignedTasksQuery, Result>
 {
-    private readonly UserManager<Student> _userManager = userManager;
+    private readonly UserManager<User> _userManager = userManager;
 
     public async Task<Result> Handle(GetAssignedTasksQuery request, CancellationToken cancellationToken)
     {
-        Student? student = await _userManager.Users.Include(s => s.AssignedTasks)
-                                 .FirstOrDefaultAsync(s => s.Id == request.StudentId, cancellationToken);
+        User? student = await _userManager.Users.Include(s => s.AssignedTasks)
+                                 .FirstOrDefaultAsync(s => s.Id == request.StudentId && s.UserType == UserType.Student, cancellationToken);
         if (student == null)
         {
             // Handle student not found scenario
