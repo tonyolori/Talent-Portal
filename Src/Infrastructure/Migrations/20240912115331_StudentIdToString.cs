@@ -3,7 +3,7 @@
 #nullable disable
 
 namespace Infrastructure.Migrations
-{g
+{
     /// <inheritdoc />
     public partial class StudentIdToString : Migration
     {
