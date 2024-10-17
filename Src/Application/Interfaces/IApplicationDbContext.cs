@@ -27,10 +27,8 @@ namespace Application.Interfaces
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<Programme> Programmes { get; set; }
         public DbSet<Notification> Notifications { get; set; }
+        public DbSet<CalendarSlot> CalendarSlots { get; set; }
 
-        //public DatabaseFacade Database { get; set; }
-
-        //public DatabaseFacade Database { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
