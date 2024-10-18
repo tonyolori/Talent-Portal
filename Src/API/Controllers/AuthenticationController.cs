@@ -15,8 +15,8 @@ namespace API.Controllers
             _mediator = mediator;  
         }  
 
-        [HttpPost("register")]  
-        public async Task<IActionResult> Register(RegisterUserCommand command)  
+        [HttpPost("student/register")]  
+        public async Task<IActionResult> Register(RegisterStudentCommand command)  
         {  
             return Ok(await _mediator.Send(command));  
         }  

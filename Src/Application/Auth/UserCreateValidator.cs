@@ -6,7 +6,7 @@ using FluentValidation;
 
 namespace Application.Auth
 {
-    public class UserCreateValidator : AbstractValidator<RegisterUserCommand>
+    public class UserCreateValidator : AbstractValidator<RegisterStudentCommand>
     {
         public UserCreateValidator()
         {

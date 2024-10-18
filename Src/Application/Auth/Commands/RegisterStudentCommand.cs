@@ -15,18 +15,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Auth.Commands;
 
-public class RegisterUserCommand : IRequest<Result>
+public class RegisterStudentCommand : IRequest<Result>
 {
     public string FirstName { get; set; }
     public string LastName { get; set; }
-    
-    public UserType UserType { get; set; }
     public string Email { get; set; }
     public string Password { get; set; } 
     public string Programme { get; set; } 
 }
 
-public class RegisterStudentCommandHandler : IRequestHandler<RegisterUserCommand, Result>
+public class RegisterStudentCommandHandler : IRequestHandler<RegisterStudentCommand, Result>
 {
     private readonly IEmailService _emailSender;
     private readonly UserManager<User> _userManager;
@@ -48,15 +46,15 @@ public class RegisterStudentCommandHandler : IRequestHandler<RegisterUserCommand
         _context = context;
     }
 
-    public async Task<Result> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(RegisterStudentCommand request, CancellationToken cancellationToken)
     {
         // Validate the request
         await request.ValidateAsync(new UserCreateValidator(), cancellationToken);
 
         // Check if the student already exists
-        User? studentExist = await _userManager.FindByEmailAsync(request.Email);
-        if (studentExist != null)
-            return Result.Failure(request, "Student already exists");
+        User? userExist = await _userManager.FindByEmailAsync(request.Email);
+        if (userExist != null)
+            return Result.Failure(request, $"{userExist.Email} already exists");
 
         // Check if the programme exists in the database
         
@@ -76,11 +74,11 @@ public class RegisterStudentCommandHandler : IRequestHandler<RegisterUserCommand
             FirstName = request.FirstName,
             LastName = request.LastName,
             EnrollmentDate = DateTime.UtcNow,
-            UserType = request.UserType,
-            UserTypeDesc = request.UserType.ToString(),
+            UserType =  UserType.Student,
+            UserTypeDesc = UserType.Student.ToString(),
             IsVerified = false,
             UserStatus = Status.Inactive,
-            UserStatusDes = Status.Active.ToString(),
+            UserStatusDes = Status.Inactive.ToString(),
             ProgrammeId = existingProgramme.Id, // Save the ProgrammeId
             PaymentType = PaymentType.BootCamp,
             PaymentTypeDes = "BootCamp",

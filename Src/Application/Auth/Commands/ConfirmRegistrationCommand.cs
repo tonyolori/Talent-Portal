@@ -1,5 +1,6 @@
 using Application.Common.Models;
 using Domain.Entities;
+using Domain.Enum;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using StackExchange.Redis;
@@ -33,6 +34,7 @@ public class ConfirmRegistrationCommandHandler(
 
         // Update student's status to active
         student.IsVerified = true;
+        student.UserStatus = Status.Active;
 
         IdentityResult result = await _userManager.UpdateAsync(student);
         if (!result.Succeeded)
