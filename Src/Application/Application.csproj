@@ -32,6 +32,7 @@
 	<ItemGroup>
 	  <Folder Include="LearningAdmins\Commands\" />
 	  <Folder Include="Notifications\Commands\" />
+	  <Folder Include="Calendar\Queries\" />
 	</ItemGroup>
 	
 

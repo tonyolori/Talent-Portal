@@ -9,9 +9,9 @@ namespace Domain.Entities
     public class Module : BaseEntity
     {
         public string Title { get; set; }
-        
+
         public string ModuleImageUrl { get; set; }
-        
+
         public required string Description { get; set; }
 
         public required string Objectives { get; set; }
@@ -19,11 +19,11 @@ namespace Domain.Entities
         public required string FacilitatorName { get; set; }
 
         public required string FacilitatorId { get; set; }
-        
-        public ModuleStatus  ModuleStatus { get; set; }
-      
-        public string ModuleStatusDes { get; set; }
-        
+
+        public ModuleStatus ModuleStatus { get; set; } = ModuleStatus.Pending;
+
+        public string ModuleStatusDes { get; set; } = ModuleStatus.Pending.ToString();
+
 
         public required string Timeframe { get; set; }
 
@@ -31,9 +31,9 @@ namespace Domain.Entities
 
         [ForeignKey(nameof(ProgrammeId))]
         public Programme Programme { get; set; }
-        
+
         public virtual ICollection<ModuleTask> ModuleTasks { get; set; }
-        
+
         public virtual ICollection<Quiz> Quizzes { get; set; } = new List<Quiz>();
 
         public virtual ICollection<Topic> Topics { get; set; } = new List<Topic>();
