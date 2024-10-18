@@ -92,8 +92,15 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             .HasOne(q => q.User)
             .WithMany(u => u.Quizzes)
             .HasForeignKey(q => q.StudentId)
-            .OnDelete(DeleteBehavior.NoAction);        
-        
+            .OnDelete(DeleteBehavior.NoAction);
+
+        // Configuring the relationship between Programme and CalendarSlots 
+        builder.Entity<Programme>()
+            .HasMany(q => q.CalendarSlots)
+            .WithOne(u => u.Programme)
+            .HasForeignKey(q => q.ProgrammeId)
+            .OnDelete(DeleteBehavior.Cascade);
+
         builder.Entity<Transaction>(entity =>  
         {  
             entity.Property(e => e.Amount)  
