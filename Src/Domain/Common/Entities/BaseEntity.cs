@@ -7,8 +7,8 @@ namespace Domain.Common.Entities
 
         public Guid Guid { get; set; } = Guid.NewGuid();
 
-        public DateTime CreatedDate = DateTime.UtcNow;
+        public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
 
-        public DateTime ModifiedDated = DateTime.UtcNow;
+        public DateTime ModifiedDated { get; set; } = DateTime.UtcNow;
     }
 }
