@@ -37,15 +37,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     protected override void OnModelCreating(ModelBuilder builder)
     {
         //builder.Entity<SubmissionDetails>()
-     
-        // Configure discriminator for the BaseUser entity  
-        // builder.Entity<BaseUser>()   
-        //     .HasDiscriminator<UserType>("UserType")  
-        //     .HasValue<User>((UserType)1)   
-        //     .HasValue<User>((UserType)2)  
-        //     .HasValue<User>((UserType)3);  
-
-
         //    .HasKey(t => new { t.TaskId, t.StudentId });
         builder.Entity<SubmissionDetails>()
             
