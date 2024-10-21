@@ -1,9 +1,13 @@
 ﻿using Application.Interfaces;
 using Domain.Common.Entities;
 using Domain.Entities;
+using Domain.Enum;
+using Infrastructure.Migrations;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
+using CalendarSlot = Domain.Entities.CalendarSlot;
+using StudentModule = Domain.Entities.StudentModule;
+using SubmissionDetails = Domain.Entities.SubmissionDetails;
 
 namespace Infrastructure.Data;
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<BaseUser>(options), IApplicationDbContext
@@ -33,6 +37,15 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     protected override void OnModelCreating(ModelBuilder builder)
     {
         //builder.Entity<SubmissionDetails>()
+     
+        // Configure discriminator for the BaseUser entity  
+        // builder.Entity<BaseUser>()   
+        //     .HasDiscriminator<UserType>("UserType")  
+        //     .HasValue<User>((UserType)1)   
+        //     .HasValue<User>((UserType)2)  
+        //     .HasValue<User>((UserType)3);  
+
+
         //    .HasKey(t => new { t.TaskId, t.StudentId });
         builder.Entity<SubmissionDetails>()
             

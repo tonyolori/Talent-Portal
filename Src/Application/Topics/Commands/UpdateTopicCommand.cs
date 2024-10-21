@@ -41,6 +41,7 @@ namespace Application.Topics.Commands
             topic.SubContent = request.SubContent;
             topic.Status = request.Status;
             topic.ModuleId = request.ModuleId;
+            topic.ModifiedDated = DateTime.UtcNow;
 
             // Save changes to the database
             await _context.SaveChangesAsync(cancellationToken);

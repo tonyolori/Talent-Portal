@@ -233,9 +233,8 @@ namespace Infrastructure.Migrations
                     b.Property<int>("ProgrammeId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Timeframe")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Timeframe")
+                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -756,7 +755,7 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ProgrammeId")
+                    b.Property<int?>("ProgrammeId")
                         .HasColumnType("int");
 
                     b.HasIndex("ProgrammeId");
@@ -919,9 +918,7 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("Domain.Entities.Programme", "Programme")
                         .WithMany()
-                        .HasForeignKey("ProgrammeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProgrammeId");
 
                     b.Navigation("Programme");
                 });
