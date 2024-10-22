@@ -25,7 +25,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     
     public DbSet<Question> Questions { get; set; }
     
-    public DbSet<Answer> Answers { get; set; }
+    public DbSet<Option> Answers { get; set; }
 
     public DbSet<Topic> Topics { get; set; }
     
@@ -48,7 +48,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             .IsUnique(true);
         
         // Configure Answer-Question relationship
-        builder.Entity<Answer>()
+        builder.Entity<Option>()
             .HasOne(a => a.Question)
             .WithMany(q => q.Options)
             .HasForeignKey(a => a.QuestionId)

@@ -20,7 +20,7 @@ namespace Application.Interfaces
     
         public DbSet<Question> Questions { get; set; }
     
-        public DbSet<Answer> Answers { get; set; }
+        public DbSet<Option> Answers { get; set; }
         
         public DbSet<StudentModule> StudentModules { get; set; }
         

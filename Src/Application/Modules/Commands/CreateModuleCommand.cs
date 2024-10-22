@@ -74,7 +74,7 @@ namespace Application.Modules.Commands
             await _context.Modules.AddAsync(module, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
             
-            return Result.Success<CreateModuleCommand>("Module and StudentModule created successfully!", module);
+            return Result.Success<CreateModuleCommand>("Module and created successfully!", module);
         }
     }
 }

@@ -35,6 +35,7 @@ public class ConfirmRegistrationCommandHandler(
         // Update student's status to active
         student.IsVerified = true;
         student.UserStatus = Status.Active;
+        student.UserStatusDes = Status.Active.ToString();
 
         IdentityResult result = await _userManager.UpdateAsync(student);
         if (!result.Succeeded)

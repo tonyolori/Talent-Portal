@@ -10,8 +10,7 @@ namespace Application.Quizzes.Commands
 {
     public class CreateQuizCommand : IRequest<Result>
     {
-        public string Title { get; set; }
-        public string StudentId { get; set; }
+        public string InstructorId { get; set; }
         public int ModuleId { get; set; }
     }
 
@@ -36,22 +35,21 @@ namespace Application.Quizzes.Commands
             }
 
             // Ensure student exists and check for user type
-            User? student = await _userManager.Users
-                .FirstOrDefaultAsync(u => u.Id == request.StudentId && u.UserType == UserType.Student, cancellationToken);
+            User? instructor = await _userManager.Users
+                .FirstOrDefaultAsync(u => u.Id == request.InstructorId && u.UserType == UserType.Instructor, cancellationToken);
 
-            if (student == null)
+            if (instructor == null)
             {
-                return Result.Failure($"Student with ID {request.StudentId} does not exist.");
+                return Result.Failure($"Instructor with ID {request.InstructorId} does not exist.");
             }
 
             // Create new quiz
             Quiz newQuiz = new()
             {
-                Title = request.Title,
                 QuizStatus = QuizStatus.NotStarted,
                 QuizStatusDes = "NotStarted",
-                StudentId = request.StudentId, // Ensure the student ID is set correctly
-                ModuleId = request.ModuleId // Set the module ID
+                InstructorId = request.InstructorId, 
+                ModuleId = request.ModuleId 
             };
 
             await _context.Quizzes.AddAsync(newQuiz, cancellationToken);

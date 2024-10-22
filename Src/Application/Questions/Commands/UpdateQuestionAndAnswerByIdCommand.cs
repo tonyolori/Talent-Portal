@@ -46,7 +46,7 @@ public class UpdateQuestionAndAnswerByIdCommandHandler : IRequestHandler<UpdateQ
         // Update or add answers
         foreach (var option in request.Options)
         {
-            Answer? existingAnswer = question.Options.FirstOrDefault(a => a.Id == option.AnswerId);
+            Option? existingAnswer = question.Options.FirstOrDefault(a => a.Id == option.AnswerId);
             if (existingAnswer != null)
             {
                 // Update existing answer
@@ -56,7 +56,7 @@ public class UpdateQuestionAndAnswerByIdCommandHandler : IRequestHandler<UpdateQ
             else
             {
                 // Add new answer
-                question.Options.Add(new Answer
+                question.Options.Add(new Option
                 {
                     AnswerText = option.AnswerText,
                     IsCorrect = option.IsCorrect,
