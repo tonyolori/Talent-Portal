@@ -35,9 +35,14 @@ public class GetModuleOverviewQueryHandler : IRequestHandler<GetProgressSummaryQ
             // Handle student not found scenario
             return Result.Failure("student Not found");
         }
-
-        List<Module>? modules = await _context.Modules.Where((m) => m.ProgrammeId == student.ProgrammeId).ToListAsync(cancellationToken);
-        List<ModuleTask>? tasks = await _context.Tasks.Where((m) => m.ProgrammeId == student.ProgrammeId).ToListAsync(cancellationToken);
+        List<Module>? modules = await _context.Modules
+            .Where(m => m.ProgrammeId == student.ProgrammeId.Value) // Use Value to access the underlying int
+            .ToListAsync(cancellationToken);
+        
+           
+        List<ModuleTask>? tasks = await _context.Tasks
+            .Where(m => m.ProgrammeId == student.ProgrammeId.Value) // Use Value to access the underlying int
+            .ToListAsync(cancellationToken);
 
         int totalModules = modules.Count;
         int totalModulesCompleted = 1;//dummy value, to be changed later 
@@ -45,7 +50,7 @@ public class GetModuleOverviewQueryHandler : IRequestHandler<GetProgressSummaryQ
 
         //quiz section = 
 
-        int totalQuizzes = await GetTotalQuizzes(student.ProgrammeId);
+        int totalQuizzes = await GetTotalQuizzes(student.ProgrammeId.Value);
         int totalQuizzesCompleted = 999999999; // dummy value until facilities to calculate this can be created
 
         int totalTasks = tasks.Count;

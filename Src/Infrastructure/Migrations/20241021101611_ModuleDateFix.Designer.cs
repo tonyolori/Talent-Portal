@@ -4,6 +4,7 @@ using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241021101611_ModuleDateFix")]
+    partial class ModuleDateFix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -142,17 +145,11 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<Guid>("Guid")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsCorrect")
                         .HasColumnType("bit");
-
-                    b.Property<DateTime>("ModifiedDated")
-                        .HasColumnType("datetime2");
 
                     b.Property<int>("QuestionId")
                         .HasColumnType("int");
@@ -176,17 +173,11 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid>("Guid")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("ModifiedDated")
-                        .HasColumnType("datetime2");
 
                     b.Property<int>("ProgrammeId")
                         .HasColumnType("int");
@@ -212,9 +203,6 @@ namespace Infrastructure.Migrations
                     b.Property<string>("AdditionalResources")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -229,9 +217,6 @@ namespace Infrastructure.Migrations
 
                     b.Property<Guid>("Guid")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("ModifiedDated")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("ModuleImageUrl")
                         .IsRequired()
@@ -299,9 +284,6 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("ModifiedDated")
-                        .HasColumnType("datetime2");
-
                     b.Property<int?>("ModuleId")
                         .HasColumnType("int");
 
@@ -335,9 +317,6 @@ namespace Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
@@ -350,9 +329,6 @@ namespace Infrastructure.Migrations
                     b.Property<string>("LongMessage")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("ModifiedDated")
-                        .HasColumnType("datetime2");
 
                     b.Property<int?>("ModuleId")
                         .HasColumnType("int");
@@ -381,14 +357,8 @@ namespace Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<Guid>("Guid")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("ModifiedDated")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -407,14 +377,8 @@ namespace Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<Guid>("Guid")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("ModifiedDated")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("QuestionText")
                         .IsRequired()
@@ -438,14 +402,8 @@ namespace Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<Guid>("Guid")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("ModifiedDated")
-                        .HasColumnType("datetime2");
 
                     b.Property<int>("ModuleId")
                         .HasColumnType("int");
@@ -482,9 +440,6 @@ namespace Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<DateTime?>("EndDate")
                         .HasColumnType("datetime2");
 
@@ -493,9 +448,6 @@ namespace Infrastructure.Migrations
 
                     b.Property<Guid>("Guid")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("ModifiedDated")
-                        .HasColumnType("datetime2");
 
                     b.Property<int>("ModuleId")
                         .HasColumnType("int");
@@ -527,9 +479,6 @@ namespace Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("FacilitatorFeedBack")
                         .HasColumnType("nvarchar(max)");
 
@@ -538,9 +487,6 @@ namespace Infrastructure.Migrations
 
                     b.Property<Guid>("Guid")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("ModifiedDated")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("StudentId")
                         .IsRequired()
@@ -577,18 +523,12 @@ namespace Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<Guid>("Guid")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("MainContent")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("ModifiedDated")
-                        .HasColumnType("datetime2");
 
                     b.Property<int>("ModuleId")
                         .HasColumnType("int");
@@ -625,9 +565,6 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("EducationalLevel")
                         .HasColumnType("int");
 
@@ -640,9 +577,6 @@ namespace Infrastructure.Migrations
 
                     b.Property<Guid>("Guid")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("ModifiedDated")
-                        .HasColumnType("datetime2");
 
                     b.Property<int>("PaymentStatus")
                         .HasColumnType("int");

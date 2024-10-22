@@ -35,7 +35,8 @@ namespace Application.Modules.Commands
 
             // Update the module status
             module.ModuleStatus =  request.ModuleStatus;
-            module.ModuleStatusDes = request.ModuleStatus.ToString(); 
+            module.ModuleStatusDes = request.ModuleStatus.ToString();
+            module.ModifiedDated = DateTime.UtcNow;
 
             _context.Modules.Update(module);
             await _context.SaveChangesAsync(cancellationToken);

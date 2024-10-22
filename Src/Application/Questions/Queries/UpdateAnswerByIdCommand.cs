@@ -24,7 +24,7 @@ public class UpdateAnswerByIdCommandHandler : IRequestHandler<UpdateAnswerByIdCo
 
     public async Task<Result> Handle(UpdateAnswerByIdCommand request, CancellationToken cancellationToken)
     {
-        Answer? answer = await _context.Answers.FindAsync(request.AnswerId);
+        Option? answer = await _context.Answers.FindAsync(request.AnswerId);
 
         if (answer == null)
         {

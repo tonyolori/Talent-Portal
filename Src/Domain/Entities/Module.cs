@@ -25,7 +25,7 @@ namespace Domain.Entities
         public string ModuleStatusDes { get; set; } = ModuleStatus.Pending.ToString();
 
 
-        public required string Timeframe { get; set; }
+        public required int Timeframe { get; set; }
 
         public int ProgrammeId { get; set; }
 

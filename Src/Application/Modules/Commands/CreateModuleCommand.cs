@@ -18,7 +18,8 @@ namespace Application.Modules.Commands
         public int ProgrammeId { get; set; }
         public string FacilitatorName { get; set; }
         public string FacilitatorId { get; set; }
-        public string Timeframe { get; set; }
+        
+        public int Timeframe { get; set; }
         
         public string? AdditionalResources { get; set; }
         
@@ -73,7 +74,7 @@ namespace Application.Modules.Commands
             await _context.Modules.AddAsync(module, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
             
-            return Result.Success<CreateModuleCommand>("Module and StudentModule created successfully!", module);
+            return Result.Success<CreateModuleCommand>("Module and created successfully!", module);
         }
     }
 }

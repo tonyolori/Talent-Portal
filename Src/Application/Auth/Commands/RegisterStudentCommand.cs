@@ -111,7 +111,8 @@ public class RegisterStudentCommandHandler : IRequestHandler<RegisterStudentComm
         // Send the registration code to the user's email
         await _emailSender.SendEmailAsync(user.Email, "Registration Confirmation Code",
             $"Your registration confirmation code is {registrationCode}");
+        
 
-        return Result.Success("Registration code sent successfully! Please confirm your registration.", user);
+        return Result.Success<RegisterStudentCommand>("Registration code sent successfully! Please confirm your registration.", user.Id);
     }
 }
