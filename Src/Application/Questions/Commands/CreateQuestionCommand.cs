@@ -61,6 +61,9 @@ namespace Application.Questions.Commands
                 await _context.SaveChangesAsync(cancellationToken); // Save to generate QuizId
             }
 
+            // List to hold created questions
+            List<Question> createdQuestions = new List<Question>();
+
             // Iterate over the questions and add them to the quiz
             foreach (var questionInput in request.Questions)
             {
@@ -90,14 +93,16 @@ namespace Application.Questions.Commands
                     question.Options.Add(answer);
                 }
 
-                // Add the question to the context
+                // Add the question to the context and list
                 _context.Questions.Add(question);
+                createdQuestions.Add(question); // Add to list of created questions
             }
 
             // Save changes
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Result.Success("Questions and options created successfully.");
+            // Return the response with the created quiz, questions, and options
+            return Result.Success<CreateQuestionCommand>("Quiz, Questions and options created successfully.", quiz);
         }
     }
 }

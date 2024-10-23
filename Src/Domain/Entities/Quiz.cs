@@ -10,7 +10,7 @@ public class Quiz : BaseEntity
 
     [ForeignKey(nameof(StudentId))]
     
-    public string? InstructorId { get; set; }
+    public string InstructorId { get; set; }
 
     [ForeignKey(nameof(InstructorId))]
 
