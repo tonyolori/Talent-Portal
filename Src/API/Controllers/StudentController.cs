@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/student")]
     public class StudentController(IMediator mediator) : ControllerBase
     {

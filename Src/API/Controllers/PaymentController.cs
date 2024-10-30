@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
-
+[Authorize]
 [ApiController]
 [Route("api/payment")]
 public class PaymentController : ControllerBase

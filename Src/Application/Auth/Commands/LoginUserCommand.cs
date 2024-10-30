@@ -97,6 +97,6 @@ public class StudentLoginCommandHandler : IRequestHandler<LoginUserCommand, Resu
             RefreshToken = tokens.RefreshToken
         };
 
-        return Result.Success<LoginUserCommand>("Successfully logged in", user);
+        return Result.Success<LoginUserCommand>("Successfully logged in", tokenResponse);
     }
 }

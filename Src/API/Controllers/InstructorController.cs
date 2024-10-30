@@ -1,31 +1,29 @@
 using Application.Instructors.Commands;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
 namespace API.Controllers
 {
-    [Route("api/instructor")]
     [ApiController]
-    public class InstructorController : ControllerBase
+    [Route("api/instructor")]
+    public class InstructorController : APIController
     {
-        private readonly IMediator _mediator;
-
-        public InstructorController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
-        
-
+        public InstructorController(IMediator mediator, IHttpContextAccessor contextAccessor)
+            : base(mediator, contextAccessor) { }
       
-        [HttpPost("update/{id}")]
+        [Authorize(Roles = "Instructor")]
+        [HttpPost("update")]
         public async Task<IActionResult> UpdateInstructor( UpdateInstructorCommand command)
         { 
+            command.InstructorId = UserId;
             return Ok( await _mediator.Send(command));
         
         }
 
 
+        [Authorize(Roles = "Admin")]  
         [HttpPost("deactivate/{id}")]
         public async Task<IActionResult> DeactivateInstructor(string id)
         {
@@ -34,19 +32,25 @@ namespace API.Controllers
           
         }
 
+        [Authorize(Roles = "Admin")]  
         [HttpPost("reactivate/{id}")]
         public async Task<IActionResult> ReactivateInstructor(string id)
         {
-            return Ok(await _mediator.Send( new ReactivateInstructorCommand { InstructorId = id }));
+            return Ok(await _mediator.Send( new ReactivateInstructorCommand() { InstructorId = id }));
         }
         
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetInstructorById(string id)
-        { 
-            return Ok(await _mediator.Send(new GetInstructorByIdQuery { InstructorId = id }));
+        [Authorize(Roles = "Instructor")]  
+        [HttpGet]  
+        public async Task<IActionResult> GetInstructorById()
+        {
+            var query = new GetInstructorByIdQuery();
+            query.InstructorId = UserId;
+            return Ok(await _mediator.Send(query));
 
         }
         
+        
+        [Authorize(Roles = "Admin")]  
         [HttpGet("all")]
         public async Task<IActionResult> GetAllInstructors()
         {

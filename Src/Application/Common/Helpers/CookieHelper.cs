@@ -16,7 +16,7 @@ namespace Application.Common
             // Define access token cookie options (30 minutes)
             var accessTokenOptions = new CookieOptions
             {
-                HttpOnly = true, // The cookie is accessible only by the server
+                HttpOnly = false, // The cookie is accessible only by the server
                 Expires = DateTime.UtcNow.AddMinutes(30), // Set expiration time for access token
                 SameSite = SameSiteMode.Strict, // Restrict cookie to same-site requests
                 Secure = true // Ensure HTTPS usage in production
@@ -25,7 +25,7 @@ namespace Application.Common
             // Define refresh token cookie options (1 day)
             var refreshTokenOptions = new CookieOptions
             {
-                HttpOnly = true, // The cookie is accessible only by the server
+                HttpOnly = false, // The cookie is accessible only by the server
                 Expires = DateTime.UtcNow.AddHours(24), // Set expiration time for refresh token
                 SameSite = SameSiteMode.Strict, // Restrict cookie to same-site requests
                 Secure = true // Ensure HTTPS usage in production
