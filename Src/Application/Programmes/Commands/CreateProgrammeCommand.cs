@@ -3,6 +3,8 @@ using MediatR;
 using Domain.Entities;
 using Application.Interfaces;
 using Domain.Enum;
+using Application.Dto;
+using AutoMapper;
 
 
 namespace Application.Programmes.Commands;
@@ -10,12 +12,12 @@ namespace Application.Programmes.Commands;
 public class CreateProgrammeCommand : IRequest<Result>
 {
     public String Type { get; set; }
-
 }
 
-public class CreateProgrammeCommandHandler(IApplicationDbContext context) : IRequestHandler<CreateProgrammeCommand, Result>
+public class CreateProgrammeCommandHandler(IApplicationDbContext context, IMapper mapper) : IRequestHandler<CreateProgrammeCommand, Result>
 {
     private readonly IApplicationDbContext _context = context;
+    private readonly IMapper _mapper = mapper;
 
     public async Task<Result> Handle(CreateProgrammeCommand request, CancellationToken cancellationToken)
     {
@@ -28,7 +30,8 @@ public class CreateProgrammeCommandHandler(IApplicationDbContext context) : IReq
         await _context.Programmes.AddAsync(programme);
         await _context.SaveChangesAsync(CancellationToken.None);
 
-        return Result.Success(programme);
+        ProgrammeDto programmeDto = _mapper.Map<ProgrammeDto>(programme);
+        return Result.Success(programmeDto);
     }
 }
 

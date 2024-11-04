@@ -1,5 +1,7 @@
 ﻿using Application.Common.Models;
+using Application.Dto;
 using Application.Interfaces;
+using AutoMapper;
 using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -13,15 +15,18 @@ namespace Application.Calendar.Commands
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public int ProgrammeId { get; set; }
+
     }
 
     public class AddCourseToCalendarCommandHandler : IRequestHandler<AddCourseToCalendarCommand, Result>
     {
         private readonly IApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public AddCourseToCalendarCommandHandler(IApplicationDbContext context)
+        public AddCourseToCalendarCommandHandler(IApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task<Result> Handle(AddCourseToCalendarCommand request, CancellationToken cancellationToken)
@@ -35,10 +40,19 @@ namespace Application.Calendar.Commands
             {
                 return Result.Failure("Start time must be earlier than end time.");
             }
-            //TODO: add foreign key validation
+
+            Programme? existingProgramme = await _context.Programmes
+                                            .AsNoTracking()
+                                            .FirstOrDefaultAsync(p => p.Id == request.ProgrammeId,cancellationToken);
+
+            if (existingProgramme == null)
+            {
+                return Result.Failure("Invalid Programme ID"); 
+            }
 
             // Check for overlapping slots
             List<CalendarSlot> overlappingSlots = await _context.CalendarSlots
+                .AsNoTracking()
                 .Where(s => s.StartTime <= request.EndTime && s.EndTime >= request.StartTime)
                 .ToListAsync(cancellationToken);
 
@@ -47,7 +61,7 @@ namespace Application.Calendar.Commands
                 return Result.Failure("Time slot already taken.");
             }
 
-            CalendarSlot slot = new ()
+            CalendarSlot slot = new()
             {
                 ClassTitle = request.ClassTitle,
                 StartTime = request.StartTime,
@@ -58,7 +72,8 @@ namespace Application.Calendar.Commands
             await _context.CalendarSlots.AddAsync(slot, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Result.Success<AddCourseToCalendarCommand>("Slot added successfully!", slot);
+            CalendarSlotDto slotDto = _mapper.Map<CalendarSlotDto>(slot);
+            return Result.Success<AddCourseToCalendarCommand>("Slot added successfully!", slotDto);
         }
     }
 }
