@@ -20,7 +20,7 @@ namespace API.Controllers
         [HttpPost("create-module")]
         public async Task<IActionResult> CreateModule([FromForm]CreateModuleCommand command)
         {
-
+            command.InstructorId = UserId;
             return Ok(await _mediator.Send(command));
         }
         
@@ -31,6 +31,16 @@ namespace API.Controllers
         {
 
             return Ok(await _mediator.Send(command));
+        }
+        
+        [Authorize(Roles = "Instructor")]  
+        [HttpGet("instructor")]  
+        public async Task<IActionResult> GetModuleByInstructorId()
+        {
+            var query = new GetModulesByInstructorIdQuery();
+            query.InstructorId = UserId;
+            return Ok(await _mediator.Send(query));
+
         }
         
         [HttpGet("{id}")]

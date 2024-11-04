@@ -2,38 +2,38 @@ using System.Text.Json.Serialization;
 using Application.Common.Models;
 using MediatR;
 using Application.Interfaces;
-using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Modules.Queries
 {
-    public class GetModuleByInstructorIdQuery : IRequest<Result>
+    public class GetModulesByInstructorIdQuery : IRequest<Result>
     {
         [Newtonsoft.Json.JsonIgnore]  
         [JsonIgnore] 
         public string InstructorId { get; set; }
     }
 
-    public class GetModuleByInstructorIdQueryHandler : IRequestHandler<GetModuleByIdQuery, Result>
+    public class GetModulesByInstructorIdQueryHandler : IRequestHandler<GetModulesByInstructorIdQuery, Result>
     {
         private readonly IApplicationDbContext _context;
 
-        public GetModuleByInstructorIdQueryHandler(IApplicationDbContext context)
+        public GetModulesByInstructorIdQueryHandler(IApplicationDbContext context)
         {
             _context = context;
         }
 
-        public async Task<Result> Handle(GetModuleByIdQuery request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(GetModulesByInstructorIdQuery request, CancellationToken cancellationToken)
         {
-
-            List<Module> module = _context.Modules.Where(
-                m=> m.InstructorId == request.InstructorId).ToList();
+            var modules = await _context.Modules
+                .Where(m => m.InstructorId == request.InstructorId)
+                .ToListAsync(cancellationToken);
             
-            if (module == null)
+            if (!modules.Any())
             {
-                return Result.Failure("Module not found.");
+                return Result.Failure("No modules found for the specified instructor.");
             } 
 
-            return Result.Success<GetModuleByIdQuery>("Module found.", module);
+            return Result.Success<GetModulesByInstructorIdQuery>("Modules found.", modules);
         }
     }
 }

@@ -36,8 +36,8 @@ namespace Application.Modules.Queries
                     ModuleImageUrl = m.ModuleImageUrl,
                     Description = m.Description,
                     Objectives = m.Objectives,
-                    FacilitatorName = m.FacilitatorName,
-                    FacilitatorId = m.FacilitatorId,
+                    InstractorName = m.InstructorName,
+                    InstrauctorId = m.InstructorId,
                     Timeframe = m.Timeframe,
                     ProgrammeId = m.ProgrammeId,
                     CreatedDate = m.CreatedDate,
@@ -71,8 +71,8 @@ namespace Application.Modules.Queries
         public string ModuleImageUrl { get; set; }
         public string Description { get; set; }
         public string Objectives { get; set; }
-        public string FacilitatorName { get; set; }
-        public string FacilitatorId { get; set; }
+        public string InstractorName { get; set; }
+        public string InstrauctorId { get; set; }
         public DateTime CreatedDate { get; set; }
         
         public int Timeframe { get; set; }
