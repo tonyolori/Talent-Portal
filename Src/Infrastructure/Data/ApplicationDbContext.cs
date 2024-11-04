@@ -1,9 +1,13 @@
 ﻿using Application.Interfaces;
 using Domain.Common.Entities;
 using Domain.Entities;
+using Domain.Enum;
+using Infrastructure.Migrations;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
+using CalendarSlot = Domain.Entities.CalendarSlot;
+using StudentModule = Domain.Entities.StudentModule;
+using SubmissionDetails = Domain.Entities.SubmissionDetails;
 
 namespace Infrastructure.Data;
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<BaseUser>(options), IApplicationDbContext
@@ -21,7 +25,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     
     public DbSet<Question> Questions { get; set; }
     
-    public DbSet<Answer> Answers { get; set; }
+    public DbSet<Option> Answers { get; set; }
 
     public DbSet<Topic> Topics { get; set; }
     
@@ -44,7 +48,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             .IsUnique(true);
         
         // Configure Answer-Question relationship
-        builder.Entity<Answer>()
+        builder.Entity<Option>()
             .HasOne(a => a.Question)
             .WithMany(q => q.Options)
             .HasForeignKey(a => a.QuestionId)

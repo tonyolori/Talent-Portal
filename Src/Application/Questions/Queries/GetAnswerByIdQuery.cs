@@ -20,7 +20,7 @@ public class GetAnswerByIdQueryHandler : IRequestHandler<GetAnswerByIdQuery, Res
 
     public async Task<Result> Handle(GetAnswerByIdQuery request, CancellationToken cancellationToken)
     {
-        Answer? answer = await _context.Answers.FindAsync(request.AnswerId);
+        Option? answer = await _context.Answers.FindAsync(request.AnswerId);
 
         if (answer == null)
         {

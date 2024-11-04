@@ -2,6 +2,7 @@
 using MediatR;
 using Domain.Entities;
 using Application.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Domain.Enum;
 using Application.Dto;
 using AutoMapper;
@@ -21,6 +22,14 @@ public class CreateProgrammeCommandHandler(IApplicationDbContext context, IMappe
 
     public async Task<Result> Handle(CreateProgrammeCommand request, CancellationToken cancellationToken)
     {
+        // Check if the programme exists
+        Programme? existingProgramme = await _context.Programmes
+            .FirstOrDefaultAsync(p => p.Type == request.Type, cancellationToken);
+
+        if (existingProgramme != null)
+        {
+            return Result.Failure($"Programme '{request.Type}'  already exist");
+        }
 
         Programme programme = new()
         {

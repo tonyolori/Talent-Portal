@@ -16,16 +16,18 @@ namespace Domain.Entities
 
         public required string Objectives { get; set; }
 
-        public required string FacilitatorName { get; set; }
+        public required string InstructorName { get; set; }
 
-        public required string FacilitatorId { get; set; }
+        public string InstructorId { get; set; }
+
+        [ForeignKey(nameof(InstructorId))]
 
         public ModuleStatus ModuleStatus { get; set; } = ModuleStatus.Pending;
 
         public string ModuleStatusDes { get; set; } = ModuleStatus.Pending.ToString();
 
 
-        public required string Timeframe { get; set; }
+        public required int Timeframe { get; set; }
 
         public int ProgrammeId { get; set; }
 

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities;
 
-public class Answer : BaseEntity
+public class Option : BaseEntity
 {
     public string AnswerText { get; set; }
 

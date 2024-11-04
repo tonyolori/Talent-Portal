@@ -20,6 +20,18 @@ namespace API.Controllers
         {  
             return Ok(await _mediator.Send(command));  
         }  
+        
+        [HttpPost("admin/register")]  
+        public async Task<IActionResult> Register(RegisterAdminCommand command)  
+        {  
+            return Ok(await _mediator.Send(command));  
+        }  
+        
+        [HttpPost("instructor/register")]  
+        public async Task<IActionResult> Register(RegisterInstructorCommand command)  
+        {  
+            return Ok(await _mediator.Send(command));  
+        }  
 
         [HttpPost("confirm-registration")]  
         public async Task<IActionResult> ConfirmRegistration(ConfirmRegistrationCommand command)  
@@ -28,10 +40,18 @@ namespace API.Controllers
         }  
 
         [HttpPost("login")]  
-        public async Task<IActionResult> Login(LoginUserCommand command)  
-        {  
+        public async Task<IActionResult> Login(LoginUserCommand command)
+        {
 
-            return Ok(await _mediator.Send(command));  
+            var res = await _mediator.Send(command);
+            var token = (Application.Auth.Commands.TokenResponse)res?.Entity;
+            if (token != null)
+            {
+                HttpContext.Response.Cookies.Append("talent-portal-accessToken", token.AccessToken);
+                HttpContext.Response.Cookies.Append("talent-portal-refreshToken", token.RefreshToken);
+            }
+            
+            return Ok(res.Message);
         }  
 
         [HttpPost("forgot-password")]  
@@ -53,3 +73,5 @@ namespace API.Controllers
         }  
     }  
 }
+
+

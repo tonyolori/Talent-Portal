@@ -4,11 +4,13 @@ using Application.Tasks.Queries;
 using Application.Topics.Commands;
 using Application.Topics.Queries;
 using Domain.Common.Enum;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace API.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/topic")]
 public class TopicController(IMediator mediator) : Controller
 {

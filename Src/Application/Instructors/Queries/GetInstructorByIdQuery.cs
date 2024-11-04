@@ -1,15 +1,17 @@
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Identity;
 using MediatR;
 using Application.Common.Models;
-using Application.Interfaces;
 using Domain.Entities;
 using Domain.Enum;
-using System.Threading;
-using System.Threading.Tasks;
 
 public class GetInstructorByIdQuery : IRequest<Result>
 {
-    public string InstructorId { get; set; } // Change to string to match IdentityUser's Id type
+    
+    
+    [Newtonsoft.Json.JsonIgnore]  
+    [JsonIgnore]  
+    public string InstructorId { get; set; } 
 
     public class GetInstructorByIdQueryHandler : IRequestHandler<GetInstructorByIdQuery, Result>
     {
@@ -30,7 +32,7 @@ public class GetInstructorByIdQuery : IRequest<Result>
                 return Result.Failure("Instructor not found.");
             }
 
-            return Result.Success("Instructor details", instructor);
+            return Result.Success<GetInstructorByIdQuery>("Instructor details", instructor);
         }
     }
 }

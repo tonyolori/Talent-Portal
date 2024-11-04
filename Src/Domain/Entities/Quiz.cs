@@ -6,13 +6,16 @@ namespace Domain.Entities;
 
 public class Quiz : BaseEntity
 {
-    public string StudentId { get; set; }
+    public string? StudentId { get; set; }
 
     [ForeignKey(nameof(StudentId))]
+    
+    public string InstructorId { get; set; }
+
+    [ForeignKey(nameof(InstructorId))]
+
     public User User { get; set; }
-
-    public string Title { get; set; }
-
+    
     public int ModuleId { get; set; }
 
     [ForeignKey(nameof(ModuleId))]

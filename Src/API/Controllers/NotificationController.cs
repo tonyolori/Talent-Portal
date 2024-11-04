@@ -3,10 +3,12 @@ using Application.Tasks.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Application.Notifications.Queries;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/Notifications")]
 public class NotificationController(IMediator mediator) : Controller { 
     private readonly IMediator _mediator = mediator;

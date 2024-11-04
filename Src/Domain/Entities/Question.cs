@@ -9,7 +9,7 @@ public class Question : BaseEntity
     public string QuestionText { get; set; }
 
     // Navigation property for the related options
-    public ICollection<Answer> Options { get; set; } = new List<Answer>();
+    public ICollection<Option> Options { get; set; } = new List<Option>();
 
     // Foreign key for Quiz
     public int QuizId { get; set; }

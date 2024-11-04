@@ -1,16 +1,14 @@
-using Application.Students.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Application.Auth.Commands;
-using Application.Tasks.Queries;
-using Application.Programmes.Commands;
 using Application.Quizzes.Commands;
 using Application.Quizzes.Queries;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace API.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/quiz")]
 public class QuizController(IMediator mediator) : Controller
 {

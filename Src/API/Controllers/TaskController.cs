@@ -2,11 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Application.Tasks.Queries;
 using Application.Tasks.Commands;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace API.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/task")]
 public class TaskController(IMediator mediator) : Controller
 {

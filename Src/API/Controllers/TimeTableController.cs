@@ -2,6 +2,7 @@
 using Application.Calendar.Queries;
 using Application.Tasks.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
 
@@ -9,6 +10,7 @@ using System.IdentityModel.Tokens.Jwt;
 namespace API.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/TimeTable")]
     public class TimeTableController : Controller
     {

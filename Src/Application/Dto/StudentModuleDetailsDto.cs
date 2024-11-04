@@ -17,11 +17,11 @@ public class StudentModuleDetailsDto(Module module, StudentModule? progress)
 
     public string FacilitatorName { get; set; } = module.Objectives;
 
-    public string FacilitatorId { get; set; } = module.FacilitatorId;
+    public string FacilitatorId { get; set; } = module.InstructorId;
 
     public ModuleStatus ModuleStatus { get; set; } = module.ModuleStatus;
     public string ModuleStatusDes { get; set; } = module.ModuleStatusDes;
-    public string Timeframe { get; set; } = module.Timeframe;
+    public int Timeframe { get; set; } = module.Timeframe;
 
 
     // Fields from StudentModule progress table

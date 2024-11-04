@@ -23,7 +23,7 @@ namespace Application.Questions.Queries
         public async Task<Result> Handle(GetAllAnswersByQuestionIdQuery request, CancellationToken cancellationToken)
         {
             
-            List<Answer>? answers = await _context.Answers
+            List<Option>? answers = await _context.Answers
                 .Where(a => a.QuestionId == request.QuestionId)
                 .ToListAsync(cancellationToken);
 
