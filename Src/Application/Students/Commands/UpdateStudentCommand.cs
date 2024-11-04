@@ -19,7 +19,7 @@ namespace Application.Auth.Commands
     public class UpdateStudentCommandHandler : IRequestHandler<UpdateStudentCommand, Result>
     {
         private readonly UserManager<User> _userManager;
-        private readonly IApplicationDbContext _context;  // Injecting DbContext to access Programmes
+        private readonly IApplicationDbContext _context; 
 
         public UpdateStudentCommandHandler(UserManager<User> userManager, IApplicationDbContext context)
         {
@@ -35,7 +35,7 @@ namespace Application.Auth.Commands
                 return Result.Failure("Student not found");
 
             // Check if the programme exists
-            var existingProgramme = await _context.Programmes
+            Programme? existingProgramme = await _context.Programmes
                 .FirstOrDefaultAsync(p => p.Type == request.Programme, cancellationToken);
 
             if (existingProgramme == null)

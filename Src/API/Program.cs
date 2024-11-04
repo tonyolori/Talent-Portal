@@ -18,6 +18,7 @@ var audience = configuration["Audience"];
 builder.Services.AddLogging();
 
 builder.Host.UseSerilog();
+
 builder.Services.AddControllers
     
     ();
@@ -140,9 +141,10 @@ app.UseCors(options =>
     options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
 //app.UseMiddleware<AuthMiddleware>();
+
 app.UseAuthentication();
 app.UseAuthorization();
-
+// app.UseMiddleware<AuthMiddleware>();
 app.UseMiddleware<ExceptionHandlerMiddleware>();
 
 

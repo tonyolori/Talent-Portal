@@ -2,7 +2,7 @@
 using MediatR;
 using Domain.Entities;
 using Application.Interfaces;
-using Domain.Enum;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace Application.Programmes.Commands;
@@ -19,6 +19,14 @@ public class CreateProgrammeCommandHandler(IApplicationDbContext context) : IReq
 
     public async Task<Result> Handle(CreateProgrammeCommand request, CancellationToken cancellationToken)
     {
+        // Check if the programme exists
+        Programme? existingProgramme = await _context.Programmes
+            .FirstOrDefaultAsync(p => p.Type == request.Type, cancellationToken);
+
+        if (existingProgramme != null)
+        {
+            return Result.Failure($"Programme '{request.Type}'  already exist");
+        }
 
         Programme programme = new()
         {

@@ -1,12 +1,14 @@
 ﻿using Application.Calendar.Commands;
 using Application.Tasks.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
 namespace API.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/TimeTable")]
     public class TimeTableController(IMediator mediator) : Controller
     {

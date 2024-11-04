@@ -5,6 +5,7 @@ using Application.Students.Queries;
 
 //using Application.AuthController.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,23 +13,34 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/module")]
-    public class ModuleController(IMediator mediator) : ControllerBase
+    public class ModuleController(IMediator mediator,IHttpContextAccessor contextAccessor) : APIController(mediator, contextAccessor)
     {
-        private readonly IMediator _mediator = mediator;
-
         [HttpPost("create-module")]
         public async Task<IActionResult> CreateModule([FromForm]CreateModuleCommand command)
         {
+            command.InstructorId = UserId;
             return Ok(await _mediator.Send(command));
         }
         
-        // PUT: api/Modules/UpdateStatus
+      
+        [Authorize(Roles = "Admin")]  
         [HttpPost("update-status")]
         public async Task<IActionResult> UpdateModuleStatus( UpdateModuleStatusCommand command)
         {
 
             return Ok(await _mediator.Send(command));
+        }
+        
+        [Authorize(Roles = "Instructor")]  
+        [HttpGet("instructor")]  
+        public async Task<IActionResult> GetModuleByInstructorId()
+        {
+            var query = new GetModulesByInstructorIdQuery();
+            query.InstructorId = UserId;
+            return Ok(await _mediator.Send(query));
+
         }
         
         [HttpGet("{id}")]
@@ -40,7 +52,7 @@ namespace API.Controllers
         [HttpGet("all")]
         public async Task<IActionResult> GetAllModule()
         {
-            return Ok(await _mediator.Send(new GetAllModulesQuery() { }));
+            return Ok(await _mediator.Send(new GetAllModulesQuery()));
         }
 
         [HttpGet("programme/{Id}")]
@@ -49,6 +61,7 @@ namespace API.Controllers
             return Ok(await _mediator.Send(new GetModulesByProgrammeIdQuery { ProgrammeId = Id }));
         }
 
+        
         [HttpPost("delete/{Id}")]
         public async Task<IActionResult> DeleteModuleById(int Id)
         {

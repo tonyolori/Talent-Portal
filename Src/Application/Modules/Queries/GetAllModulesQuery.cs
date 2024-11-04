@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Application.Common.Models;
 using MediatR;
 using Application.Interfaces;
@@ -8,6 +9,8 @@ namespace Application.Modules.Queries
 {
     public class GetAllModulesQuery : IRequest<Result>
     {
+        
+        
     }
 
     public class GetAllModulesQueryHandler : IRequestHandler<GetAllModulesQuery, Result>
@@ -22,6 +25,7 @@ namespace Application.Modules.Queries
         public async Task<Result> Handle(GetAllModulesQuery request, CancellationToken cancellationToken)
         {
             List<ModuleDetailsDto>? modules = await _context.Modules
+                .OrderByDescending(m=> m.CreatedDate)
                 .Include(m => m.Topics)
                 .Include(m => m.ModuleTasks)
                 .Include(m => m.Quizzes)
@@ -32,10 +36,11 @@ namespace Application.Modules.Queries
                     ModuleImageUrl = m.ModuleImageUrl,
                     Description = m.Description,
                     Objectives = m.Objectives,
-                    FacilitatorName = m.FacilitatorName,
-                    FacilitatorId = m.FacilitatorId,
+                    InstractorName = m.InstructorName,
+                    InstrauctorId = m.InstructorId,
                     Timeframe = m.Timeframe,
                     ProgrammeId = m.ProgrammeId,
+                    CreatedDate = m.CreatedDate,
                     AdditionalResources = m.AdditionalResources,
                     TotalTopics = m.Topics.Count, 
                     TotalModuleTasks = m.ModuleTasks.Count, 
@@ -66,10 +71,10 @@ namespace Application.Modules.Queries
         public string ModuleImageUrl { get; set; }
         public string Description { get; set; }
         public string Objectives { get; set; }
-        public string FacilitatorName { get; set; }
-        public string FacilitatorId { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public string InstractorName { get; set; }
+        public string InstrauctorId { get; set; }
+        public DateTime CreatedDate { get; set; }
+        
         public int Timeframe { get; set; }
         public int ProgrammeId { get; set; }
         public string Progress { get; set; }
