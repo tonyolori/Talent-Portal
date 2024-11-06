@@ -20,8 +20,8 @@ public static class PasswordReset
         if (!string.IsNullOrEmpty(existingCode))
         {
             // Send the existing verification code to the user's email
-            await emailService.SendEmailAsync(email, "Password Reset Verification Code",
-                $"Your verification code is {existingCode}");
+            await emailService.SendPasswordResetCodeAsync(email,
+                existingCode);
 
             // Return the existing verification code
             return existingCode;
@@ -34,7 +34,7 @@ public static class PasswordReset
         await redisDb.StringSetAsync($"PasswordResetCode:{email}", newVerificationCode, TimeSpan.FromHours(2));
 
         // Send the new verification code to the user's email
-        await emailService.SendEmailAsync(email, "Password Reset Verification Code",
+        await emailService.SendPasswordResetCodeAsync(email,
             $"Your verification code is {newVerificationCode}");
 
         // Return the generated verification code

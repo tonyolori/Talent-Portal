@@ -83,8 +83,7 @@ public class RegisterInstructorCommandHandler : IRequestHandler<RegisterInstruct
         }
 
         // Send the email with instructor login details (email and password)
-        string emailContent = $"Your instructor account has been created.\n\nLogin Details:\nEmail: {user.Email}\nPassword: {randomPassword}";
-        await _emailSender.SendEmailAsync(user.Email, "Instructor Login Details", emailContent);
+        await _emailSender.SendLoginDetailsAsync(user.Email, "Instructor", randomPassword);
 
         return Result.Success<RegisterInstructorCommand>("Instructor registered successfully, login details sent via email!", user.Id);
     }
