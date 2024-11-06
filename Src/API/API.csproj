@@ -39,6 +39,7 @@
     <Content Include="..\..\.dockerignore">
       <Link>.dockerignore</Link>
     </Content>
+    <Content Include="EmailTemplate.html" />
   </ItemGroup>
 
 </Project>

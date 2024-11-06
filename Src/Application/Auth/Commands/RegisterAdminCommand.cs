@@ -85,8 +85,7 @@ public class RegisterAdminCommandHandler : IRequestHandler<RegisterAdminCommand,
         }
 
         // Send the email with admin login details (email and password)
-        string emailContent = $"Your admin account has been created.\n\nLogin Details:\nEmail: {user.Email}\nPassword: {randomPassword}";
-        await _emailSender.SendEmailAsync(user.Email, "Admin Login Details", emailContent);
+        await _emailSender.SendLoginDetailsAsync(user.Email, "Admin", randomPassword);
 
         return Result.Success<RegisterAdminCommand>("Admin registered successfully, login details sent via email!", user.Id);
     }

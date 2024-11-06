@@ -29,4 +29,10 @@ public class EmailTemplate
 
         return data;
     }
+
+    public static string GetTemplate()
+    {
+        string htmlTemplate = System.IO.File.ReadAllText("EmailTemplate.html");
+        return htmlTemplate;
+    }
 }
