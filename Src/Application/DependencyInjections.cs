@@ -3,11 +3,11 @@ using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
-using Application.Paystack.Commands;
 using CloudinaryDotNet;
 using Microsoft.Extensions.Configuration;
 using Serilog;
 using StackExchange.Redis;
+using Application.Paystack.Commands;
 
 //using Application.AuthController;
 
@@ -20,6 +20,7 @@ namespace Application
         {
             Assembly assembly = typeof(DependencyInjection).Assembly;
 
+            services.AddAutoMapper(typeof(MappingProfile));
             services.AddMediatR(configuration => configuration.RegisterServicesFromAssembly(assembly));
             services.AddHttpClient<CreatePaymentCommandHandler>();
             services.AddHttpClient<VerifyPaymentCommandHandler>();

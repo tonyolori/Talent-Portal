@@ -32,10 +32,10 @@ public class StudentLoginCommandHandler : IRequestHandler<LoginUserCommand, Resu
     private readonly IDatabase _redisDb;
     private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public StudentLoginCommandHandler(SignInManager<User> signInManager, 
+    public StudentLoginCommandHandler(SignInManager<User> signInManager,
                                       UserManager<User> userManager,
-                                      IGenerateToken generateToken, 
-                                      IEmailService emailService, 
+                                      IGenerateToken generateToken,
+                                      IEmailService emailService,
                                       IConnectionMultiplexer redis,
                                       IHttpContextAccessor httpContextAccessor)
     {
@@ -65,8 +65,7 @@ public class StudentLoginCommandHandler : IRequestHandler<LoginUserCommand, Resu
             await _redisDb.StringSetAsync($"ConfirmationCode:{request.Email}", confirmationCode, TimeSpan.FromHours(2));
 
             // Send the confirmation code to the user's email
-            await _emailService.SendEmailAsync(user.Email!, "Account Confirmation Code",
-                $"Your confirmation code is {confirmationCode}");
+            await _emailService.SendAccountConfirmationCodeAsync(user.Email!, confirmationCode);
 
             return Result.Failure<LoginUserCommand>($"User {request.Email} account is not verified. A new confirmation code has been sent.");
         }
@@ -88,7 +87,7 @@ public class StudentLoginCommandHandler : IRequestHandler<LoginUserCommand, Resu
         }
 
         var tokens = _generateToken.GenerateTokens(user.Id, user.Email!, user.UserType.ToString());
-        
+
         CookieHelper.SetTokensInCookies(_httpContextAccessor, tokens.AccessToken, tokens.RefreshToken);
 
         var tokenResponse = new TokenResponse

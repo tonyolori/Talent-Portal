@@ -164,7 +164,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("ProgrammeId");
 
-                    b.ToTable("CalendarSlots");
+                    b.ToTable("CalendarSlots", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Module", b =>
@@ -233,7 +233,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Modules");
+                    b.ToTable("Modules", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.ModuleTask", b =>
@@ -290,7 +290,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Tasks");
+                    b.ToTable("Tasks", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Notification", b =>
@@ -336,7 +336,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Notifications");
+                    b.ToTable("Notifications", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Option", b =>
@@ -396,7 +396,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Programmes");
+                    b.ToTable("Programmes", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Question", b =>
@@ -427,7 +427,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("QuizId");
 
-                    b.ToTable("Questions");
+                    b.ToTable("Questions", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Quiz", b =>
@@ -470,7 +470,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("Quizzes");
+                    b.ToTable("Quizzes", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.StudentModule", b =>
@@ -515,7 +515,7 @@ namespace Infrastructure.Migrations
                     b.HasIndex("StudentId", "ModuleId")
                         .IsUnique();
 
-                    b.ToTable("StudentModules");
+                    b.ToTable("StudentModules", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.SubmissionDetails", b =>
@@ -565,7 +565,7 @@ namespace Infrastructure.Migrations
                     b.HasIndex("TaskId", "StudentId")
                         .IsUnique();
 
-                    b.ToTable("SubmissionDetails");
+                    b.ToTable("SubmissionDetails", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Topic", b =>
@@ -606,7 +606,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("ModuleId");
 
-                    b.ToTable("Topics");
+                    b.ToTable("Topics", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Transaction", b =>
@@ -669,7 +669,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("Transactions");
+                    b.ToTable("Transactions", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
