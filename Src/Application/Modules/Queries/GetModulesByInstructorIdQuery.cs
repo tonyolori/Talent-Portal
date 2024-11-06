@@ -32,8 +32,14 @@ namespace Application.Modules.Queries
             {
                 return Result.Failure("No modules found for the specified instructor.");
             } 
+            
+            var response = new
+            {
+                Modules = modules,
+                TotalModules = modules.Count
+            };
 
-            return Result.Success<GetModulesByInstructorIdQuery>("Modules found.", modules);
+            return Result.Success<GetModulesByInstructorIdQuery>("Modules found.", response);
         }
     }
 }

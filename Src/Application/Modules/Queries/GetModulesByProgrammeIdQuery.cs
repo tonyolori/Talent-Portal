@@ -27,10 +27,16 @@ namespace Application.Modules.Queries
                 return Result.Failure("Invalid Programme");
             }
 
-            List<Module> module = _context.Modules.Where(
+            List<Module> modules = _context.Modules.Where(
                 m=> m.ProgrammeId == request.ProgrammeId).ToList();
+            
+            var response = new
+            {
+                Modules = modules,
+                TotalModules = modules.Count
+            };
 
-            return Result.Success<GetModulesByProgrammeIdQuery>("Modules retrieved successfully", module);
+            return Result.Success<GetModulesByProgrammeIdQuery>("Modules retrieved successfully", response);
         }
     }
 }

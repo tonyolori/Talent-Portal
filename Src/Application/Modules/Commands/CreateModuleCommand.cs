@@ -19,9 +19,8 @@ namespace Application.Modules.Commands
         public string Objectives { get; set; }
         public int ProgrammeId { get; set; }
         
-        [Newtonsoft.Json.JsonIgnore]  
         [JsonIgnore] 
-        public string InstructorId { get; set; }
+        public string? InstructorId { get; set; }
         
         public int Timeframe { get; set; }
         
