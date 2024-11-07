@@ -44,14 +44,14 @@ namespace API.Controllers
         {
 
             var res = await _mediator.Send(command);
-            var token = (Application.Auth.Commands.TokenResponse)res?.Entity;
+            var token = (TokenResponse)res?.Entity;
             if (token != null)
             {
                 HttpContext.Response.Cookies.Append("talent-portal-accessToken", token.AccessToken);
                 HttpContext.Response.Cookies.Append("talent-portal-refreshToken", token.RefreshToken);
             }
             
-            return Ok(res.Message);
+            return Ok(res);
         }  
 
         [HttpPost("forgot-password")]  

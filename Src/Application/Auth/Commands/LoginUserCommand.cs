@@ -17,12 +17,6 @@ public class LoginUserCommand : IRequest<Result>
     public string Password { get; set; }
 }
 
-public class TokenResponse
-{
-    public string AccessToken { get; set; }
-    public string RefreshToken { get; set; }
-}
-
 public class StudentLoginCommandHandler : IRequestHandler<LoginUserCommand, Result>
 {
     private readonly UserManager<User> _userManager;
@@ -89,13 +83,7 @@ public class StudentLoginCommandHandler : IRequestHandler<LoginUserCommand, Resu
         var tokens = _generateToken.GenerateTokens(user.Id, user.Email!, user.UserType.ToString());
 
         CookieHelper.SetTokensInCookies(_httpContextAccessor, tokens.AccessToken, tokens.RefreshToken);
-
-        var tokenResponse = new
-        {
-            AccessToken = tokens.AccessToken,
-            RefreshToken = tokens.RefreshToken
-        };
-
-        return Result.Success<LoginUserCommand>("Successfully logged in", tokenResponse);
+    
+        return Result.Success<LoginUserCommand>("Successfully logged in", tokens);  
     }
 }
