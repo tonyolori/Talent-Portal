@@ -90,7 +90,7 @@ public class StudentLoginCommandHandler : IRequestHandler<LoginUserCommand, Resu
 
         CookieHelper.SetTokensInCookies(_httpContextAccessor, tokens.AccessToken, tokens.RefreshToken);
 
-        var tokenResponse = new TokenResponse
+        var tokenResponse = new
         {
             AccessToken = tokens.AccessToken,
             RefreshToken = tokens.RefreshToken
