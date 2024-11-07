@@ -39,7 +39,7 @@ namespace Application.Auth.Commands
             string verificationCode = await PasswordReset.SendPasswordResetVerificationCodeAsync(_redisDb.Multiplexer, _emailService, request.Email);
 
             // Return success result with the verification code
-            return Result.Success<ForgotPasswordCommand>("Email verification code sent!", verificationCode);
+            return Result.Success("Email verification code sent via mail!");
         }
     }
 }

@@ -44,6 +44,6 @@ public class ConfirmRegistrationCommandHandler(
             return Result.Failure("Failed to confirm registration!\n" + errors);
         }
 
-        return Result.Success<ConfirmRegistrationCommand>("Registration confirmed successfully!", student);
+        return Result.Success("Registration confirmed successfully!");
     }
 }
