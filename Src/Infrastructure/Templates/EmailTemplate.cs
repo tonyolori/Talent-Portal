@@ -32,7 +32,49 @@ public class EmailTemplate
 
     public static string GetTemplate()
     {
-        string htmlTemplate = System.IO.File.ReadAllText("EmailTemplate.html");
+        string htmlTemplate = @"
+                                   <!DOCTYPE html>
+                                   <html>
+                                   <head>
+                                       <style>
+                                           .header {
+                                               background-color: #f0f0f0;
+                                               padding: 20px;
+                                           }
+                                   
+                                           .body {
+                                               background-color: #fff;
+                                               padding: 20px;
+                                           }
+                                   
+                                           .code {
+                                               font-weight: bold;
+                                               font-size: 18px;
+                                           }
+                                   
+                                           .footer {
+                                               background-color: #f0f0f0;
+                                               padding: 20px;
+                                               text-align: center;
+                                           }
+                                       </style>
+                                   </head>
+                                   <body>
+                                       <div class=""header"">
+                                           <h2>{subject}</h2>
+                                       </div>
+                                   
+                                       <div class=""body"">
+                                           {body}
+                                       </div>
+                                   
+                                       <div class=""footer"">
+                                           <p>Contact us | About us | Services</p>
+                                           <p>&copy; 2024 reventtechnologies. All rights reserved.</p>
+                                       </div>
+                                   </body>
+                                   </html>
+                          ";
         return htmlTemplate;
     }
 }
